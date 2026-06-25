@@ -150,3 +150,38 @@ Full verification harness + figures + its own README live in `verification/`
 matches the PDF dashed contour (`verification/figures/02_forcing_ellipse.png`); Pangu's
 integrated TCWV and FCNv2's TCWV channel agree (RMSE ~3.6 kg/m²) on the RAGASA IC; both
 operators produce finite, physical one-step output on real ICs.
+
+---
+
+## 6. 為什麼有 `investigation/`（排查與試錯）
+
+§1–5 的 pipeline 跑得起來，但拿去對 **`related_paper/AI-Forum.pdf`**（本專案早期作品、
+原始碼已不可考的參考結果）時，結果對不上：渦度量級過強、結構不像、TCWV 偏低。為了釐清
+**「到底是哪個環節造成落差」**，另開 `investigation/` 做系統性診斷與試錯——**不動 §1–5 主程式**，
+全部用獨立腳本驗證，再把確定有效的改動回寫主程式。
+
+**逐項排查的結論（詳見報告）：**
+
+* **已排除（不是問題）**：
+  * 方位/經度 — Pangu I/O 方位正確（一步漂移 RMS 0.85 K）。
+  * 初始場 — 我們自建的 `u0_paperDJF` ≈ 論文官方 `mean_DJF.h5`（熱帶 RMSE < 1%）。
+  * 渦度診斷 — 對擾動 `u'` 直接算渦度是對的（渦度線性：`ζ(u') = ζ(u'+B) − ζ(B)`，實測差 1e-7）。
+* **校準到位**：加熱**振幅** 10 → ~1.5–3 K/day（原本 10 把系統打進過度非線性）、
+  加熱**區域** → 5–15°N / 125°E–95°W。
+* **找到關鍵變因 = 加熱「垂直分布」**：Deep/Stratiform/Shallow 三種 sin 分布在 1000 hPa 都歸零
+  （邊界層不加熱），TCWV 卡在 ~30；改成**均勻加熱（含低層 1000–250 hPa）**後，低層加熱驅動水氣輻合，
+  TCWV 才上到 ~45（對上 AI-Forum）。**故 §1 的 `clip_moisture` 已在 investigation 驗證後拿掉**
+  （與論文一致），垂直分布新增 `uniform` 選項。
+* **本質限制**：ITCZ breakdown 是**混沌**正壓不穩定，逐日**確切渦旋位置**對微小 IC 差異極敏感
+  （0.2 K → day12 場相關係數 0.42），只能對齊統計/定性特徵，不能逐點重現（論文亦有此警告）。
+* **仍未解（待討論）**：day1 我們是全域緯向條紋、AI-Forum 是 2D 紅藍斑塊（疑重力波）；
+  陸地較早長出渦度；中緯度 day9 後偏活躍。
+
+**進去看哪裡：**
+
+* **[investigation/進度報告0625_總整理.md](investigation/進度報告0625_總整理.md)** — 大統整（內嵌 2D 渦度圖、
+  AI-Forum 目標對照、已排除變因、最佳結果、未解問題、下一步），對外討論看這份。
+* `investigation/進度報告0625_*.md` — 各階段時間戳報告；`investigation/FINDINGS_AND_EXPERIMENTS.md`、
+  `ALGORITHM_AND_SETUP.md` — 細節與實驗紀錄。
+* `investigation/standalone/` — 可攜單檔腳本（h5→npy、跑 Pangu 加熱、畫渦度），純 for 迴圈、好讀。
+* `investigation/figs/` — 所有圖；`investigation/ref/` — 下載的論文官方 code 與資料（**不上 git**）。
