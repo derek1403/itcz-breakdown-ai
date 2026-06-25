@@ -18,13 +18,14 @@ PY=/home/pc/.conda/envs/pangu_env/bin/python
 The growth mechanism is a **finite-time nonlinear perturbation evolution** (not a
 tangent-linear Jacobian). With model operator `M` (one 6-h step), a *stationary*
 background `u0` (a climatology or a single day), a frozen one-step drift
-`B1 = M(u0)`, an initial perturbation `u'_0`, and per-step forcing `f_n`:
+`B = M(u0)`, an initial perturbation `u'_0`, and per-step forcing `f_n`:
 
 ```
+B = M(u0)
 for n = 1 .. N:
     A_n   = u0 + u'_{n-1} + f_n      # state fed to M, ALWAYS anchored to steady u0
-    A_n   = clip_moisture(A_n)       # enforce q>=0 / 0<=r<=100% before M
-    u'_n  = M(A_n) - B1              # peel the constant one-step model drift
+    #A_n   = clip_moisture(A_n)       # enforce q>=0 / 0<=r<=100% before M #在investigation中已經拿掉 
+    u'_n  = M(A_n) - B              # peel the constant one-step model drift
     u'_n  = LOCK(u'_n)              # optional channel zeroing (Steps 2/4)
 ```
 
