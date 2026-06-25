@@ -1,0 +1,63 @@
+# ============================================================================
+# ITCZ Breakdown experiment configuration
+# ----------------------------------------------------------------------------
+# Reproduction of Guinn & Schubert (1994) ITCZ breakdown inside global AI
+# weather models (Pangu-Weather, FourCastNet v2) using the finite-time
+# nonlinear "Perpetual Background Re-centering" perturbation method.
+#
+# Override any field on the command line, e.g.:
+#   python scripts/run_step1.py --model fcnv2 --background JJA --amp_K 5
+# ============================================================================
+
+# --- external resources (read-only; never written) -------------------------
+paths:
+  pangu_model_dir: /wk2/pc/AI_models/pangu/models          # pangu_weather_{1,6,24}.onnx
+  fcnv2_weight_dir: /wk2/pc/AI_models/claude_RegionalCouple_AI/weights/FCNV2  # weights.tar + global_{means,stds}.npy
+  era5_monthly_dir: /wk2/pc/AI_models/data/ERA5_monthly_global
+  era5_clim_dir: /wk2/pc/AI_models/data/ERA5_monthly_global/ERA5_monthly_climatology
+  era5_daily_dir: /wk2/pc/AI_models/data/ERA5_global
+  # everything we WRITE lives under the project dir:
+  ic_dir: ic                 # prepared background states u0 (npz), relative to project root
+  output_dir: outputs        # per-run perturbation states + figures
+
+# --- model selection --------------------------------------------------------
+model: pangu                 # "pangu" or "fcnv2"
+device: cpu                  # fcnv2: "cpu" or "cuda"; pangu always CPUExecutionProvider
+cpu_num: -1                  # threads for inference & parallel averaging; -1 = all cores
+step_hours: 6                # both models advance 6 h per call
+
+# --- background state u0 ----------------------------------------------------
+background: JJA              # JJA | DJF | annual | ragasa | enso_pos | enso_neg | enso_neutral
+
+# --- driver: Perpetual Background Re-centering ------------------------------
+driver:
+  n_days: 16                 # total integration length; n_steps = n_days * 24/step_hours
+  forcing_days: 7            # heating ON for the first N days (Step 1/2); 0 thereafter
+  save_every: 1              # save perturbation every N steps
+
+# --- forcing (Step 1 diabatic heating) -------------------------------------
+# Horizontal: zonally elongated ellipse along the N-Pacific ITCZ, specified by its
+# GEOGRAPHIC EXTENT (the PDF dashed contour): center 165W, reaching 120E on the
+# west and 90W on the east (so lon_halfwidth = 75 deg about center_lon = 195E).
+forcing:
+  center_lat: 10.0           # deg N    (AI-Forum zoom reading: heating band 5-15N)
+  center_lon: 195.0          # deg E = 165W
+  lon_halfwidth: 70.0        # deg      -> west edge 125E, east edge 95W (265E)
+  lat_halfwidth: 5.0         # deg      meridional half-extent (5-15N dashed ellipse)
+  edge_sigmas: 2.0           # dashed boundary sits at this many sigma; sigma = halfwidth/edge_sigmas
+  heat_type: Deep            # Deep | Stratiform | Shallow
+  amp_K_per_day: 10.0        # diabatic heating rate (also run with 5.0)
+  # moisture forcing (Step 4): SPECIFIC-HUMIDITY rate (kg/kg per day);
+  # layout.py converts to each model's moisture variables.
+  moist_amp_qday: 2.0e-3
+
+# --- diagnostics / plotting -------------------------------------------------
+plot:
+  domain: [100, -70, 0, 45]  # lon_min, lon_max(as -70 => 290E), lat_min, lat_max (Pacific)
+  vort_level: 850            # hPa for anomaly vorticity
+  vort_clim: 10.0            # colorbar limit, units 1e-5 s^-1 (seismic)
+  vort_step: 1.0             # discrete colorbar interval (units 1e-5 s^-1)
+  tcwv_clim: 40.0            # colorbar limit, kg/m^2
+  tcwv_step: 10.0            # discrete colorbar interval (kg/m^2)
+  snapshot_days: [0, 1, 4, 6, 9, 12, 15]
+  track_band: [0, 20, 120, 270]  # vortex-search box: lat_min, lat_max, lon_min, lon_max (deg E)

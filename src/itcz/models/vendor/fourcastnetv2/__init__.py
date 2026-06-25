@@ -1,0 +1,1 @@
+from .sfnonet import FourierNeuralOperatorNet
