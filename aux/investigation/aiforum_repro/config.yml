@@ -1,0 +1,16 @@
+# 重現 AI-Forum 原作：JAS IC + deep convective 2.5K/day, center 10N/180E
+path_model:  '/wk2/pc/AI_models/pangu/models/'
+path_mean:   '/wk2/pc/AI_models/itcz-breakdown-ai/aux/investigation/ref/ERA5_means/'
+path_input:  '/tmp/'
+path_output: '/wk2/pc/AI_models/itcz-breakdown-ai/aux/investigation/aiforum_repro/output/'
+
+mean_state_season: 'JAS'
+zm: False
+
+nhours: 384      # 16 天（每天存場看演變，對齊 AI-Forum day 0/1/4/6/9/12/15）
+ohr: 24          # 每 24h 輸出一次（24h Pangu 模型；dhr=24）
+only_500: False
+
+var_sfc: ["msl", "u10m", "v10m", "t2m"]
+var_pl: ["z", "q", "t", "u", "v"]
+levels: [1000, 925, 850, 700, 600, 500, 400, 300, 250, 200, 150, 100, 50]

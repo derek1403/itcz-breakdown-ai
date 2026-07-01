@@ -75,6 +75,10 @@ def vertical_profile(heat_type: str, levels_hpa: np.ndarray) -> np.ndarray:
         v[mask] = np.sin(2.0 * np.pi * pn)
     elif heat_type == "Shallow":
         v[mask] = (np.sin(np.pi * pn) - np.sin(2.0 * np.pi * pn)) / np.sqrt(2.0)
+    elif heat_type == "uniform":
+        # constant over 1000-200 hPa (incl. low levels) -> drives low-level
+        # moisture convergence; investigation raised TCWV ~30 -> ~45 with DJF ICs.
+        v[mask] = 1.0
     else:
         raise ValueError(f"unknown heat_type {heat_type!r}")
     return v

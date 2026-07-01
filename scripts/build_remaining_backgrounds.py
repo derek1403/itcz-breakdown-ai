@@ -17,8 +17,8 @@ from itcz import config as cfgmod
 from itcz.data import prep
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-REPORT = os.path.join(ROOT, "verification", "full_run", "report.md")
-STATUS = os.path.join(ROOT, "pending_decisions", "phase2_status.md")
+REPORT = os.path.join(ROOT, "aux", "verification", "full_run", "report.md")
+STATUS = os.path.join(ROOT, "aux", "pending_decisions", "phase2_status.md")
 ONI_URL = "https://www.cpc.ncep.noaa.gov/data/indices/oni.ascii.txt"
 
 log = []

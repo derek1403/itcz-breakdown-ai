@@ -4,7 +4,7 @@ Core iteration (see README).  With frozen one-step drift ``B1 = M(u0)`` and give
 ``u'_0``, for n = 1 .. N:
 
     A_n   = u0 + u'_{n-1} + f_n        # state fed to M, always anchored to steady u0
-    A_n   = clip_moisture(A_n)         # enforce q>=0 / 0<=r<=100% before M
+    A_n   = clip_moisture(A_n)         # OPTIONAL (driver.clip_moisture): q>=0 / 0<=r<=100%
     u'_n  = M(A_n) - B1                # peel the constant one-step model drift
     u'_n  = LOCK(u'_n)                 # variant-specific channel zeroing
 
@@ -84,7 +84,8 @@ def run(cfg: dict, operator: Operator | None = None) -> str:
     for n in range(1, N + 1):
         f_n = f_base if (persistent or n <= Nf) else f_base.zeros_like()
         A = u0 + u_prev + f_n
-        layout.clip_moisture(A)                  # physical-bound safeguard before M
+        if cfg["driver"].get("clip_moisture", False):
+            layout.clip_moisture(A)              # optional physical-bound safeguard before M
         u_n = op.step(A) - B1
         _apply_lock(layout, u_n, lock)
         if n % save_every == 0 or n == N:

@@ -123,6 +123,25 @@ def _discrete(cmap_name, clim, step, extend="both"):
 # ---------------------------------------------------------------------------
 # plots
 # ---------------------------------------------------------------------------
+def _run_banner(cfg):
+    """One-line run descriptor for figure suptitles (ASCII to avoid CJK-font tofu):
+    e.g. 'step1_pangu_JAS_Deep_2.5Kday | pangu 24h | JAS | Deep 2.5 K/day |
+          heating 16/16 d (continuous) | lock=none | clip=False'."""
+    d, f = cfg["driver"], cfg["forcing"]
+    fd, nd = d["forcing_days"], d["n_days"]
+    reg = "continuous" if fd >= nd else "then off"
+    parts = []
+    exp = cfg.get("experiment", {})
+    if exp.get("name"):
+        parts.append(exp["name"])
+    ftype = exp.get("forcing_type", "heating")
+    heat = (f"{f['heat_type']} {f['amp_K_per_day']:g} K/day | heating {fd}/{nd} d ({reg})"
+            if ftype == "heating" else f"forcing={ftype}")
+    parts.append(f"{cfg['model']} {cfg['step_hours']}h | {cfg['background']} | {heat} | "
+                 f"lock={exp.get('lock', 'none')} | clip={d.get('clip_moisture', False)}")
+    return "\n".join(parts)
+
+
 def plot_field_panels(run_dir, cfg, field="vort", out=None):
     import cartopy.crs as ccrs
     model = cfg["model"]
@@ -162,7 +181,8 @@ def plot_field_panels(run_dir, cfg, field="vort", out=None):
             ax.plot(vlon, vlat, "kx", ms=6, transform=ccrs.PlateCarree())
         plt.colorbar(mesh, ax=ax, shrink=0.8, pad=0.02, label=label,
                      extend="both", ticks=ticks)
-    fig.tight_layout()
+    fig.suptitle(_run_banner(cfg), fontsize=10)
+    fig.tight_layout(rect=[0, 0, 1, 0.97])
     out = out or os.path.join(run_dir, f"panels_{field}.png")
     fig.savefig(out, dpi=130)
     plt.close(fig)
@@ -197,7 +217,8 @@ def plot_timeseries(run_dirs, labels, cfg, out=None):
     for ax in (axv, axt):
         ax.grid(alpha=0.3)
         ax.legend(fontsize=8)
-    fig.tight_layout()
+    fig.suptitle(_run_banner(cfg), fontsize=10)
+    fig.tight_layout(rect=[0, 0, 1, 0.92])
     out = out or os.path.join(run_dirs[0], "timeseries.png")
     fig.savefig(out, dpi=130)
     plt.close(fig)

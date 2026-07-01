@@ -13,8 +13,14 @@ import tempfile
 
 import numpy as np
 
-_SRC = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src")
-sys.path.insert(0, _SRC)
+# locate the project's src/ by walking upward (robust to this file's depth)
+_d = os.path.dirname(os.path.abspath(__file__))
+while _d != os.path.dirname(_d):
+    _SRC = os.path.join(_d, "src")
+    if os.path.isdir(os.path.join(_SRC, "itcz")):
+        sys.path.insert(0, _SRC)
+        break
+    _d = os.path.dirname(_d)
 
 from itcz.experiment import forcing  # noqa: E402
 

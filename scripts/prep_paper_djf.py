@@ -31,7 +31,7 @@ from itcz.data import prep
 BG = "paperDJF"
 YEARS = range(1979, 2020)          # 1979..2019 inclusive (calendar D/J/F)
 MONTHS = (12, 1, 2)
-RAW = os.path.join(cfgmod.PROJECT_ROOT, "data_raw")   # 1979 downloads (in-project)
+RAW = os.path.join(cfgmod.PROJECT_ROOT, "aux", "data_raw")   # 1979 downloads (in-project)
 
 # CDS names (match the shared archive's download script)
 UPPER_CDS = {"z": "geopotential", "q": "specific_humidity", "r": "relative_humidity",

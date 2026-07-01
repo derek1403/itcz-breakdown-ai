@@ -29,7 +29,7 @@ from itcz.plotting import tracker
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Per-background report dir (set in main once the background is known) so runs of
 # different backgrounds don't overwrite each other's report/comparison figures.
-REPORT_DIR = os.path.join(ROOT, "verification", "full_run")
+REPORT_DIR = os.path.join(ROOT, "aux", "verification", "full_run")
 
 STAGES = []   # (name, status, detail, seconds)
 
@@ -170,7 +170,7 @@ def main():
     })
 
     global REPORT_DIR
-    REPORT_DIR = os.path.join(ROOT, "verification", "full_run", args.background)
+    REPORT_DIR = os.path.join(ROOT, "aux", "verification", "full_run", args.background)
     os.makedirs(REPORT_DIR, exist_ok=True)
 
     t0 = time.time()

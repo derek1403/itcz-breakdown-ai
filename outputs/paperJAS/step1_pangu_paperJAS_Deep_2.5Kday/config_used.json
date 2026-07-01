@@ -1,0 +1,67 @@
+{
+  "paths": {
+    "pangu_model_dir": "/wk2/pc/AI_models/pangu/models",
+    "fcnv2_weight_dir": "/wk2/pc/AI_models/claude_RegionalCouple_AI/weights/FCNV2",
+    "era5_monthly_dir": "/wk2/pc/AI_models/data/ERA5_monthly_global",
+    "era5_clim_dir": "/wk2/pc/AI_models/data/ERA5_monthly_global/ERA5_monthly_climatology",
+    "era5_daily_dir": "/wk2/pc/AI_models/data/ERA5_global",
+    "ic_dir": "/wk2/pc/AI_models/itcz-breakdown-ai/ic",
+    "output_dir": "/wk2/pc/AI_models/itcz-breakdown-ai/outputs"
+  },
+  "model": "pangu",
+  "device": "cuda",
+  "cpu_num": -1,
+  "step_hours": 24,
+  "background": "paperJAS",
+  "driver": {
+    "n_days": 16,
+    "forcing_days": 16,
+    "save_every": 1,
+    "clip_moisture": false
+  },
+  "forcing": {
+    "center_lat": 10.0,
+    "center_lon": 195.0,
+    "lon_halfwidth": 130.0,
+    "lat_halfwidth": 12.8,
+    "edge_sigmas": 2.0,
+    "heat_type": "Deep",
+    "amp_K_per_day": 2.5,
+    "moist_amp_qday": 0.002
+  },
+  "plot": {
+    "domain": [
+      100,
+      -70,
+      0,
+      45
+    ],
+    "vort_level": 850,
+    "vort_clim": 10.0,
+    "vort_step": 1.0,
+    "tcwv_clim": 40.0,
+    "tcwv_step": 10.0,
+    "snapshot_days": [
+      0,
+      1,
+      4,
+      6,
+      9,
+      12,
+      15
+    ],
+    "track_band": [
+      0,
+      20,
+      120,
+      270
+    ]
+  },
+  "experiment": {
+    "name": "step1_pangu_paperJAS_Deep_2.5Kday",
+    "forcing_type": "heating",
+    "persistent": false,
+    "lock": "none",
+    "seed_npz": null
+  }
+}

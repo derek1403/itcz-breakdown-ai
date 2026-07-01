@@ -13,14 +13,14 @@
 !*.py
 !*.md
 
-# 4) 放行：圖片（討論用，雖然多也留）
-!*.png
-!*.jpg
-!*.jpeg
-!*.gif
-!*.svg
-!*.webp
-!*.bmp
+# 4) 圖片：預設全部忽略（量太大）。要保留特定圖用：git add -f <path.png>
+#!*.png
+#!*.jpg
+#!*.jpeg
+#!*.gif
+#!*.svg
+#!*.webp
+#!*.bmp
 
 # 5) 放行：小型設定檔 (config.yaml / config_used.json 等)
 !*.yaml
@@ -38,7 +38,7 @@
 __pycache__/
 
 # 下載的論文 repo（自帶 .git，會變 embedded repo）+ 1.7GB 資料/h5
-investigation/ref/
+aux/investigation/ref/
 
 # ------------------------------------------------------------
 # （可選）若也想保留設定檔，取消對應註解：

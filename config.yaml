@@ -22,31 +22,32 @@ paths:
 
 # --- model selection --------------------------------------------------------
 model: pangu                 # "pangu" or "fcnv2"
-device: cpu                  # fcnv2: "cpu" or "cuda"; pangu always CPUExecutionProvider
+device: cuda                 # fcnv2: "cuda" (GPU) or "cpu"; pangu always CPUExecutionProvider (ignores this)
 cpu_num: -1                  # threads for inference & parallel averaging; -1 = all cores
-step_hours: 6                # both models advance 6 h per call
+step_hours: 24               # §7 validated: Pangu uses pangu_weather_24.onnx (24 h/step). fcnv2 is 6 h-only.
 
 # --- background state u0 ----------------------------------------------------
-background: JJA              # JJA | DJF | annual | ragasa | enso_pos | enso_neg | enso_neutral
+background: JAS             # JAS = validated AI-Forum IC (§7). also: JJA|DJF|annual|ragasa|enso_*
 
 # --- driver: Perpetual Background Re-centering ------------------------------
 driver:
   n_days: 16                 # total integration length; n_steps = n_days * 24/step_hours
-  forcing_days: 7            # heating ON for the first N days (Step 1/2); 0 thereafter
+  forcing_days: 16           # §7 validated: heating ON continuously (=n_days). (7 = the 4-exp pulse design)
   save_every: 1              # save perturbation every N steps
+  clip_moisture: false       # investigation 驗證後拿掉（與論文一致）；true 才在餵 M 前 clip q/r
 
 # --- forcing (Step 1 diabatic heating) -------------------------------------
-# Horizontal: zonally elongated ellipse along the N-Pacific ITCZ, specified by its
-# GEOGRAPHIC EXTENT (the PDF dashed contour): center 165W, reaching 120E on the
-# west and 90W on the east (so lon_halfwidth = 75 deg about center_lon = 195E).
+# Horizontal: separable 2D Gaussian centred on the N-Pacific ITCZ, tuned to the
+# VALIDATED aiforum_repro setting (1_run_pangu_gauss.py): sigma_lat≈6.4°, sigma_lon≈65°
+# (halfwidth = sigma * edge_sigmas, so the dashed 2-sigma boundary is drawn at these).
 forcing:
-  center_lat: 10.0           # deg N    (AI-Forum zoom reading: heating band 5-15N)
+  center_lat: 10.0           # deg N    (AI-Forum: heating centre 10N)
   center_lon: 195.0          # deg E = 165W
-  lon_halfwidth: 70.0        # deg      -> west edge 125E, east edge 95W (265E)
-  lat_halfwidth: 5.0         # deg      meridional half-extent (5-15N dashed ellipse)
+  lon_halfwidth: 130.0       # deg      -> sigma_lon = 130/2 = 65 (validated gauss)
+  lat_halfwidth: 12.8        # deg      -> sigma_lat = 12.8/2 = 6.4 (validated gauss)
   edge_sigmas: 2.0           # dashed boundary sits at this many sigma; sigma = halfwidth/edge_sigmas
-  heat_type: Deep            # Deep | Stratiform | Shallow
-  amp_K_per_day: 10.0        # diabatic heating rate (also run with 5.0)
+  heat_type: Deep            # Deep | Stratiform | Shallow | uniform
+  amp_K_per_day: 2.5         # diabatic heating rate (validated §7; 10 overshoots into nonlinearity)
   # moisture forcing (Step 4): SPECIFIC-HUMIDITY rate (kg/kg per day);
   # layout.py converts to each model's moisture variables.
   moist_amp_qday: 2.0e-3
