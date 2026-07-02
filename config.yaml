@@ -24,7 +24,7 @@ paths:
 model: pangu                 # "pangu" or "fcnv2"
 device: cuda                 # fcnv2: "cuda" (GPU) or "cpu"; pangu always CPUExecutionProvider (ignores this)
 cpu_num: -1                  # threads for inference & parallel averaging; -1 = all cores
-step_hours: 24               # §7 validated: Pangu uses pangu_weather_24.onnx (24 h/step). fcnv2 is 6 h-only.
+step_hours: 24
 
 # --- background state u0 ----------------------------------------------------
 background: JAS             # JAS = validated AI-Forum IC (§7). also: JJA|DJF|annual|ragasa|enso_*
@@ -32,7 +32,7 @@ background: JAS             # JAS = validated AI-Forum IC (§7). also: JJA|DJF|a
 # --- driver: Perpetual Background Re-centering ------------------------------
 driver:
   n_days: 16                 # total integration length; n_steps = n_days * 24/step_hours
-  forcing_days: 16           # §7 validated: heating ON continuously (=n_days). (7 = the 4-exp pulse design)
+  forcing_days: 20           # extended: continuous through day 20
   save_every: 1              # save perturbation every N steps
   clip_moisture: false       # investigation 驗證後拿掉（與論文一致）；true 才在餵 M 前 clip q/r
 

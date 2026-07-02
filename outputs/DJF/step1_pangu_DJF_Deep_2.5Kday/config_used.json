@@ -12,9 +12,9 @@
   "device": "cuda",
   "cpu_num": -1,
   "step_hours": 24,
-  "background": "paperJAS",
+  "background": "DJF",
   "driver": {
-    "n_days": 20,
+    "n_days": 16,
     "forcing_days": 20,
     "save_every": 1,
     "clip_moisture": false
@@ -58,7 +58,7 @@
     ]
   },
   "experiment": {
-    "name": "step1_pangu_paperJAS_Deep_2.5Kday",
+    "name": "step1_pangu_DJF_Deep_2.5Kday",
     "forcing_type": "heating",
     "persistent": false,
     "lock": "none",

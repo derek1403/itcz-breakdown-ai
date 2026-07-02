@@ -40,6 +40,8 @@ __pycache__/
 # 下載的論文 repo（自帶 .git，會變 embedded repo）+ 1.7GB 資料/h5
 aux/investigation/ref/
 
+paper/FTR/*
+
 # ------------------------------------------------------------
 # （可選）若也想保留設定檔，取消對應註解：
 # !config.yaml

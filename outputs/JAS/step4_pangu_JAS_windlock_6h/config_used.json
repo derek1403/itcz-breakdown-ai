@@ -11,11 +11,11 @@
   "model": "pangu",
   "device": "cuda",
   "cpu_num": -1,
-  "step_hours": 24,
-  "background": "paperJAS",
+  "step_hours": 6,
+  "background": "JAS",
   "driver": {
-    "n_days": 20,
-    "forcing_days": 20,
+    "n_days": 16,
+    "forcing_days": 16,
     "save_every": 1,
     "clip_moisture": false
   },
@@ -58,10 +58,10 @@
     ]
   },
   "experiment": {
-    "name": "step1_pangu_paperJAS_Deep_2.5Kday",
-    "forcing_type": "heating",
-    "persistent": false,
-    "lock": "none",
-    "seed_npz": null
+    "name": "step4_pangu_JAS_windlock",
+    "forcing_type": "moisture",
+    "persistent": true,
+    "lock": "wind",
+    "seed_npz": "/wk2/pc/AI_models/itcz-breakdown-ai/outputs/JAS/seed_moisture_pangu_day7.npz"
   }
 }
