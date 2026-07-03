@@ -11,8 +11,8 @@
     (b) 振幅掃描；(c) 垂直分布（Deep vs uniform：只有含邊界層的加熱能把 TCWV 推上高值 →
     低層加熱驅動水氣輻合）。
 3.4 外部模態 vs 邊界層加熱等價 —— 你的積分論證 ∫−(∂Q/∂z)Ψ₀ dz ≈ Q_B。
-3.5 機制剝奪（Step 2–4）—— 鎖水氣抑制成長；只給水氣 / 鎖風分離出風–水氣耦合。
-    ⚠ 這節的定量敘述我標了 [TODO]，等你跑完的 timeseries 確認數字後填入。
+3.5 機制剝奪（Step 2–4）—— 定量已定稿（24h 高斯套組）：鎖水氣 ζ' 5.5（抑制 94%）；
+    只給水氣 ζ' 79 @ d9（水氣單獨也能起渦）；鎖風 ζ'≡0、TCWV 續增至 53（水氣無風則惰性）。
 3.6 24h vs 6h —— 先聲明 Pangu 無時間輸入（naive「日夜混疊」不成立），再給兩個真正的機制：
     (i) 6h 算子統計上學到陸地日夜加熱冷卻傾向、24h 算子同地方時對映把日夜訊號積分掉；
     (ii) 同樣 lead 要疊 4 倍次數 → 棋盤格假影與單步誤差級聯 4 倍累積。兩者都講清楚。
@@ -47,7 +47,7 @@ increment and produces the asymmetric PV response that the conservation
 theorems demand — an early indication that the learned operator carries the
 relevant dynamics.
 
-![Fig. 3](../outputs/JAS/step1_pangu_JAS_Deep_2.5Kday/panels_vort.png)
+![Fig. 3](pic/fig3_panels_vort.png)
 *Fig. 3: Snapshot panels of $\zeta'_{850}$ across the iteration (nominal days
 0–15). Early panels show the poleward-displaced vorticity band; later panels
 the roll-up into discrete vortices.*
@@ -77,11 +77,12 @@ test for. Consistent with the chaos caveat of Section 2.6, individual
 vortex longitudes are sensitive to the experimental details and only the
 statistics — vortex count, spacing, latitude, amplitude — are robust.
 
-![Fig. 4a](../outputs/JAS/step1_pangu_JAS_Deep_2.5Kday/panels_tcwv.png)
+![Fig. 4a](pic/fig4a_panels_tcwv.png)
 *Fig. 4a: TCWV$'$ snapshot panels for the headline run.*
 
-![Fig. 4b](../outputs/JAS/step1_pangu_JAS_Deep_2.5Kday/timeseries.png)
-*Fig. 4b: Peak $\zeta'_{850}$ and TCWV$'$ versus iteration.*
+![Fig. 4b](pic/fig4b_timeseries.png)
+*Fig. 4b: $\zeta'_{850}$ (left) and TCWV$'$ (right) at individual vortex centres
+versus iteration; each line is one tracked vortex branch.*
 
 ## 3.3 What controls the response
 
@@ -166,13 +167,16 @@ column moisture, and with it, essentially the entire instability — the
 learned breakdown is a *moist* barotropic breakdown. Conversely,
 initializing with the day-7 moisture anomaly alone (Step 3) tests whether a
 moisture field can excite the instability without its accompanying winds:
-the model spins up a vigorous vortex response from moisture alone,
-demonstrating the coupling in the opposite direction. Locking the winds
-while sustaining the moisture source (Step 4) isolates the moisture
-evolution with the dynamical feedback denied; the moisture field then
-accumulates passively without organizing into vortices.
-[TODO: Step 3/4 的定量數字待 24h 重跑完成後定稿（舊 6h 版：Step 3 ζ' 80.3e-5 @ d10；
-Step 4 TCWV' 68.6 @ d16）。]
+the model spins up a vigorous vortex response from moisture alone, reaching
+$\zeta' \approx 79 \times 10^{-5}\ \mathrm{s^{-1}}$ within nine iterations —
+comparable in amplitude to the standard run, and earlier, since the
+experiment begins from a mature moisture seed. The learned coupling thus
+operates in both directions: winds build moisture (Step 1 vs. 2), and
+moisture builds winds (Step 3). Finally, locking the winds while sustaining
+the moisture source (Step 4) isolates the moisture evolution with the
+dynamical feedback denied: the column moisture then accumulates steadily
+(to $\approx 53$ mm by day 16) without ever organizing into vortices —
+moisture alone, denied its winds, is inert.
 Taken together, the suite shows that the
 full breakdown requires the two-way coupling — winds converging moisture,
 moisture sustaining the vortices — that the model has evidently learned from
@@ -187,10 +191,14 @@ the four-step suite (Pangu, JAS background, 24-h operator).*
 ## 3.6 Sensitivity to the operator time step: 24-h versus 6-h
 
 Repeating the headline experiment with the 6-h Pangu operator (four
-applications per nominal day, forcing scaled to +0.625 K per step) yields a
-visibly noisier evolution: the vorticity band and subsequent vortices are
-present, but embedded in high-frequency, land-anchored clutter absent from
-the 24-h run (Fig. 8).
+applications per nominal day, forcing scaled to +0.625 K per step, sustained
+as in the 24-h run) yields a visibly noisier evolution: the vorticity band
+and a subsequent roll-up are present, but embedded in filamentary,
+land-anchored, high-frequency clutter absent from the 24-h run, and the
+discrete four-vortex chain never emerges as cleanly (Fig. 8). The peak
+amplitudes are also inflated ($\zeta' \approx 101$ vs. $89 \times 10^{-5}\
+\mathrm{s^{-1}}$; TCWV$' \approx 77$ vs. $48$ mm), the moisture field
+especially.
 
 We emphasize at the outset what this difference is *not*. Pangu's inputs
 contain no solar zenith angle, no top-of-atmosphere radiation, and no clock
@@ -224,10 +232,11 @@ variance, preferentially anchored to land, superposed on an otherwise
 similar breakdown. For the purposes of this study the 24-h operator is
 therefore the cleaner instrument, and all headline results use it.
 
-![Fig. 8](../outputs/JAS/step1_pangu_JAS_Deep_2.5Kday_6h_pulse7d/panels_vort.png)
-*Fig. 8: $\zeta'_{850}$ evolution with the 6-h operator; compare the 24-h
-companion run (Appendix D, Fig. D2). A same-iteration side-by-side version is
-specified in `FIGURES_TODO.md`, item F3.*
+![Fig. 8](pic/fig8_6h_vs_24h_day12.png)
+*Fig. 8: $\zeta'_{850}$ at nominal day 12 under the 24-h operator (left)
+and the 6-h operator (right), identical sustained Gaussian Deep
+2.5 K day$^{-1}$ forcing. Full snapshot panels for both runs are in
+Appendix D.*
 
 ## 3.7 An observed counterpart: the November 2024 quadruple-typhoon event
 

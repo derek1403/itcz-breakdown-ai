@@ -98,17 +98,54 @@ def fig7():
 # ---------------------------------------------------------------------- fig8
 def fig8(day=12):
     import cartopy.crs as ccrs
+    import matplotlib.ticker as mticker
     run6 = RUN_6H if os.path.isdir(RUN_6H) else RUN_6H_FALLBACK
     tag6 = "6-h operator" + ("" if run6 == RUN_6H else " (7-day pulse run)")
     fig = plt.figure(figsize=(13, 3.6))
     for i, (rd, tt) in enumerate([(RUN_24H, "24-h operator"), (run6, tag6)]):
         ax = fig.add_subplot(1, 2, i + 1, projection=ccrs.PlateCarree(central_longitude=180))
         im = _vort_map(ax, rd, day, f"{tt} — nominal day {day}")
-    cb = fig.colorbar(im, ax=fig.axes, shrink=0.85, pad=0.02)
+        ax.set_title(f"{tt} — nominal day {day}", fontsize=10, fontweight="bold")
+        gl = ax.gridlines(draw_labels=True, linewidth=0.3, color="gray",
+                          alpha=0.4, linestyle="--")
+        gl.top_labels = gl.right_labels = False
+        gl.xlocator = mticker.FixedLocator([120, 150, 180, 210])  # lon every 30 deg
+        gl.ylocator = mticker.FixedLocator([0, 10, 20, 30])       # lat every 10 deg
+        gl.xlabel_style = {"size": 8, "weight": "bold"}
+        gl.ylabel_style = {"size": 8, "weight": "bold"}
+    cb = fig.colorbar(im, ax=fig.axes, shrink=0.85, pad=0.02, extend="both")
     cb.set_label(r"$\zeta'_{850}$ ($10^{-5}$ s$^{-1}$)")
     fig.savefig(os.path.join(OUT, "fig8_6h_vs_24h_day12.png"), dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"[fig] fig8_6h_vs_24h_day12.png  (6-h source: {run6})")
+
+
+# Enhanced-IR brightness-temperature colour table (ref: paper/FTR/IR_colorbar.png),
+# capped at -110 C. Equal-width segments between successive boundary temperatures.
+IR_TEMPS = [28, 0, -20, -31, -42, -53, -63, -80, -110]  # warm -> cold, deg C
+_IR_SEGS = [                       # (colour at warm edge, colour at cold edge) per bin
+    ((0, 0, 0), (0, 0, 1)),        #  28 ..   0  black -> blue
+    ((0, 0.7, 0), (0, 0.7, 0)),    #   0 .. -20  green
+    ((1, 1, 0), (1, 1, 0)),        # -20 .. -31  yellow
+    ((1, 0, 0), (1, 0, 0)),        # -31 .. -42  red
+    ((1, 1, 1), (1, 1, 1)),        # -42 .. -53  white
+    ((0, 0, 0), (0, 0, 0)),        # -53 .. -63  black
+    ((1, 0, 1), (1, 1, 1)),        # -63 .. -80  magenta -> white
+    ((1, 1, 1), (1, 1, 1)),        # -80 ..-110  white
+]
+
+
+def _ir_cmap(n=256):
+    from matplotlib.colors import ListedColormap
+    nb = len(_IR_SEGS)
+    cols = []
+    for i in range(n):
+        p = i / (n - 1) * nb           # position in units of bins (0..nb)
+        b = min(int(p), nb - 1)
+        t = p - b                      # fraction within bin
+        c0, c1 = _IR_SEGS[b]
+        cols.append([c0[k] + (c1[k] - c0[k]) * t for k in range(3)])
+    return ListedColormap(cols)
 
 
 # ---------------------------------------------------------------------- fig9
@@ -117,25 +154,48 @@ def fig9():
     from PIL import Image
     model_days = [6, 9, 12, 15]
     obs_dates = ["20241107", "20241109", "20241111", "20241113"]
-    fig = plt.figure(figsize=(16, 6.2))
+    fig = plt.figure(figsize=(16, 4.0))
     im = None
+    top_ax = None
     for i, day in enumerate(model_days):
         ax = fig.add_subplot(2, 4, i + 1, projection=ccrs.PlateCarree(central_longitude=180))
         im = _vort_map(ax, RUN_24H, day, f"model iteration {day} (nominal day)")
-        ax.set_xticks([]); ax.set_yticks([])
+        ax.set_title(f"model iteration {day} (nominal day)", fontsize=10, fontweight="bold")
+        top_ax = ax
+    bot_ax = None
     for i, date in enumerate(obs_dates):
         ax = fig.add_subplot(2, 4, 5 + i)
         img = Image.open(os.path.join(OBS_DIR, f"{date}_00Z_ir.jpg")).crop(CROP)
         ax.imshow(img)
-        ax.set_title(f"Himawari IR  {date[:4]}-{date[4:6]}-{date[6:]} 00Z", fontsize=10)
+        ax.set_title(f"Himawari IR  {date[:4]}-{date[4:6]}-{date[6:]} 00Z",
+                     fontsize=10, fontweight="bold")
         ax.axis("off")
-    cax = fig.add_axes([0.92, 0.55, 0.012, 0.33])
-    cb = fig.colorbar(im, cax=cax)
-    cb.set_label(r"$\zeta'_{850}$ ($10^{-5}$ s$^{-1}$)", fontsize=9)
+        bot_ax = ax
+    fig.subplots_adjust(left=0.02, right=0.90, top=0.89, bottom=0.02, hspace=0.20, wspace=0.08)
+    # colorbars: thin and vertically aligned with their rows (need final axes bbox)
+    fig.canvas.draw()
+    pos1 = top_ax.get_position()
+    cax = fig.add_axes([0.915, pos1.y0, 0.006, pos1.height])
+    cb = fig.colorbar(im, cax=cax, extend="both")
+    cb.set_label(r"$\zeta'_{850}$ ($10^{-5}$ s$^{-1}$)", fontsize=9, fontweight="bold")
+    for t in cb.ax.get_yticklabels():
+        t.set_fontweight("bold")
+    # IR brightness-temperature colorbar for the Himawari row
+    from matplotlib.colors import Normalize
+    from matplotlib.cm import ScalarMappable
+    nb = len(_IR_SEGS)
+    pos2 = bot_ax.get_position()
+    cax2 = fig.add_axes([0.915, pos2.y0, 0.006, pos2.height])
+    sm = ScalarMappable(norm=Normalize(0, nb), cmap=_ir_cmap())
+    cb2 = fig.colorbar(sm, cax=cax2)
+    cb2.set_ticks(list(range(nb + 1)))
+    cb2.set_ticklabels([str(t) for t in IR_TEMPS])
+    cb2.set_label(r"IR brightness $T_b$ ($^\circ$C)", fontsize=9, fontweight="bold")
+    for t in cb2.ax.get_yticklabels():
+        t.set_fontweight("bold")
     fig.suptitle("Modeled mode extraction (top; frozen JAS background) vs. observed "
                  "November 2024 monsoon-trough breakdown (bottom; true time evolution)",
-                 fontsize=12)
-    fig.subplots_adjust(left=0.02, right=0.90, top=0.90, bottom=0.03, hspace=0.15, wspace=0.08)
+                 fontsize=12, fontweight="bold", y=0.98)
     fig.savefig(os.path.join(OUT, "fig9_model_vs_obs.png"), dpi=150)
     plt.close(fig)
     print("[fig] fig9_model_vs_obs.png")

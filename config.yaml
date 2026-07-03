@@ -24,7 +24,7 @@ paths:
 model: pangu                 # "pangu" or "fcnv2"
 device: cuda                 # fcnv2: "cuda" (GPU) or "cpu"; pangu always CPUExecutionProvider (ignores this)
 cpu_num: -1                  # threads for inference & parallel averaging; -1 = all cores
-step_hours: 24
+step_hours: 6
 
 # --- background state u0 ----------------------------------------------------
 background: JAS             # JAS = validated AI-Forum IC (§7). also: JJA|DJF|annual|ragasa|enso_*

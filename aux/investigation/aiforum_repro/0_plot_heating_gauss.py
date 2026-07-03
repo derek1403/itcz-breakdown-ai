@@ -20,6 +20,18 @@ import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 import panguweather_utils as pw
 
+# --- bold + enlarged fonts everywhere (colorbar label reset to plain below) ---
+plt.rcParams.update({
+    "font.size": 12,
+    "font.weight": "bold",
+    "axes.titlesize": 14,
+    "axes.titleweight": "bold",
+    "axes.labelsize": 13,
+    "axes.labelweight": "bold",
+    "xtick.labelsize": 12,
+    "ytick.labelsize": 12,
+})
+
 km = 1.e3
 grav = 9.81
 YLAT = 10.0        # 緯向中心
@@ -84,47 +96,56 @@ def add_map(ax):
     ax.set_global()
     gl = ax.gridlines(draw_labels=True, linewidth=0.3, color="0.5", alpha=0.5)
     gl.top_labels = gl.right_labels = False
+    gl.xlabel_style = {"weight": "bold", "size": 11}
+    gl.ylabel_style = {"weight": "bold", "size": 11}
 
 
-# =================== 圖1：加熱分布 ===================
+def map_cbar(im, ax, label, **kw):
+    """Horizontal colorbar as long as the map; plain label, bold tick labels."""
+    cb = fig.colorbar(im, ax=ax, orientation="horizontal", shrink=1.0, pad=0.08, **kw)
+    cb.set_label(label, fontweight="normal", fontsize=10)
+    for t in cb.ax.get_xticklabels():
+        t.set_fontweight("bold"); t.set_fontsize(9)
+    return cb
+
+
+# =================== 圖1：加熱分布（panel order matches paper Fig. 1）===================
 fig = plt.figure(figsize=(16, 9))
-
-# (a) 加熱水平（疊海岸線）
-ax1 = fig.add_subplot(2, 2, 1, projection=PROJ)
 hlev = np.arange(0, AMP_SHOW + 0.25, 0.25)        # 每 0.25 K/day 一格
 hnorm = BoundaryNorm(hlev, plt.get_cmap("Reds").N, clip=False, extend="max")
-im1 = ax1.pcolormesh(lon, lat, AMP_SHOW * shape2d, cmap="Reds", norm=hnorm,
+
+# (a) JAS IC TCWV（疊海岸線 + 加熱 0.25/0.6 輪廓）
+ax1 = fig.add_subplot(2, 2, 1, projection=PROJ)
+im1 = ax1.pcolormesh(lon, lat, tcwv_ic, cmap=CMAP_TCWV, norm=NORM_TCWV,
                      shading="auto", transform=DATA)
+ax1.contour(lon, lat, shape2d, levels=[0.25, 0.6], colors="k", linewidths=0.8, transform=DATA)
 add_map(ax1)
-ax1.set_title(f"(a) GAUSS heating ({AMP_SHOW} K/day, center {YLAT:.0f}N/{XLON:.0f}E, "
-              f"sig {SIG_LAT}/{SIG_LON} deg)")
-fig.colorbar(im1, ax=ax1, shrink=0.6, label="heating (K/day)", ticks=hlev,
-             orientation="horizontal", pad=0.05)
+ax1.set_title(f"(a) {season} IC: TCWV (black = heating 0.25/0.6 contour)", fontsize=12)
+map_cbar(im1, ax1, "TCWV (kg m$^{-2}$)", ticks=tlev, extend="max", aspect=40)
 
-# (b) Deep 垂直分布
-ax2 = fig.add_subplot(2, 2, 2)
-ax2.plot(vprof, levels, "o-"); ax2.invert_yaxis()
-ax2.set_title("(b) Deep vertical profile")
-ax2.set_xlabel("unit heating"); ax2.set_ylabel("pressure (hPa)")
-ax2.grid(True, alpha=0.3)
-
-# (c) 緯向切面（過中心經度）
-ax3 = fig.add_subplot(2, 2, 3)
-ax3.plot(lat, shape2d[:, ilon], "-")
-ax3.axvline(YLAT, color="g", ls=":", lw=1); ax3.axvline(0, color="0.6", lw=0.6)
-ax3.set_xlim(-20, 40)
-ax3.set_title(f"(c) Meridional cut @ {XLON:.0f}E (sig_lat={SIG_LAT} deg, center {YLAT:.0f}N)")
-ax3.set_xlabel("lat (deg)"); ax3.set_ylabel("unit heating"); ax3.grid(True, alpha=0.3)
-
-# (d) JAS IC TCWV（疊海岸線）
-print(lon.shape, lat.shape, tcwv_ic.shape)
-ax4 = fig.add_subplot(2, 2, 4, projection=PROJ)
-im4 = ax4.pcolormesh(lon, lat, tcwv_ic, cmap=CMAP_TCWV, norm=NORM_TCWV,
+# (b) 加熱水平（高斯包絡，疊海岸線）
+ax2 = fig.add_subplot(2, 2, 2, projection=PROJ)
+im2 = ax2.pcolormesh(lon, lat, AMP_SHOW * shape2d, cmap="Reds", norm=hnorm,
                      shading="auto", transform=DATA)
-add_map(ax4)
-ax4.set_title(f"(d) {season} IC: TCWV")
-fig.colorbar(im4, ax=ax4, shrink=0.6, label="TCWV (kg m$^{-2}$)", ticks=tlev,
-             extend="max", orientation="horizontal", pad=0.05)
+add_map(ax2)
+ax2.set_title(f"(b) GAUSS heating ({AMP_SHOW} K/day, center {YLAT:.0f}N/{XLON:.0f}E, "
+              f"sig {SIG_LAT}/{SIG_LON} deg)", fontsize=12)
+map_cbar(im2, ax2, "heating (K/day)", ticks=hlev, aspect=40)
+
+# (c) Deep 垂直分布
+ax3 = fig.add_subplot(2, 2, 3)
+ax3.plot(vprof, levels, "o-"); ax3.invert_yaxis()
+ax3.set_title("(c) Deep vertical profile")
+ax3.set_xlabel("unit heating"); ax3.set_ylabel("pressure (hPa)")
+ax3.grid(True, alpha=0.3)
+
+# (d) 緯向切面（過中心經度）
+ax4 = fig.add_subplot(2, 2, 4)
+ax4.plot(lat, shape2d[:, ilon], "-")
+ax4.axvline(YLAT, color="g", ls=":", lw=1); ax4.axvline(0, color="0.6", lw=0.6)
+ax4.set_xlim(-20, 40)
+ax4.set_title(f"(d) Meridional cut @ {XLON:.0f}E (sig_lat={SIG_LAT} deg, center {YLAT:.0f}N)")
+ax4.set_xlabel("lat (deg)"); ax4.set_ylabel("unit heating"); ax4.grid(True, alpha=0.3)
 
 fig.tight_layout()
 fig.savefig("figs/heating_dist_gauss.png", dpi=120)

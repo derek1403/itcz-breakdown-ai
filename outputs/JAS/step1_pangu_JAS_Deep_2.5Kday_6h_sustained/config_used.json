@@ -1,0 +1,67 @@
+{
+  "paths": {
+    "pangu_model_dir": "/LeibnizHD1/pc/AI_model/pangu/models",
+    "fcnv2_weight_dir": "/tmp/unused",
+    "era5_monthly_dir": "/tmp/unused",
+    "era5_clim_dir": "/tmp/unused",
+    "era5_daily_dir": "/tmp/unused",
+    "ic_dir": "/home/pc/itcz_run/ic",
+    "output_dir": "/home/pc/itcz_run/outputs"
+  },
+  "model": "pangu",
+  "device": "cpu",
+  "cpu_num": -1,
+  "step_hours": 6,
+  "background": "JAS",
+  "driver": {
+    "n_days": 16,
+    "forcing_days": 20,
+    "save_every": 1,
+    "clip_moisture": false
+  },
+  "forcing": {
+    "center_lat": 10.0,
+    "center_lon": 195.0,
+    "lon_halfwidth": 130.0,
+    "lat_halfwidth": 12.8,
+    "edge_sigmas": 2.0,
+    "heat_type": "Deep",
+    "amp_K_per_day": 2.5,
+    "moist_amp_qday": 0.002
+  },
+  "plot": {
+    "domain": [
+      100,
+      -70,
+      0,
+      45
+    ],
+    "vort_level": 850,
+    "vort_clim": 10.0,
+    "vort_step": 1.0,
+    "tcwv_clim": 40.0,
+    "tcwv_step": 10.0,
+    "snapshot_days": [
+      0,
+      1,
+      4,
+      6,
+      9,
+      12,
+      15
+    ],
+    "track_band": [
+      0,
+      20,
+      120,
+      270
+    ]
+  },
+  "experiment": {
+    "name": "step1_pangu_JAS_Deep_2.5Kday",
+    "forcing_type": "heating",
+    "persistent": false,
+    "lock": "none",
+    "seed_npz": null
+  }
+}

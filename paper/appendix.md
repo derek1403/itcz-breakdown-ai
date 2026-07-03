@@ -77,10 +77,10 @@ prescription, it is used for the headline experiments.
 ![Fig. B1b](../aux/investigation/aiforum_repro/figs/heating_dist.png)
 *Fig. B1b: Cosine-lobe envelope (after Hakim and Masanam 2024).*
 
-![Fig. B1c](../outputs/JAS/step1_pangu_JAS_Deep_2.5Kday/panels_vort.png)
+![Fig. B1c](pic/fig3_panels_vort.png)
 *Fig. B1c: $\zeta'_{850}$ evolution, Gaussian envelope (= Fig. 3).*
 
-![Fig. B1d](../outputs/paperJAS/step1_pangu_paperJAS_Deep_2.5Kday/panels_vort.png)
+![Fig. B1d](pic/figB1d_panels_vort.png)
 *Fig. B1d: $\zeta'_{850}$ evolution, cosine-lobe envelope.*
 
 ### B.2 Amplitude
@@ -97,7 +97,7 @@ regime by $\sim$10 K day$^{-1}$.
 Snapshot panels of the DJF-background control of Section 3.3a, identical
 Gaussian Deep 2.5 K day$^{-1}$ forcing.
 
-![Fig. B3](../outputs/DJF/step1_pangu_DJF_Deep_2.5Kday/panels_vort.png)
+![Fig. B3](pic/figB3_panels_vort.png)
 *Fig. B3: $\zeta'_{850}$ evolution, DJF background.*
 
 ## Appendix C: The August–September 2023 event
@@ -115,10 +115,10 @@ east (Fig. C1). The event is meridionally less aligned than the November
 Full snapshot panels for the 6-h experiment of Section 3.6, for comparison
 with the 24-h headline panels (Fig. 3).
 
-![Fig. D1](../outputs/JAS/step1_pangu_JAS_Deep_2.5Kday_6h_pulse7d/panels_vort.png)
-*Fig. D1: $\zeta'_{850}$ evolution with the 6-h operator (forcing scaled to
-+0.625 K per step). Note the land-anchored high-frequency clutter discussed
-in Section 3.6.*
+![Fig. D1](pic/figD1_panels_vort.png)
+*Fig. D1: $\zeta'_{850}$ evolution with the 6-h operator (sustained forcing,
+scaled to +0.625 K per step — the controlled counterpart of the 24-h run).
+Note the land-anchored high-frequency clutter discussed in Section 3.6.*
 
-![Fig. D2](../outputs/JAS/step1_pangu_JAS_Deep_2.5Kday/panels_vort.png)
+![Fig. D2](pic/fig3_panels_vort.png)
 *Fig. D2: Companion 24-h run from the same pipeline configuration.*
