@@ -49,6 +49,7 @@ theorems demand — an early indication that the learned operator carries the
 relevant dynamics.
 
 ![Fig. 3](pic/fig3_panels_vort.png)
+
 *Fig. 3: Snapshot panels of $\zeta'_{850}$ across the iteration (nominal days
 0–15). Early panels show the poleward-displaced vorticity band; later panels
 the roll-up into discrete vortices.*
@@ -79,10 +80,12 @@ vortex longitudes are sensitive to the experimental details and only the
 statistics — vortex count, spacing, latitude, amplitude — are robust.
 
 ![Fig. 4a](pic/fig4a_panels_tcwv.png)
-*Fig. 4a: TCWV$'$ snapshot panels for the headline run.*
+
+*Fig. 4a: $\mathrm{TCWV}'$ snapshot panels for the headline run.*
 
 ![Fig. 4b](pic/fig4b_timeseries.png)
-*Fig. 4b: $\zeta'_{850}$ (left) and TCWV$'$ (right) at individual vortex centres
+
+*Fig. 4b: $\zeta'_{850}$ (left) and $\mathrm{TCWV}'$ (right) at individual vortex centres
 versus iteration; each line is one tracked vortex branch.*
 
 ## 3.3 What controls the response
@@ -108,26 +111,27 @@ words, belongs to the background state, and the heating merely excites it —
 as barotropic-instability theory would insist.
 
 ![Fig. 5](pic/fig5_seasonal_timeseries.png)
-*Fig. 5: Seasonal control under identical Gaussian Deep 2.5 K day$^{-1}$
+
+*Fig. 5: Seasonal control under identical Gaussian Deep $2.5 \mathrm{K} \cdot \mathrm{day^{-1}}$
 forcing, JAS versus DJF background. (a) Peak $\zeta'_{850}$ versus
 iteration: explosive growth on the summer background, saturation without
-organization on the winter background. (b) Peak TCWV$'$ versus iteration:
+organization on the winter background. (b) Peak $\mathrm{TCWV}'$ versus iteration:
 nearly identical in the two seasons.*
 
 The forcing amplitude, by contrast, sets only where on a familiar curve the
 experiment sits. An amplitude sweep (Appendix B) shows quasi-linear scaling
-of the early response up to a few K day$^{-1}$, with the 2.5 K day$^{-1}$
+of the early response up to a few $\mathrm{K} \cdot \mathrm{day^{-1}}$, with the $2.5 \mathrm{K} \cdot \mathrm{day^{-1}}$
 headline value lying in the regime where the roll-up is vigorous but not yet
-overdriven; by 10 K day$^{-1}$ the response is strongly nonlinear from the
+overdriven; by $10 \mathrm{K} \cdot \mathrm{day^{-1}}$ the response is strongly nonlinear from the
 outset and contaminates the midlatitudes.
 
 The vertical structure of the heating discriminates between the two response
 fields in an instructive way. With equal amplitude and horizontal envelope,
 the deep-convective profile yields peak
 $\zeta' \approx 43.8\times10^{-5}\ \mathrm{s^{-1}}$ but
-TCWV$' \approx 31$ mm only, whereas a vertically uniform profile extending
+$\mathrm{TCWV}' \approx 31$ mm only, whereas a vertically uniform profile extending
 into the boundary layer yields $\zeta' \approx 48\times10^{-5}\
-\mathrm{s^{-1}}$ and TCWV$' \approx 43$ mm (calibration runs): the vorticity
+\mathrm{s^{-1}}$ and $\mathrm{TCWV}' \approx 43$ mm (calibration runs): the vorticity
 response barely notices the change, while the moisture response is lifted by
 a third. The moisture side is readily understood — the sinusoidal profiles
 vanish at 1000 hPa and so drive no boundary-layer buoyancy and little
@@ -163,10 +167,11 @@ also explains why the roll-up is robust across vertical profiles
 (Section 3.3) even as the moisture amplitude varies.
 
 ![Fig. 6](../aux/investigation/figs/hakim/exbl_evolution/day12.png)
+
 *Fig. 6: Perturbation 500-hPa geopotential height at nominal day 12 for
 external-mode heating (EX, 1000–50 hPa; top row) versus boundary-layer
-heating (BL, 1000–700 hPa; bottom row), at forcing amplitudes 0.1 K day$^{-1}$
-(left) and 0.5 K day$^{-1}$ (right). Height perturbations are contoured every
+heating (BL, 1000–700 hPa; bottom row), at forcing amplitudes $0.1 \mathrm{K} \cdot \mathrm{day^{-1}}$
+(left) and $0.5 \mathrm{K} \cdot \mathrm{day^{-1}}$ (right). Height perturbations are contoured every
 10 m (red solid = positive, blue dashed = negative); thin grey contours are the
 base-state 500-hPa height and the red dashed ellipse marks the heating
 footprint. At equal amplitude the EX and BL rows produce closely similar
@@ -204,10 +209,11 @@ requiring an order of magnitude larger amplitude for a comparable response,
 a model contrast we return to in Section 4.
 
 ![Fig. 7](pic/fig7_steps_overlay.png)
+
 *Fig. 7: The four-step mechanism-denial suite (Pangu, JAS background, 24-h
 operator). (a) Peak $\zeta'_{850}$ versus iteration: moisture-locking
 (Step 2) suppresses the growth almost entirely, while a moisture-only
-initialization (Step 3) excites it. (b) Peak TCWV$'$ versus iteration: the
+initialization (Step 3) excites it. (b) Peak $\mathrm{TCWV}'$ versus iteration: the
 wind-locked run (Step 4) accumulates moisture steadily without ever
 organizing.*
 
@@ -220,7 +226,7 @@ and a subsequent roll-up are present, but embedded in filamentary,
 land-anchored, high-frequency clutter absent from the 24-h run, and the
 discrete four-vortex chain never emerges as cleanly (Fig. 8). The peak
 amplitudes are also inflated ($\zeta' \approx 101$ vs. $89 \times 10^{-5}\
-\mathrm{s^{-1}}$; TCWV$' \approx 77$ vs. $48$ mm), the moisture field
+\mathrm{s^{-1}}$; $\mathrm{TCWV}' \approx 77$ vs. $48$ mm), the moisture field
 especially.
 
 We emphasize at the outset what this difference is *not*. Pangu's inputs
@@ -256,8 +262,9 @@ similar breakdown. For the purposes of this study the 24-h operator is
 therefore the cleaner instrument, and all headline results use it.
 
 ![Fig. 8](pic/fig8_6h_vs_24h_day12.png)
+
 *Fig. 8: $\zeta'_{850}$ at nominal day 12 under identical sustained Gaussian
-Deep 2.5 K day$^{-1}$ forcing. (a) The 24-h operator: four discrete vortices
+Deep $2.5 \mathrm{K} \cdot \mathrm{day^{-1}}$ forcing. (a) The 24-h operator: four discrete vortices
 along the strip. (b) The 6-h operator: a noisier field with filamentary,
 land-anchored clutter and no clean vortex chain. Full snapshot panels for
 both runs are in Appendix D.*
@@ -299,6 +306,7 @@ end-state structure, under a quasi-stationary background — is the sense in
 which we consider the observations to corroborate the modeled breakdown.
 
 ![Fig. 9](pic/fig9_model_vs_obs.png)
+
 *Fig. 9: (a) Top row: modeled $\zeta'_{850}$ at iterations 6, 9, 12, 15 of
 the mode extraction (frozen JAS background). (b) Bottom row: Himawari
 infrared imagery, 00Z 7–13 November 2024, as the western North Pacific

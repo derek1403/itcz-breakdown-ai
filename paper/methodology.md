@@ -50,7 +50,7 @@ transitions, a point to which we return in Section 3.6. Second, Pangu carries
 no moisture column integral, so TCWV must be diagnosed as
 $\mathrm{TCWV} = g^{-1}\int q\, dp$; FCNv2 carries TCWV natively. We verified
 that the two definitions agree on identical states to within an RMSE of
-$\sim3.6$ kg m$^{-2}$ (Appendix A), so that moisture responses can be compared
+$\sim 3.6\ \mathrm{kg} \cdot \mathrm{m^{-2}}$ (Appendix A), so that moisture responses can be compared
 across models. Moisture forcing is specified once, as a specific-humidity
 rate, and converted to each model's native variables ($q$ for Pangu; relative
 humidity plus the consistent TCWV increment for FCNv2, using the background
@@ -105,6 +105,7 @@ channel-locking operator used only in the mechanism-denial experiments
 scheme suitable:
 
 ![Fig. 1](pic/fig_method_schematic.png)
+
 *Fig. 1: The perpetual background re-centering loop.*
 
 1. *The input to $M$ is always anchored to $u_0$.* The model never sees a
@@ -139,7 +140,7 @@ instability of the heated vorticity strip. The higher-order terms are the
 finite-amplitude saturation of the roll-up, and the wind–moisture coupling in
 which perturbation winds converge background moisture that in turn modifies
 the perturbation heating response. At the amplitudes we force
-( $\lVert \delta \rVert $ set by a $2.5 \text{K day}^{-1}$ heating sustained
+( $\lVert \delta \rVert$ set by a $2.5 \mathrm{K} \cdot \mathrm{day^{-1}}$ heating sustained
 throughout the experiment), these quadratic-and-higher terms are essential and active; the
 method coincides with a tangent-linear calculation only in the formal limit
 $\lVert\delta\rVert \to 0$, which we are deliberately not in. Following the
@@ -217,9 +218,10 @@ the same under both (the amplitude scales with the net delivered heating),
 and the comparison is given in Appendix B.
 
 ![Fig. 2](../outputs/JAS/heating_dist_check.png)
+
 *Fig. 2: The forcing and its background. (a) JAS climatological TCWV with
 the heating footprint contoured in black (0.25 and 0.6 of the peak rate);
-(b) horizontal structure of the applied Gaussian heating (2.5 K day$^{-1}$
+(b) horizontal structure of the applied Gaussian heating ($2.5 \mathrm{K} \cdot \mathrm{day^{-1}}$
 peak, centered at 10°N, 195°E); (c) the Deep vertical profile $Q(p)$;
 (d) meridional cross-section of the envelope at 195°E.*
 
@@ -237,7 +239,7 @@ single-signed mode of essentially this shape. Alternative profiles
 (stratiform, shallow, and vertically uniform) are used in the sensitivity
 experiments of Section 3.3.
 
-*Amplitude and duration.* The heating rate is  $ 2.5\text{K day}^{-1}$ at the
+*Amplitude and duration.* The heating rate is $2.5 \mathrm{K} \cdot \mathrm{day^{-1}}$ at the
 horizontal and vertical maximum, applied as a discrete increment at each step
 (+2.5 K per 24-h step; +0.625 K per 6-h step). We treat this discrete pulse
 as an approximation to a continuous diabatic heating rate acting over the
@@ -245,8 +247,8 @@ step — the same convention used for the moisture source in Step 4. The
 heating is sustained at every iteration throughout the $N = 16$ experiment,
 maintaining the strip against dissipation while the instability develops
 upon it. Amplitude is a genuinely calibrated quantity: rates of order
-$10\ \text{K day}^{-1}$ drive the system into a strongly overdriven regime
-(Appendix B), while $1.5$–$3\ \text{K day}^{-1}$ brackets the regime in which
+$10 \mathrm{K} \cdot \mathrm{day^{-1}}$ drive the system into a strongly overdriven regime
+(Appendix B), while $1.5$–$3 \mathrm{K} \cdot \mathrm{day^{-1}}$ brackets the regime in which
 the roll-up is vigorous but not overdriven.
 
 ## 2.5 The experiment suite
@@ -276,14 +278,14 @@ whether the response is set by the background ITCZ rather than by the
 forcing; (ii) an *external-mode versus boundary-layer heating* pair,
 which places the heating either in the barotropic (external) vertical mode or
 in the boundary layer alone (Section 3.4); (iii) an *amplitude sweep*
-( $ 0.1–20 \text{K day}^{-1}$; Appendix B); and (iv) a *time-step control* repeating
+($0.1$–$20 \mathrm{K} \cdot \mathrm{day^{-1}}$; Appendix B); and (iv) a *time-step control* repeating
 Step 1 with the 6-h Pangu operator (Section 3.6). The full suite is run on
 both Pangu and FCNv2.
 
 ## 2.6 Diagnostics
 
 The primary diagnostics are the 850-hPa perturbation relative vorticity
-$\zeta'_{850}$ and the perturbation column water vapor $\text{TCWV}'$. Because the
+$\zeta'_{850}$ and the perturbation column water vapor $\mathrm{TCWV}'$. Because the
 curl is a linear operator, computing $\zeta'$ directly from the perturbation
 winds is exact — $\zeta(u') = \zeta(u' + B) - \zeta(B)$ — which we verified
 numerically to machine precision ($\sim10^{-7}$ relative). Time series of the

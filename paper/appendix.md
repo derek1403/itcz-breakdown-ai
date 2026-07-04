@@ -29,17 +29,20 @@ ellipse are verified in Fig. A1, and the four vertical profiles used in
 Section 3.3 are shown in Fig. A2.
 
 ![Fig. A1](../aux/verification/figures/02_forcing_ellipse.png)
+
 *Fig. A1: Horizontal forcing envelope and boundary ellipse.*
 
 ![Fig. A2](../aux/verification/figures/03_vertical_profiles.png)
+
 *Fig. A2: Vertical heating profiles (Deep, stratiform, shallow, uniform).*
 
 *Cross-model moisture consistency.* Pangu's diagnosed
 $\mathrm{TCWV}=g^{-1}\!\int q\,dp$ agrees with FCNv2's native TCWV channel on
-identical states to RMSE $\approx 3.6$ kg m$^{-2}$ (Fig. A3), validating
+identical states to RMSE $\approx 3.6\ \mathrm{kg} \cdot \mathrm{m^{-2}}$ (Fig. A3), validating
 cross-model comparison of moisture responses.
 
 ![Fig. A3](../aux/verification/figures/04_tcwv_agreement.png)
+
 *Fig. A3: Integrated q (Pangu) versus native TCWV channel (FCNv2).*
 
 *Background as-run.* The full JAS background state of the headline run is
@@ -47,6 +50,7 @@ documented in Fig. A4; the heating actually applied is Fig. 2 of the main
 text.
 
 ![Fig. A4](../outputs/JAS/ic_JAS_check.png)
+
 *Fig. A4: JAS 1979–2019 climatological background (vorticity and TCWV).*
 
 ## Appendix B: Sensitivity gallery
@@ -69,32 +73,38 @@ structure is envelope-independent and the Gaussian is the smoother, simpler
 prescription, it is used for the headline experiments.
 
 ![Fig. B1a](../aux/investigation/aiforum_repro/figs/heating_dist_gauss.png)
+
 *Fig. B1a: Gaussian envelope.*
 
 ![Fig. B1b](../aux/investigation/aiforum_repro/figs/heating_dist.png)
+
 *Fig. B1b: Cosine-lobe envelope (after Hakim and Masanam 2024).*
 
 ![Fig. B1c](pic/fig3_panels_vort.png)
+
 *Fig. B1c: $\zeta'_{850}$ evolution, Gaussian envelope (= Fig. 3).*
 
 ![Fig. B1d](pic/figB1d_panels_vort.png)
+
 *Fig. B1d: $\zeta'_{850}$ evolution, cosine-lobe envelope.*
 
 ### B.2 Amplitude
 
 Peak-response time series across the amplitude sweep (Fig. B2) show
-quasi-linear early scaling through a few K day$^{-1}$ and an overdriven
-regime by $\sim$10 K day$^{-1}$.
+quasi-linear early scaling through a few $\mathrm{K} \cdot \mathrm{day^{-1}}$ and an overdriven
+regime by $\sim 10 \mathrm{K} \cdot \mathrm{day^{-1}}$.
 
 ![Fig. B2](../aux/investigation/figs/sweep/pangu/timeseries_amps.png)
+
 *Fig. B2: Amplitude sweep, Pangu, peak responses.*
 
 ### B.3 Seasonal control
 
 Snapshot panels of the DJF-background control of Section 3.3a, identical
-Gaussian Deep 2.5 K day$^{-1}$ forcing.
+Gaussian Deep $2.5 \mathrm{K} \cdot \mathrm{day^{-1}}$ forcing.
 
 ![Fig. B3](pic/figB3_panels_vort.png)
+
 *Fig. B3: $\zeta'_{850}$ evolution, DJF background.*
 
 ## Appendix C: The August–September 2023 event
@@ -105,6 +115,7 @@ east (Fig. C1). The event is meridionally less aligned than the November
 2024 case but exhibits the same strip-to-vortices morphology.
 
 ![Fig. C1](../obs/2023-09_WPac_triple-plus/rollup_IR_Aug30-Sep06.jpg)
+
 *Fig. C1: Himawari IR montage, 30 Aug – 6 Sep 2023.*
 
 ## Appendix D: 24-h versus 6-h operator panels
@@ -113,9 +124,11 @@ Full snapshot panels for the 6-h experiment of Section 3.6, for comparison
 with the 24-h headline panels (Fig. 3).
 
 ![Fig. D1](pic/figD1_panels_vort.png)
+
 *Fig. D1: $\zeta'_{850}$ evolution with the 6-h operator (sustained forcing,
 scaled to +0.625 K per step — the controlled counterpart of the 24-h run).
 Note the land-anchored high-frequency clutter discussed in Section 3.6.*
 
 ![Fig. D2](pic/fig3_panels_vort.png)
+
 *Fig. D2: Companion 24-h run from the same pipeline configuration.*

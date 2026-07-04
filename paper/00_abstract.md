@@ -31,11 +31,11 @@ itself is re-anchored at every step. Because the background is frozen, the
 iteration constitutes a forced power iteration that extracts the
 fastest-growing finite-time structure — a nonlinear analogue of a singular
 vector of $M$ about the basic state — rather than a forecast trajectory.
-Sustained deep-convective heating (2.5 K day$^{-1}$, centered at 10°N) first
+Sustained deep-convective heating ($2.5 \mathrm{K} \cdot \mathrm{day^{-1}}$, centered at 10°N) first
 generates a potential-vorticity band displaced to the poleward flank of the
 heating, which subsequently undulates and rolls up into approximately four
-discrete vortices (peak $\zeta' \approx 9\times10^{-4}$ s$^{-1}$,
-TCWV$'\approx 48$ mm). Mechanism-denial experiments (moisture
+discrete vortices (peak $\zeta' \approx 9\times10^{-4}\ \mathrm{s^{-1}}$,
+$\mathrm{TCWV}' \approx 48$ mm). Mechanism-denial experiments (moisture
 and wind locking) show the growth requires the wind–moisture coupling the
 model has learned. The converged mode structure — a chain of vortices along
 the monsoon trough — closely resembles the November 2024 western North
