@@ -1,85 +1,85 @@
-"""Paper Fig. 4b generator: per-vortex zeta' and TCWV' genealogy branches.
+"""Paper Fig. 4b generator: per-vortex zeta' / TCWV' genealogy from HAND tracks.
 
-Redraw of the headline run's timeseries as MANY lines (one per tracked vortex
-branch), like tracking/vortex_genealogy.png but in the 2-panel Fig.4b layout.
-Uses the SAME detect()/link() as scripts/track_vortices.py (and the QC montage
-scripts/plot_maxcheck.py), so tuning the knobs below keeps all three consistent.
+The automatic tracker could not reproduce the observed 1->2->4 genealogy, so the
+vortex centres are tracked by eye (tracking/track_eye.md), snapped to the nearby
+zeta' maximum by scripts/plot_eyecheck.py -> tracking/eye_snapped.csv.  This
+script draws the two-panel genealogy from that csv:
 
-The vorticity axis is in units of 1e-5 s^-1 (values ~0..90), not raw s^-1.
+  * one coloured line per labelled segment (2b, 2a, 1, 3, 4, 2)
+  * thin connectors at the split/merge events so the tree reads as a genealogy
+  * colour = FINAL vortex number  (1 blue, 2 orange [=2a/2b], 3 green, 4 red)
 
-Run with pangu_env python:
+Genealogy (from the md annotations):
+  days 5-8 trunk 2b ; day9 trunk splits -> 2a,2b,3 ; day10 1 splits from 2a ;
+  day13 4 splits from 3 ; day14 2a+2b merge -> 2.
+
+The vorticity axis is in units of 1e-5 s^-1.
+
     /home/pc/.conda/envs/pangu_env/bin/python paper/pic/plot_fig4b_timeseries.py
 """
-import json
+import csv
 import os
-import sys
-
-ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-sys.path.insert(0, os.path.join(ROOT, "src"))
-sys.path.insert(0, os.path.join(ROOT, "scripts"))
 
 import numpy as np
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 
-import track_vortices as TV
-from itcz.plotting import tracker as T
-from itcz.models.layout import get_layout
-
-# ----------------------------- knobs (kept in sync with the QC montage) -------
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 RUN = os.path.join(ROOT, "outputs/JAS/step1_pangu_JAS_Deep_2.5Kday")
+CSV = os.path.join(RUN, "tracking", "eye_snapped.csv")
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fig4b_timeseries.png")
-BAND = None            # None -> use the run's plot.track_band
-PEAK_MIN = 4.0         # zeta' detection threshold (x1e-5)
-NBHD_DEG = 6.0         # min separation between peaks (deg)
-MAX_JUMP = 10.0        # max day-to-day move when linking (deg)
-MIN_LEN = 3            # keep a branch only with >= this many points
-KEEP_ZETA = 6.0        # keep a branch only if its peak zeta' >= this (x1e-5)
-START_DAY = 4.0        # ignore earlier (pre-vortex) days
-# -----------------------------------------------------------------------------
+
+# colour by final vortex number; 2a/2b/2 share vortex 2's orange
+COLOR = {"1": "tab:blue", "2": "tab:orange", "2a": "tab:orange", "2b": "tab:orange",
+         "3": "tab:green", "4": "tab:red"}
+LEGEND = [("vortex 1", "tab:blue"), ("vortex 2", "tab:orange"),
+          ("vortex 3", "tab:green"), ("vortex 4", "tab:red")]
+
+# (from_label, from_day) -> (to_label, to_day) genealogy links; drawn in child colour
+CONNECTORS = [
+    ("2b", 8, "2a", 9), ("2b", 8, "3", 9),   # day9: trunk splits into 2a, 3 (2b continues)
+    ("2a", 9, "1", 10),                        # day10: 1 splits from 2a
+    # (4 is NOT a clean split from 3 -> no connector; it just appears at day13)
+    ("2a", 13, "2", 14), ("2b", 13, "2", 14),  # day14: 2a + 2b merge into 2
+]
 
 plt.rcParams.update({
-    "font.size": 12,
-    "font.weight": "bold",
-    "axes.titlesize": 15,
-    "axes.titleweight": "bold",
-    "axes.labelsize": 13,
-    "axes.labelweight": "bold",
-    "xtick.labelsize": 11,
-    "ytick.labelsize": 11,
+    "font.size": 12, "font.weight": "bold",
+    "axes.titlesize": 15, "axes.titleweight": "bold",
+    "axes.labelsize": 13, "axes.labelweight": "bold",
+    "xtick.labelsize": 11, "ytick.labelsize": 11,
 })
 
-with open(os.path.join(RUN, "config_used.json")) as fh:
-    cfg = json.load(fh)
-model = cfg["model"]
-layout = get_layout(model)
-band = BAND or cfg["plot"]["track_band"]
+# --- load eye_snapped.csv -> nodes[(label, day)] = (zeta, tcwv); segs[label]=[days] ---
+nodes, segs = {}, {}
+with open(CSV) as fh:
+    for r in csv.DictReader(fh):
+        lab, day = r["label"], float(r["day"])
+        nodes[(lab, day)] = (float(r["zeta_1e5"]), float(r["tcwv"]))
+        segs.setdefault(lab, []).append(day)
+for lab in segs:
+    segs[lab] = sorted(segs[lab])
 
-steps_dets, days = [], []
-for s in T.list_steps(RUN):
-    day = s * cfg["step_hours"] / 24.0
-    if day < START_DAY:
-        continue
-    st = T.load_pert(RUN, s, model)
-    zeta = T.vort850(st, layout) * 1e5
-    tcwv = np.asarray(T.tcwv_anom(st, layout))
-    steps_dets.append(TV.detect(zeta, tcwv, band, PEAK_MIN, NBHD_DEG))
-    days.append(day)
 
-tracks = TV.link(steps_dets, days, MAX_JUMP)
-leaves = [tr for tr in tracks if not tr["split"]
-          and len(tr["points"]) >= MIN_LEN
-          and max(p["zeta"] for p in tr["points"]) >= KEEP_ZETA]
-leaves.sort(key=lambda tr: tr["points"][0]["day"])
-print(f"[fig4b] {len(tracks)} raw tracks -> {len(leaves)} branches kept")
+def seg_xy(lab, field_idx):
+    d = segs[lab]
+    return d, [nodes[(lab, dd)][field_idx] for dd in d]
 
-colors = plt.get_cmap("tab10")(np.linspace(0, 1, 10))
+
 fig, (axv, axt) = plt.subplots(1, 2, figsize=(12, 4.5))
-for k, tr in enumerate(leaves):
-    d = [p["day"] for p in tr["points"]]
-    axv.plot(d, [p["zeta"] for p in tr["points"]], "-o", ms=3, lw=1.4, color=colors[k % 10])
-    axt.plot(d, [p["tcwv"] for p in tr["points"]], "-o", ms=3, lw=1.4, color=colors[k % 10])
+for ax, fi in ((axv, 0), (axt, 1)):
+    # connectors first (thin, dashed, child colour), so segments sit on top
+    for pl, pd, cl, cd in CONNECTORS:
+        if (pl, pd) in nodes and (cl, cd) in nodes:
+            ax.plot([pd, cd], [nodes[(pl, pd)][fi], nodes[(cl, cd)][fi]],
+                    "--", color=COLOR[cl], lw=1.0, alpha=0.6, zorder=2)
+    # one solid line per labelled segment
+    for lab in segs:
+        x, y = seg_xy(lab, fi)
+        ax.plot(x, y, "-o", ms=4, lw=2.0, color=COLOR[lab], zorder=3)
+
 axv.set(title=r"$\zeta'_{850}$ at vortex centres", xlabel="iteration n (nominal day)",
         ylabel=r"$\zeta'_{850}$ ($10^{-5}$ s$^{-1}$)")
 axt.set(title=r"TCWV$'$ at vortex centres", xlabel="iteration n (nominal day)",
@@ -88,8 +88,11 @@ for ax in (axv, axt):
     ax.grid(alpha=0.3)
     for lbl in ax.get_xticklabels() + ax.get_yticklabels():
         lbl.set_fontweight("bold")
+axv.legend(handles=[Line2D([0], [0], color=c, lw=2.5, label=n) for n, c in LEGEND],
+           fontsize=10, framealpha=0.9, loc="upper left")
 
 fig.tight_layout()
 fig.savefig(OUT, dpi=150)
 plt.close(fig)
+print(f"[fig4b] segments: {', '.join(f'{k}({len(v)})' for k, v in segs.items())}")
 print(f"[fig] {OUT}")

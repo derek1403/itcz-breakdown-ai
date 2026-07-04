@@ -14,8 +14,8 @@
   "step_hours": 24,
   "background": "JAS",
   "driver": {
-    "n_days": 16,
-    "forcing_days": 16,
+    "n_days": 20,
+    "forcing_days": 20,
     "save_every": 1,
     "clip_moisture": false
   },
@@ -62,6 +62,8 @@
     "forcing_type": "heating",
     "persistent": false,
     "lock": "none",
-    "seed_npz": null
+    "seed_npz": null,
+    "resume_from": "/wk2/pc/AI_models/itcz-breakdown-ai/outputs/JAS/step1_pangu_JAS_Deep_2.5Kday/pert_016.npz",
+    "start_step": 16
   }
 }

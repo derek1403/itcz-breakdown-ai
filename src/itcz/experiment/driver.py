@@ -14,6 +14,8 @@ The four stages are expressed as an ``experiment`` config block:
     persistent   : bool   -- if False, forcing is off after ``forcing_days``
     lock         : "none" | "moisture" | "wind"
     seed_npz     : path to a moisture-only initial perturbation (Steps 3/4) or None
+    resume_from  : (optional) path to a FULL perturbation npz to warm-start u'_{start}
+    start_step   : (optional) step index of ``resume_from``; the loop resumes at start_step+1
 """
 from __future__ import annotations
 
@@ -61,7 +63,10 @@ def run(cfg: dict, operator: Operator | None = None) -> str:
     op = operator or load_operator(cfg)
     f_base = _build_forcing(layout, cfg, u0)
 
-    if exp.get("seed_npz"):
+    start_step = int(exp.get("start_step", 0))
+    if exp.get("resume_from"):
+        u_prev = State.from_npz(exp["resume_from"], model)      # full perturbation u'_{start}
+    elif exp.get("seed_npz"):
         u_prev = layout.extract_moisture_only(State.from_npz(exp["seed_npz"], model))
     else:
         u_prev = u0.zeros_like()
@@ -76,12 +81,14 @@ def run(cfg: dict, operator: Operator | None = None) -> str:
     os.makedirs(run_dir, exist_ok=True)
     _stamp(run_dir, cfg)
 
+    resume_note = f", resume from step {start_step}" if start_step else ""
     print(f"[driver] {exp['name']}: model={model} background={cfg['background']} "
-          f"N={N} steps ({cfg['driver']['n_days']}d), forcing<= {Nf} steps, lock={lock}")
+          f"N={N} steps ({cfg['driver']['n_days']}d), forcing<= {Nf} steps, lock={lock}{resume_note}")
 
     B1 = op.step(u0)                              # frozen one-step background drift
-    u_prev.save_npz(os.path.join(run_dir, "pert_000.npz"))
-    for n in range(1, N + 1):
+    if start_step == 0:
+        u_prev.save_npz(os.path.join(run_dir, "pert_000.npz"))
+    for n in range(start_step + 1, N + 1):
         f_n = f_base if (persistent or n <= Nf) else f_base.zeros_like()
         A = u0 + u_prev + f_n
         if cfg["driver"].get("clip_moisture", False):

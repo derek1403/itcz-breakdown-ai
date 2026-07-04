@@ -26,7 +26,7 @@ from scipy.ndimage import gaussian_filter, maximum_filter
 
 from itcz.models.layout import get_layout
 from itcz.plotting import tracker as T
-from itcz.plotting.tracker import LAT, LON
+from itcz.plotting.tracker import A_EARTH, LAT, LON
 
 DEG = 0.25  # grid spacing
 
@@ -45,6 +45,114 @@ def detect(zeta1e5, tcwv, band, peak_min, nbhd_deg, smooth=2.0):
         dets.append({"lon": float(LON[i]), "lat": float(LAT[j]),
                      "zeta": float(zeta1e5[j, i]), "tcwv": float(tcwv[j, i])})
     return dets
+
+
+# ---------------------------------------------------------------------------
+# vortex-CENTRE detection: Okubo-Weiss cores + land mask + previous-position
+# guided search.  Separates rotating vortex centres from the shear/vorticity
+# band (a ridge has W ~ 0, a vortex core has W < 0), and drops land picks.
+# ---------------------------------------------------------------------------
+def okubo_weiss(u, v):
+    """Okubo-Weiss W = strain^2 - vorticity^2 [s^-2] on the lat/lon grid.
+    W < 0 -> rotation-dominated (vortex core); W ~ 0 -> shear band."""
+    phi = np.deg2rad(LAT)
+    lam = np.deg2rad(LON)
+    cosphi = np.cos(phi)[:, None]
+    cosphi = np.where(np.abs(cosphi) < 1e-6, 1e-6, cosphi)
+    du_dx = np.gradient(u, lam, axis=1) / (A_EARTH * cosphi)
+    dv_dx = np.gradient(v, lam, axis=1) / (A_EARTH * cosphi)
+    du_dy = np.gradient(u, phi, axis=0) / A_EARTH
+    dv_dy = np.gradient(v, phi, axis=0) / A_EARTH
+    sn = du_dx - dv_dy          # normal strain
+    ss = dv_dx + du_dy          # shear strain
+    w = dv_dx - du_dy           # relative vorticity (planar approx.)
+    return sn ** 2 + ss ** 2 - w ** 2
+
+
+_LAND = {}
+
+
+def land_tester(buffer_deg=1.5, resolution="110m"):
+    """Return near_land(lon, lat) -> bool, True within ~buffer_deg of land.
+
+    Uses UNBUFFERED land polygons (buffering the global union is very slow) and
+    tests the point plus a ring of points at radius buffer_deg -- cheap because
+    only a handful of candidate maxima are tested per frame.
+    """
+    key = (buffer_deg, resolution)
+    if key not in _LAND:
+        from cartopy.io import shapereader
+        from shapely.geometry import Point
+        from shapely.ops import unary_union
+        from shapely.prepared import prep
+        shp = shapereader.natural_earth(resolution=resolution,
+                                        category="physical", name="land")
+        prepared = prep(unary_union(list(shapereader.Reader(shp).geometries())))
+        ring = [(0.0, 0.0)]
+        if buffer_deg > 0:
+            ring += [(buffer_deg * np.cos(a), buffer_deg * np.sin(a))
+                     for a in np.linspace(0, 2 * np.pi, 8, endpoint=False)]
+
+        def near_land(lon, lat):
+            x0 = lon - 360.0 if lon > 180.0 else lon
+            return any(prepared.contains(Point(x0 + dx, lat + dy)) for dx, dy in ring)
+
+        _LAND[key] = near_land
+    return _LAND[key]
+
+
+def detect_cores(state, layout, band, peak_min, nbhd_deg, ow_fact=0.2,
+                 near_land=None, smooth=2.0):
+    """Vortex-centre detections: local maxima of zeta' restricted to Okubo-Weiss
+    cores (W < -ow_fact*std_band) and off land, one per nbhd_deg blob.
+
+    Before roll-up the disturbance is a single shear band with no cores; in that
+    case fall back to the single band-maximum so early days give one centre.
+    """
+    zeta = np.asarray(T.vort850(state, layout)) * 1e5
+    tcwv = np.asarray(T.tcwv_anom(state, layout))
+    u, v = layout.get_uv(state, 850)
+    W = okubo_weiss(np.asarray(u), np.asarray(v))
+
+    lat_min, lat_max, lon_min, lon_max = band
+    bmask = ((LAT >= lat_min) & (LAT <= lat_max))[:, None] & \
+            ((LON >= lon_min) & (LON <= lon_max))[None, :]
+    zs = gaussian_filter(zeta, sigma=smooth)
+    core = W < -ow_fact * float(np.std(W[bmask]))
+
+    size = max(3, int(round(nbhd_deg / DEG)))
+    mx = maximum_filter(zs, size=size, mode="nearest")
+    cand_mask = (zs >= mx - 1e-9) & (zs >= peak_min) & bmask & core
+    cand = [(float(zs[j, i]), float(LON[i]), float(LAT[j]), float(zeta[j, i]),
+             float(tcwv[j, i])) for j, i in zip(*np.where(cand_mask))]
+
+    def not_land(lon, lat):
+        return near_land is None or not near_land(lon, lat)
+
+    # greedy non-max suppression: keep strongest, drop anything within nbhd_deg
+    cand.sort(reverse=True)  # by smoothed zeta'
+    kept = []
+    for zval, lon, lat, zraw, tw in cand:
+        if not not_land(lon, lat):
+            continue
+        clash = False
+        for d in kept:
+            dlat = lat - d["lat"]
+            dlon = (lon - d["lon"]) * np.cos(np.deg2rad(0.5 * (lat + d["lat"])))
+            if np.hypot(dlat, dlon) < nbhd_deg:
+                clash = True
+                break
+        if not clash:
+            kept.append({"lon": lon, "lat": lat, "zeta": zraw, "tcwv": tw})
+
+    if not kept:  # undeveloped band -> single strongest centre
+        masked = np.where(bmask, zeta, -np.inf)
+        j, i = np.unravel_index(np.argmax(masked), masked.shape)
+        lon, lat = float(LON[i]), float(LAT[j])
+        if float(zeta[j, i]) >= peak_min and not_land(lon, lat):
+            kept = [{"lon": lon, "lat": lat, "zeta": float(zeta[j, i]),
+                     "tcwv": float(tcwv[j, i])}]
+    return kept
 
 
 def gcdist(a, b):
@@ -101,6 +209,58 @@ def link(steps_dets, days, max_jump):
             if d["trk"] is None:
                 new_track(d["pt"], None)
     return tracks
+
+
+def cluster_reps(dets, d_min):
+    """Merge detections closer than d_min (deg) into one representative (the
+    strongest = the developing band reads as one blob until vortices separate)."""
+    reps = []
+    for d in sorted(dets, key=lambda x: -x["zeta"]):
+        clash = False
+        for r in reps:
+            dlat = d["lat"] - r["lat"]
+            dlon = (d["lon"] - r["lon"]) * np.cos(np.deg2rad(0.5 * (d["lat"] + r["lat"])))
+            if np.hypot(dlat, dlon) < d_min:
+                clash = True
+                break
+        if not clash:
+            reps.append(d)
+    return reps
+
+
+def track_run(run_dir, cfg, band, peak_min=4.0, nbhd_deg=6.0, ow_fact=0.2,
+              d_min=15.0, search_radius=12.0, min_len=3, keep_zeta=6.0,
+              start_day=4.0, land_buffer=1.5, smooth=2.0):
+    """Seeded Lagrangian vortex-centre tracker.
+
+    Per frame: OW cores (off land) -> merge within d_min -> representatives.
+    Across frames: nearest within search_radius, splitting when a rep separates;
+    keep branches with >= min_len points and peak zeta' >= keep_zeta (persistence).
+    Returns (days, leaves, frames) where frames[i] = dict(day, zeta, bandmax_lonlat).
+    """
+    model = cfg["model"]
+    layout = get_layout(model)
+    near_land = land_tester(land_buffer)
+    steps_reps, days, frames = [], [], []
+    for s in T.list_steps(run_dir):
+        day = s * cfg["step_hours"] / 24.0
+        st = T.load_pert(run_dir, s, model)
+        zeta = np.asarray(T.vort850(st, layout)) * 1e5
+        val, mlat, mlon = T.track_max(np.asarray(T.vort850(st, layout)), band)
+        frames.append({"day": day, "zeta": zeta, "bandmax": (mlon, mlat, val * 1e5)})
+        if day < start_day:
+            continue
+        dets = detect_cores(st, layout, band, peak_min, nbhd_deg, ow_fact=ow_fact,
+                            near_land=near_land, smooth=smooth)
+        steps_reps.append(cluster_reps(dets, d_min))
+        days.append(day)
+
+    tracks = link(steps_reps, days, search_radius)
+    leaves = [tr for tr in tracks if not tr["split"]
+              and len(tr["points"]) >= min_len
+              and max(p["zeta"] for p in tr["points"]) >= keep_zeta]
+    leaves.sort(key=lambda tr: tr["points"][0]["day"])
+    return days, leaves, frames
 
 
 def main():

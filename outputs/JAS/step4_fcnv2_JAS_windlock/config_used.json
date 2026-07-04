@@ -15,7 +15,7 @@
   "background": "JAS",
   "driver": {
     "n_days": 16,
-    "forcing_days": 16,
+    "forcing_days": 20,
     "save_every": 1,
     "clip_moisture": false
   },

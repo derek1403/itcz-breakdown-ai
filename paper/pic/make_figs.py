@@ -59,6 +59,15 @@ def _vort_map(ax, run_dir, day, title):
     return im
 
 
+# bold style matching fig4b (paper/pic/plot_fig4b_timeseries.py) so titles align
+_BOLD_RC = {
+    "font.size": 12, "font.weight": "bold",
+    "axes.titlesize": 15, "axes.titleweight": "bold",
+    "axes.labelsize": 13, "axes.labelweight": "bold",
+    "xtick.labelsize": 11, "ytick.labelsize": 11,
+}
+
+
 # ---------------------------------------------------------------- fig5 / fig7
 def overlay(run_dirs, labels, out, suptitle):
     fig, (axv, axt) = plt.subplots(1, 2, figsize=(11, 4.2))
@@ -79,20 +88,76 @@ def overlay(run_dirs, labels, out, suptitle):
 
 
 def fig5():
-    overlay([RUN_24H, RUN_DJF], ["JAS background", "DJF background"],
-            os.path.join(OUT, "fig5_seasonal_timeseries.png"),
-            "Seasonal control: identical Gaussian Deep 2.5 K/day forcing")
+    """Self-contained (bold, big titles, legend only on the left panel) so the
+    shared overlay() used by fig7 stays untouched.  Each panel's title names the
+    peak/max field it traces (left: peak zeta'; right: peak TCWV')."""
+    run_dirs = [RUN_24H, RUN_DJF]
+    labels = ["JAS background", "DJF background"]
+    out = os.path.join(OUT, "fig5_seasonal_timeseries.png")
+
+    with plt.rc_context(_BOLD_RC):  # title size aligned with fig4b
+        fig, (axv, axt) = plt.subplots(1, 2, figsize=(11, 4.4))
+        for rd, lab in zip(run_dirs, labels):
+            if not os.path.isdir(rd):
+                print(f"[skip] {rd} missing"); continue
+            d, vm, tm = run_series(rd)
+            axv.plot(d, vm * 1e5, "-o", ms=3, lw=2.0, label=lab)
+            axt.plot(d, tm, "-o", ms=3, lw=2.0, label=lab)
+        axv.set(title=r"Peak $\zeta'_{850}$",
+                xlabel="iteration n (nominal day)",
+                ylabel=r"peak $\zeta'_{850}$ ($10^{-5}$ s$^{-1}$)")
+        axt.set(title=r"Peak TCWV$'$",
+                xlabel="iteration n (nominal day)",
+                ylabel=r"peak TCWV$'$ (kg m$^{-2}$)")
+        for ax in (axv, axt):
+            ax.grid(alpha=0.3)
+            ax.set_xlim(0, 16)  # keep both panels on day 0-16
+            for lbl in ax.get_xticklabels() + ax.get_yticklabels():
+                lbl.set_fontweight("bold")
+        axv.legend(fontsize=11, framealpha=0.9)  # legend on the left panel only
+        fig.suptitle("Seasonal control: identical Gaussian Deep 2.5 K/day forcing",
+                     fontsize=14, fontweight="bold")
+        fig.tight_layout(rect=[0, 0, 1, 0.94])
+        fig.savefig(out, dpi=150); plt.close(fig)
+    print(f"[fig] {out}")
 
 
 def fig7():
+    """Self-contained like fig5: bold, big titles aligned with fig4b, legend on
+    the left panel only, both panels titled by the peak field, day 0-16."""
     runs = [RUN_24H,
             os.path.join(ROOT, "outputs/JAS/step2_pangu_JAS_Deep_2.5Kday_moistlock"),
             os.path.join(ROOT, "outputs/JAS/step3_pangu_JAS_moistinit_d7"),
             os.path.join(ROOT, "outputs/JAS/step4_pangu_JAS_windlock")]
-    labels = ["Step 1: standard", "Step 2: moisture-locked",
-              "Step 3: moisture-only init", "Step 4: wind-locked"]
-    overlay(runs, labels, os.path.join(OUT, "fig7_steps_overlay.png"),
-            "Mechanism denial: the four-step suite (Pangu, JAS, 24-h)")
+    labels = ["standard", "moisture-locked",
+              "moisture-only init", "wind-locked"]
+    out = os.path.join(OUT, "fig7_steps_overlay.png")
+
+    with plt.rc_context(_BOLD_RC):
+        fig, (axv, axt) = plt.subplots(1, 2, figsize=(11, 4.4))
+        for rd, lab in zip(runs, labels):
+            if not os.path.isdir(rd):
+                print(f"[skip] {rd} missing"); continue
+            d, vm, tm = run_series(rd)
+            axv.plot(d, vm * 1e5, "-o", ms=3, lw=2.0, label=lab)
+            axt.plot(d, tm, "-o", ms=3, lw=2.0, label=lab)
+        axv.set(title=r"Peak $\zeta'_{850}$",
+                xlabel="iteration n (nominal day)",
+                ylabel=r"peak $\zeta'_{850}$ ($10^{-5}$ s$^{-1}$)")
+        axt.set(title=r"Peak TCWV$'$",
+                xlabel="iteration n (nominal day)",
+                ylabel=r"peak TCWV$'$ (kg m$^{-2}$)")
+        for ax in (axv, axt):
+            ax.grid(alpha=0.3)
+            ax.set_xlim(0, 16)  # keep both panels on day 0-16
+            for lbl in ax.get_xticklabels() + ax.get_yticklabels():
+                lbl.set_fontweight("bold")
+        axv.legend(fontsize=10, framealpha=0.9)  # legend on the left panel only
+        fig.suptitle("Mechanism denial: the four-step suite (Pangu, JAS, 24-h)",
+                     fontsize=14, fontweight="bold")
+        fig.tight_layout(rect=[0, 0, 1, 0.94])
+        fig.savefig(out, dpi=150); plt.close(fig)
+    print(f"[fig] {out}")
 
 
 # ---------------------------------------------------------------------- fig8

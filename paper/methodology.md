@@ -11,6 +11,9 @@
     是對單步算子 M 在 u0 點的「非線性奇異向量冪次疊代」；n 是模態萃取的收斂次數、不是物理天數；
     這正是我們保留 "semi-linear" 這個名字的原因；並宣告「模態萃取序列 vs 觀測時間演化」的
     可比較性是本文要說清楚的目標之一（§3.7、§4 收尾）。
+圖編號（依你指示調整）：Fig. 1 = 方法示意圖（§2.2）；Fig. 2 = 四合一強迫圖 (a)背景TCWV+加熱
+框 (b)水平加熱 (c)Deep垂直分布 (d)經向剖面（§2.4）；原本單獨的背景場圖已移除（與 Fig. 2a 重複），
+完整背景場留在 Appendix A。
 2.4 非絕熱加熱 —— 水平：高斯橢圓（σφ≈6.4°、σλ≈65°，中心 10°N/195°E；cos 波瓣替代版
     移到 Appendix B，註明源自 Hakim & Masanam 的做法、結果無明顯差異）；垂直：
     Deep = sin(π(p−200)/800)，出自 Chen & Masunaga 2025 Fig. 2b 的 EOF1；2.5 K/day、
@@ -63,11 +66,8 @@ individual synoptic systems, so a free-running forecast from it does not
 immediately spin up weather that would swamp the perturbation signal. The
 choice of season proves to be a controlling parameter, and we treat it as
 part of the experiment design rather than a technicality. The background's
-low-level vorticity and column moisture are shown in Fig. 2.
-
-![Fig. 2](../outputs/JAS/ic_JAS_check.png)
-*Fig. 2: The JAS 1979–2019 climatological background state (850-hPa
-vorticity and TCWV).*
+column moisture, with the heating footprint of Section 2.4 overlaid, is
+shown in Fig. 2a; the full background fields are documented in Appendix A.
 
 ## 2.2 The perturbation framework: perpetual background re-centering
 
@@ -101,11 +101,11 @@ $$
 
 with $u'_0 = 0$ for the standard experiment and $\mathcal{L}$ an optional
 channel-locking operator used only in the mechanism-denial experiments
-(Section 2.5). The loop is sketched in Fig. M1. Three properties make this
+(Section 2.5). The loop is sketched in Fig. 1. Three properties make this
 scheme suitable:
 
-![Fig. M1](pic/fig_method_schematic.png)
-*Fig. M1: The perpetual background re-centering loop.*
+![Fig. 1](pic/fig_method_schematic.png)
+*Fig. 1: The perpetual background re-centering loop.*
 
 1. *The input to $M$ is always anchored to $u_0$.* The model never sees a
    free-running trajectory, so the smooth background cannot spin up
@@ -210,22 +210,27 @@ $$ h(\phi,\lambda) \;=\;
 \qquad \sigma_\phi \approx 6.4^\circ,\; \sigma_\lambda \approx 65^\circ, $$
 
 i.e., an ITCZ-scale zonally elongated ellipse spanning roughly 5–25°N and a
-wide Pacific sector (Fig. 1). An alternative cosine-lobe envelope, adapted
-from the forcing construction of Hakim and Masanam (2024), was also tested;
-the character of the breakdown is the same under both (the amplitude scales
-with the net delivered heating), and the comparison is given in Appendix B.
+wide Pacific sector (Fig. 2b; its meridional cross-section in Fig. 2d). An
+alternative cosine-lobe envelope, adapted from the forcing construction of
+Hakim and Masanam (2024), was also tested; the character of the breakdown is
+the same under both (the amplitude scales with the net delivered heating),
+and the comparison is given in Appendix B.
 
-![Fig. 1](../outputs/JAS/heating_dist_check.png)
-*Fig. 1: Horizontal structure of the applied Gaussian heating, centered at
-10°N, 195°E.*
+![Fig. 2](../outputs/JAS/heating_dist_check.png)
+*Fig. 2: The forcing and its background. (a) JAS climatological TCWV with
+the heating footprint contoured in black (0.25 and 0.6 of the peak rate);
+(b) horizontal structure of the applied Gaussian heating (2.5 K day$^{-1}$
+peak, centered at 10°N, 195°E); (c) the Deep vertical profile $Q(p)$;
+(d) meridional cross-section of the envelope at 195°E.*
 
 *Vertical structure.* The vertical profile is the deep-convective mode
 
 $$ Q(p) \;=\; \sin\!\left(\pi\,\frac{p - 200\ \mathrm{hPa}}{800\ \mathrm{hPa}}\right),
 \qquad 200 \le p \le 1000\ \mathrm{hPa}, $$
 
-which peaks at 600 hPa and vanishes at 200 and 1000 hPa. This profile is
-adopted as the leading EOF of observed diabatic heating over tropical oceans:
+which peaks at 600 hPa and vanishes at 200 and 1000 hPa (Fig. 2c). This
+profile is adopted as the leading EOF of observed diabatic heating over
+tropical oceans:
 Chen and Masunaga (2025, their Fig. 2b) show that the first EOF of the
 $Q_1$ vertical structure in the convectively active tropics is a deep,
 single-signed mode of essentially this shape. Alternative profiles

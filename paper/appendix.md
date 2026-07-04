@@ -26,7 +26,7 @@ and 4 to machine precision.
 
 *Forcing geometry.* The horizontal envelope geometry and its boundary
 ellipse are verified in Fig. A1, and the four vertical profiles used in
-Section 3.3c are shown in Fig. A2.
+Section 3.3 are shown in Fig. A2.
 
 ![Fig. A1](../aux/verification/figures/02_forcing_ellipse.png)
 *Fig. A1: Horizontal forcing envelope and boundary ellipse.*
@@ -42,15 +42,12 @@ cross-model comparison of moisture responses.
 ![Fig. A3](../aux/verification/figures/04_tcwv_agreement.png)
 *Fig. A3: Integrated q (Pangu) versus native TCWV channel (FCNv2).*
 
-*Background and heating as-run.* The JAS background state and the heating
-distribution actually applied in the headline run are documented in Figs. A4
-and A5.
+*Background as-run.* The full JAS background state of the headline run is
+documented in Fig. A4; the heating actually applied is Fig. 2 of the main
+text.
 
 ![Fig. A4](../outputs/JAS/ic_JAS_check.png)
 *Fig. A4: JAS 1979–2019 climatological background (vorticity and TCWV).*
-
-![Fig. A5](../outputs/JAS/heating_dist_check.png)
-*Fig. A5: Applied heating distribution.*
 
 ## Appendix B: Sensitivity gallery
 

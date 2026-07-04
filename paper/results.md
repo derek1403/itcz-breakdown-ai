@@ -7,9 +7,10 @@
     Schubert et al. 1991 撐腰。
 3.2 正壓崩解主結果 —— 全面改用高斯加熱的主管線 run（outputs/JAS，24h、持續加熱 16 天）：
     panels_vort + panels_tcwv + timeseries；不再對照/標註 AI-Forum。
-3.3 什麼控制反應強弱 —— (a) 季節對照：JAS vs DJF（高斯、同強迫；inverse 測試已按你指示移除）；
-    (b) 振幅掃描；(c) 垂直分布（Deep vs uniform：只有含邊界層的加熱能把 TCWV 推上高值 →
-    低層加熱驅動水氣輻合）。
+3.3 什麼控制反應強弱 —— 已改成一般論文的段落寫法（開頭一段總起三個控制因子，
+    每段第一句即主張，不再用 *(a)(b)(c)* 標籤）：背景季節對照（JAS vs DJF，高斯同強迫，
+    inverse 已移除）→ 振幅 → 垂直分布（結尾拋出「渦度為何不在乎垂直分布」的問題，
+    交棒給 3.4）。
 3.4 外部模態 vs 邊界層加熱等價 —— 你的積分論證 ∫−(∂Q/∂z)Ψ₀ dz ≈ Q_B。
 3.5 機制剝奪（Step 2–4）—— 定量已定稿（24h 高斯套組）：鎖水氣 ζ' 5.5（抑制 94%）；
     只給水氣 ζ' 79 @ d9（水氣單獨也能起渦）；鎖風 ζ'≡0、TCWV 續增至 53（水氣無風則惰性）。
@@ -86,50 +87,62 @@ versus iteration; each line is one tracked vortex branch.*
 
 ## 3.3 What controls the response
 
-*(a) The background, not the forcing.* Running the identical forcing on the
-DJF climatology instead of JAS collapses the instability (Fig. 5). On the
-summer background the peak vorticity undergoes explosive growth after
-nominal day 8, reaching $89 \times 10^{-5}\ \mathrm{s^{-1}}$; on the winter
-background — whose ITCZ lies south of the heated band — it saturates near
+Having established the breakdown itself, we ask what sets its strength. The
+sensitivity experiments of Section 2.5 identify three controls — the basic
+state, the forcing amplitude, and the vertical structure of the heating —
+and each carries a distinct piece of physics.
+
+The dominant control is the background, not the forcing. Running the
+identical forcing on the DJF climatology instead of JAS collapses the
+instability (Fig. 5a). On the summer background the peak vorticity undergoes
+explosive growth after nominal day 8, reaching
+$89 \times 10^{-5}\ \mathrm{s^{-1}}$; on the winter background — whose ITCZ
+lies south of the heated band — it saturates near
 $14 \times 10^{-5}\ \mathrm{s^{-1}}$ by day 9 and never organizes, a factor
 of $\sim$6 weaker. The moisture response, by contrast, is nearly identical
-in the two seasons (right panel of Fig. 5): the column moistening is the
-direct, quasi-passive thermodynamic response to the sustained heating,
-available on any background, whereas the vortex growth requires a basic
-state whose ITCZ shear zone is ripe for barotropic breakdown. The
-instability, in other words, belongs to the background state, and the
-heating merely excites it — as barotropic-instability theory would insist.
+in the two seasons (Fig. 5b): the column moistening is the direct,
+quasi-passive thermodynamic response to the sustained heating, available on
+any background, whereas the vortex growth requires a basic state whose ITCZ
+shear zone is ripe for barotropic breakdown. The instability, in other
+words, belongs to the background state, and the heating merely excites it —
+as barotropic-instability theory would insist.
 
 ![Fig. 5](pic/fig5_seasonal_timeseries.png)
-*Fig. 5: Peak $\zeta'_{850}$ and TCWV$'$ versus iteration, JAS versus DJF
-background, identical Gaussian Deep 2.5 K day$^{-1}$ forcing.*
+*Fig. 5: Seasonal control under identical Gaussian Deep 2.5 K day$^{-1}$
+forcing, JAS versus DJF background. (a) Peak $\zeta'_{850}$ versus
+iteration: explosive growth on the summer background, saturation without
+organization on the winter background. (b) Peak TCWV$'$ versus iteration:
+nearly identical in the two seasons.*
 
-*(b) Amplitude.* An amplitude sweep (Appendix B) shows quasi-linear scaling
+The forcing amplitude, by contrast, sets only where on a familiar curve the
+experiment sits. An amplitude sweep (Appendix B) shows quasi-linear scaling
 of the early response up to a few K day$^{-1}$, with the 2.5 K day$^{-1}$
 headline value lying in the regime where the roll-up is vigorous but not yet
 overdriven; by 10 K day$^{-1}$ the response is strongly nonlinear from the
-outset, with mid-latitude contamination.
+outset and contaminates the midlatitudes.
 
-*(c) Vertical structure of the heating.* With equal amplitude and horizontal
-envelope, the deep-convective profile yields peak
-$\zeta' \approx 43.8\times10^{-5}$ s$^{-1}$ but TCWV$' \approx 31$ mm only,
-whereas a vertically uniform profile extending into the boundary layer yields
-$\zeta' \approx 48\times10^{-5}$ s$^{-1}$ and TCWV$' \approx 43$ mm — the
-moisture target is reached only when the lowest levels are heated. The
-interpretation is straightforward: all the sinusoidal profiles vanish at
-1000 hPa, so they drive no boundary-layer buoyancy and hence little
-low-level moisture convergence; heating the boundary layer forces low-level
-convergence in the moisture-rich lower troposphere and lets TCWV amplify.
-This dependence of the moisture pathway on near-surface heating motivates
-the external-mode/boundary-layer comparison of the next subsection.
+The vertical structure of the heating discriminates between the two response
+fields in an instructive way. With equal amplitude and horizontal envelope,
+the deep-convective profile yields peak
+$\zeta' \approx 43.8\times10^{-5}\ \mathrm{s^{-1}}$ but
+TCWV$' \approx 31$ mm only, whereas a vertically uniform profile extending
+into the boundary layer yields $\zeta' \approx 48\times10^{-5}\
+\mathrm{s^{-1}}$ and TCWV$' \approx 43$ mm (calibration runs): the vorticity
+response barely notices the change, while the moisture response is lifted by
+a third. The moisture side is readily understood — the sinusoidal profiles
+vanish at 1000 hPa and so drive no boundary-layer buoyancy and little
+low-level convergence in the moisture-rich lower troposphere, which is
+exactly what heating the boundary layer supplies. But the insensitivity of
+the *vorticity* response poses a sharper question — why should the
+instability care so little about where in the column the heating resides? —
+and answering it is the subject of the next subsection.
 
 ## 3.4 External-mode and boundary-layer heating produce similar responses
 
-Why should the vorticity response care so little about *where* in the column
-the heating resides, when the moisture response cares so much? A vertical-mode
-argument supplies the answer. Project the heating onto the barotropic
-(external) mode, whose vertical structure function $\Psi_0(z)$ is nearly
-constant with height. The projection integral is, after integrating by parts,
+A vertical-mode argument answers the question posed above. Project the
+heating onto the barotropic (external) mode, whose vertical structure
+function $\Psi_0(z)$ is nearly constant with height. The projection integral
+is, after integrating by parts,
 
 $$
 \int_{B}^{T} -\frac{\partial Q}{\partial z}\,\Psi_0 \, dz
@@ -146,12 +159,18 @@ is distributed in the vertical. The model concurs: placing the heating in
 the external mode and placing it in the boundary layer alone yield closely
 similar perturbation evolutions, illustrated at nominal day 12 in Fig. 6.
 Since the instability that breaks the strip is barotropic, this equivalence
-also explains why the roll-up is robust across vertical profiles (Section
-3.3c) even as the moisture amplitude varies.
+also explains why the roll-up is robust across vertical profiles
+(Section 3.3) even as the moisture amplitude varies.
 
 ![Fig. 6](../aux/investigation/figs/hakim/exbl_evolution/day12.png)
-*Fig. 6: Perturbation response to external-mode heating (left) versus
-boundary-layer heating (right) at nominal day 12.*
+*Fig. 6: Perturbation 500-hPa geopotential height at nominal day 12 for
+external-mode heating (EX, 1000–50 hPa; top row) versus boundary-layer
+heating (BL, 1000–700 hPa; bottom row), at forcing amplitudes 0.1 K day$^{-1}$
+(left) and 0.5 K day$^{-1}$ (right). Height perturbations are contoured every
+10 m (red solid = positive, blue dashed = negative); thin grey contours are the
+base-state 500-hPa height and the red dashed ellipse marks the heating
+footprint. At equal amplitude the EX and BL rows produce closely similar
+height responses, as the external-mode argument predicts.*
 
 ## 3.5 Mechanism denial: the wind–moisture coupling is necessary
 
@@ -185,8 +204,12 @@ requiring an order of magnitude larger amplitude for a comparable response,
 a model contrast we return to in Section 4.
 
 ![Fig. 7](pic/fig7_steps_overlay.png)
-*Fig. 7: Peak $\zeta'_{850}$ (left) and TCWV$'$ (right) versus iteration for
-the four-step suite (Pangu, JAS background, 24-h operator).*
+*Fig. 7: The four-step mechanism-denial suite (Pangu, JAS background, 24-h
+operator). (a) Peak $\zeta'_{850}$ versus iteration: moisture-locking
+(Step 2) suppresses the growth almost entirely, while a moisture-only
+initialization (Step 3) excites it. (b) Peak TCWV$'$ versus iteration: the
+wind-locked run (Step 4) accumulates moisture steadily without ever
+organizing.*
 
 ## 3.6 Sensitivity to the operator time step: 24-h versus 6-h
 
@@ -233,10 +256,11 @@ similar breakdown. For the purposes of this study the 24-h operator is
 therefore the cleaner instrument, and all headline results use it.
 
 ![Fig. 8](pic/fig8_6h_vs_24h_day12.png)
-*Fig. 8: $\zeta'_{850}$ at nominal day 12 under the 24-h operator (left)
-and the 6-h operator (right), identical sustained Gaussian Deep
-2.5 K day$^{-1}$ forcing. Full snapshot panels for both runs are in
-Appendix D.*
+*Fig. 8: $\zeta'_{850}$ at nominal day 12 under identical sustained Gaussian
+Deep 2.5 K day$^{-1}$ forcing. (a) The 24-h operator: four discrete vortices
+along the strip. (b) The 6-h operator: a noisier field with filamentary,
+land-anchored clutter and no clean vortex chain. Full snapshot panels for
+both runs are in Appendix D.*
 
 ## 3.7 An observed counterpart: the November 2024 quadruple-typhoon event
 
@@ -275,11 +299,11 @@ end-state structure, under a quasi-stationary background — is the sense in
 which we consider the observations to corroborate the modeled breakdown.
 
 ![Fig. 9](pic/fig9_model_vs_obs.png)
-*Fig. 9: Top: modeled $\zeta'_{850}$ at iterations 6, 9, 12, 15 of the mode
-extraction (frozen JAS background). Bottom: Himawari infrared imagery, 00Z
-7–13 November 2024, as the western North Pacific monsoon trough discretizes
-into four coexisting tropical cyclones (Yinxing, Toraji, Usagi, Man-yi).
-The rows are deliberately labeled in different units — iterations versus
-dates — because the comparison is of structure, not of a time axis
-(Section 2.3). Full eight-panel IR montage:
+*Fig. 9: (a) Top row: modeled $\zeta'_{850}$ at iterations 6, 9, 12, 15 of
+the mode extraction (frozen JAS background). (b) Bottom row: Himawari
+infrared imagery, 00Z 7–13 November 2024, as the western North Pacific
+monsoon trough discretizes into four coexisting tropical cyclones (Yinxing,
+Toraji, Usagi, Man-yi). The two rows are deliberately labeled in different
+units — iterations versus dates — because the comparison is of structure,
+not of a time axis (Section 2.3). Full eight-panel IR montage:
 `../obs/2024-11_WPac_quad-typhoon/rollup_IR_Nov06-13.jpg`.*
