@@ -1,0 +1,10 @@
+format: jb-book
+root: 00_abstract  # 對應 00_abstract.md，注意這裡不用寫副檔名 .md
+
+chapters:
+  - file: introduction
+  - file: methodology
+  - file: results
+  - file: discussion
+  - file: references
+  - file: appendix

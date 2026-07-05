@@ -1,0 +1,794 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>2. Methodology &#8212; ITCZ Breakdown AI Models</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'methodology';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="3. Results" href="results.html" />
+    <link rel="prev" title="1. Introduction" href="introduction.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="00_abstract.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">ITCZ Breakdown AI Models</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="00_abstract.html">
+                    Barotropic Breakdown of the ITCZ in a Global AI Weather Model: A Finite-Time Nonlinear Perturbation Framework
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">2. Methodology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="results.html">3. Results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="discussion.html">4. Discussion and Conclusions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix.html">Appendices</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/methodology.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>2. Methodology</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#models-and-background-states">2.1 Models and background states</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-perturbation-framework-perpetual-background-re-centering">2.2 The perturbation framework: perpetual background re-centering</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation-a-nonlinear-power-iteration-not-a-forecast">2.3 Interpretation: a nonlinear power iteration, not a forecast</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#diabatic-forcing">2.4 Diabatic forcing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-experiment-suite">2.5 The experiment suite</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#diagnostics">2.6 Diagnostics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#observational-data">2.7 Observational data</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="methodology">
+<h1>2. Methodology<a class="headerlink" href="#methodology" title="Link to this heading">#</a></h1>
+<div class="highlight-說明 notranslate"><div class="highlight"><pre><span></span>這是全文的重點章節（你與合作者共同發展的方法）。結構：
+2.1 模式與背景場 —— Pangu（24h / 6h 兩種算子）與 FCNv2；特別點明 Pangu 輸入「沒有」太陽天頂角、
+    TOA 輻射或時間戳，是純空間映射 X_t → X_{t+Δt}，這個事實在 §3.6（6h vs 24h）會用到。
+    背景場用 ERA5 1979–2019 JAS 氣候平均（平滑、無天氣系統 → 擾動才不會被綜觀混沌淹沒）。
+2.2 擾動框架的數學核心 —— perpetual background re-centering 遞迴式 + Taylor 展開，
+    說明擾動增長來自哪些項（J 的不穩定方向 + 非線性整流項），以及為什麼扣 B 能「精確」去除模式漂移。
+2.3 迭代指標 n 的詮釋（關鍵誠實聲明）—— 背景永遠鎖在 t=0、無波流交互作用；整個演算法在數學上
+    是對單步算子 M 在 u0 點的「非線性奇異向量冪次疊代」；n 是模態萃取的收斂次數、不是物理天數；
+    這正是我們保留 &quot;semi-linear&quot; 這個名字的原因；並宣告「模態萃取序列 vs 觀測時間演化」的
+    可比較性是本文要說清楚的目標之一（§3.7、§4 收尾）。
+圖編號（依你指示調整）：Fig. 1 = 方法示意圖（§2.2）；Fig. 2 = 四合一強迫圖 (a)背景TCWV+加熱
+框 (b)水平加熱 (c)Deep垂直分布 (d)經向剖面（§2.4）；原本單獨的背景場圖已移除（與 Fig. 2a 重複），
+完整背景場留在 Appendix A。
+2.4 非絕熱加熱 —— 水平：高斯橢圓（σφ≈6.4°、σλ≈65°，中心 10°N/195°E；cos 波瓣替代版
+    移到 Appendix B，註明源自 Hakim &amp; Masanam 的做法、結果無明顯差異）；垂直：
+    Deep = sin(π(p−200)/800)，出自 Chen &amp; Masunaga 2025 Fig. 2b 的 EOF1；2.5 K/day、
+    全程持續加熱（非 7 天脈衝；依 config_used：主線/profile/振幅 step1 全 20 天，
+    denial 套組與 DJF 為 16 天）；離散脈衝 ≈ 連續加熱率。振幅段落已同步新 B.2 掃描
+    （2.5 近最優；0.5–1 under-forced；5–10 overdriven）。
+2.5 實驗組 —— Step 1–4（標準 / 鎖水氣 / 只給水氣 / 鎖風）+ 外部模態 vs 邊界層加熱對 +
+    DJF 季節對照 + 振幅掃描 + 24h vs 6h。
+2.6 診斷 —— 直接對 u&#39; 取渦度的合法性（curl 線性）、TCWV、混沌敏感性警語。
+2.7 觀測資料 —— HIMAWARI / ASRAD。
+</pre></div>
+</div>
+<section id="models-and-background-states">
+<h2>2.1 Models and background states<a class="headerlink" href="#models-and-background-states" title="Link to this heading">#</a></h2>
+<p>We use two independently trained global DWP models as our “laboratory
+atmospheres.” The primary model is Pangu-Weather (Bi et al. 2023), a 3D
+Earth-specific transformer operating on 13 pressure levels
+(1000–50 hPa; five upper-air variables <span class="math notranslate nohighlight">\(z,q,T,u,v\)</span>) plus four surface fields
+(MSLP, <span class="math notranslate nohighlight">\(u_{10}\)</span>, <span class="math notranslate nohighlight">\(v_{10}\)</span>, <span class="math notranslate nohighlight">\(T_{2m}\)</span>) on a 0.25° grid. Pangu is distributed as
+a family of fixed-lead operators; we use the 24-h operator for all headline
+experiments and the 6-h operator for the time-step sensitivity test of
+Section 3.6. The secondary model is FourCastNet v2 (FCNv2; Bonev et al.
+2023), a spherical Fourier neural operator with 73 channels including a
+native total-column-water-vapor (TCWV) channel.</p>
+<p>Two architectural facts are load-bearing for the interpretation of our
+results. First, <em>Pangu’s inputs contain no solar zenith angle, no
+top-of-atmosphere radiation, and no timestamp of any kind</em>: the trained
+network is a pure spatial mapping</p>
+<div class="math notranslate nohighlight">
+\[ X_{t+\Delta t} = M\left(X_{t}\right), \]</div>
+<p>with no knowledge of local solar time. Any diurnal information the operator
+carries must therefore be implicit in the statistics of its training
+transitions, a point to which we return in Section 3.6. Second, Pangu carries
+no moisture column integral, so TCWV must be diagnosed as
+<span class="math notranslate nohighlight">\(\mathrm{TCWV} = g^{-1}\int q\, dp\)</span>; FCNv2 carries TCWV natively. We verified
+that the two definitions agree on identical states to within an RMSE of
+<span class="math notranslate nohighlight">\(\sim 3.6\ \mathrm{kg} \cdot \mathrm{m^{-2}}\)</span> (Appendix A), so that moisture responses can be compared
+across models. Moisture forcing is specified once, as a specific-humidity
+rate, and converted to each model’s native variables (<span class="math notranslate nohighlight">\(q\)</span> for Pangu; relative
+humidity plus the consistent TCWV increment for FCNv2, using the background
+temperature for the conversion).</p>
+<p>The background (basic) state <span class="math notranslate nohighlight">\(u_0\)</span> is the 1979–2019 July–September (JAS)
+climatological mean built from ERA5 (Hersbach et al. 2020). A seasonal
+climatology has two virtues as a basic state. Dynamically, it contains a realistic, zonally elongated summer ITCZ /
+monsoon-trough shear zone in the Northern Hemisphere — the substrate the
+instability needs (Section 3.3 shows the response collapses when the winter
+climatology is used instead). Methodologically, it is smooth: it contains no
+individual synoptic systems, so a free-running forecast from it does not
+immediately spin up weather that would swamp the perturbation signal. The
+choice of season proves to be a controlling parameter, and we treat it as
+part of the experiment design rather than a technicality. The background’s
+column moisture, with the heating footprint of Section 2.4 overlaid, is
+shown in Fig. 2a; the full background fields are documented in Appendix A.</p>
+</section>
+<section id="the-perturbation-framework-perpetual-background-re-centering">
+<h2>2.2 The perturbation framework: perpetual background re-centering<a class="headerlink" href="#the-perturbation-framework-perpetual-background-re-centering" title="Link to this heading">#</a></h2>
+<p>We wish to measure how a perturbation grows <em>about the fixed basic state</em>
+<span class="math notranslate nohighlight">\(u_0\)</span> under the full nonlinear model operator <span class="math notranslate nohighlight">\(M\)</span>. A free rollout of
+<span class="math notranslate nohighlight">\(M\)</span> from <span class="math notranslate nohighlight">\(u_0+\delta\)</span> will not do: the trajectory drifts away from <span class="math notranslate nohighlight">\(u_0\)</span>
+(both through the model’s climate drift and through genuine synoptic
+development), and after a few steps the “perturbation” is measured about a
+background that no longer exists. Hakim and Masanam (2024) addressed this by
+constructing steady backgrounds; we extend their approach into a recursive
+scheme that keeps the background steady <em>for arbitrarily many steps</em> while
+letting the perturbation evolve nonlinearly.</p>
+<p>Let <span class="math notranslate nohighlight">\(M\)</span> denote one model step (24 h unless stated), <span class="math notranslate nohighlight">\(u_0\)</span> the steady
+background, <span class="math notranslate nohighlight">\(f_n\)</span> the forcing increment added at step <span class="math notranslate nohighlight">\(n\)</span> (Section 2.4), and
+<span class="math notranslate nohighlight">\(u'_n\)</span> the perturbation carried across steps. Define the frozen one-step
+drift</p>
+<div class="math notranslate nohighlight">
+\[ B \equiv M(u_0), \]</div>
+<p>computed once. The iteration is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+A_n &amp;= u_0 + u'_{n-1} + f_n, \\
+u'_n &amp;= M(A_n) - B, \\
+u'_n &amp;\leftarrow \mathcal{L}\left(u'_n\right),
+\end{aligned}
+\qquad n = 1,\dots,N,
+\end{split}\]</div>
+<p>with <span class="math notranslate nohighlight">\(u'_0 = 0\)</span> for the standard experiment and <span class="math notranslate nohighlight">\(\mathcal{L}\)</span> an optional
+channel-locking operator used only in the mechanism-denial experiments
+(Section 2.5). The loop is sketched in Fig. 1. Three properties make this
+scheme suitable:</p>
+<p><img alt="Fig. 1" src="_images/fig_method_schematic.png" /></p>
+<p><em>Fig. 1: The perpetual background re-centering loop.</em></p>
+<ol class="arabic simple">
+<li><p><em>The input to <span class="math notranslate nohighlight">\(M\)</span> is always anchored to <span class="math notranslate nohighlight">\(u_0\)</span>.</em> The model never sees a
+free-running trajectory, so the smooth background cannot spin up
+synoptic-scale “weather” of its own.</p></li>
+<li><p><em>The constant drift is removed exactly.</em> Because the background part of
+the input is identically <span class="math notranslate nohighlight">\(u_0\)</span> at every step, its image under any map is
+identically <span class="math notranslate nohighlight">\(B\)</span>; subtracting <span class="math notranslate nohighlight">\(B\)</span> therefore removes the model’s one-step
+climate drift without linearization error. (This exactness is a property
+of re-anchoring, not of any small-amplitude assumption.)</p></li>
+<li><p><em>The perturbation evolves fully nonlinearly.</em> No Jacobian is ever formed
+or applied; <span class="math notranslate nohighlight">\(M\)</span> acts on the complete state <span class="math notranslate nohighlight">\(u_0+u'+f\)</span>.</p></li>
+</ol>
+<p>The mathematical content of the scheme is seen by Taylor-expanding <span class="math notranslate nohighlight">\(M\)</span> about
+<span class="math notranslate nohighlight">\(u_0\)</span>. Writing <span class="math notranslate nohighlight">\(\mathbf{J} \equiv \partial M/\partial x \,|_{u_0}\)</span> and
+<span class="math notranslate nohighlight">\(\mathbf{H} \equiv \partial^2 M/\partial x^2\,|_{u_0}\)</span>, and letting
+<span class="math notranslate nohighlight">\(\delta_n \equiv u'_{n-1} + f_n\)</span> denote the total departure fed to the model
+at step <span class="math notranslate nohighlight">\(n\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[
+u'_n \;=\; M(u_0+\delta_n) - M(u_0)
+\;=\; \underbrace{\mathbf{J}\,\delta_n}_{\text{linear growth}}
+\;+\; \underbrace{\tfrac{1}{2}\,\delta_n^{\top}\mathbf{H}\,\delta_n + \cdots}_{O(\lVert\delta_n\rVert^{2})}.
+\]</div>
+<p>This expansion identifies the two engines of perturbation growth. The linear
+term <span class="math notranslate nohighlight">\(\mathbf{J}\delta_n\)</span> contains the classical instability: directions of
+state space in which the linearized one-step map about the ITCZ basic state
+has amplification factors exceeding unity — for our problem, the barotropic
+instability of the heated vorticity strip. The higher-order terms are the
+<em>rectified nonlinear</em> contributions: vortex merger and axisymmetrization, the
+finite-amplitude saturation of the roll-up, and the wind–moisture coupling in
+which perturbation winds converge background moisture that in turn modifies
+the perturbation heating response. At the amplitudes we force
+( <span class="math notranslate nohighlight">\(\lVert \delta \rVert\)</span> set by a <span class="math notranslate nohighlight">\(2.5 \mathrm{K} \cdot \mathrm{day^{-1}}\)</span> heating sustained
+throughout the experiment), these quadratic-and-higher terms are essential and active; the
+method coincides with a tangent-linear calculation only in the formal limit
+<span class="math notranslate nohighlight">\(\lVert\delta\rVert \to 0\)</span>, which we are deliberately not in. Following the
+usage established for this class of experiment we nevertheless refer to the
+scheme by the shorthand <em>semi-linear</em>; the next subsection explains why that
+name, understood correctly, is apt.</p>
+</section>
+<section id="interpretation-a-nonlinear-power-iteration-not-a-forecast">
+<h2>2.3 Interpretation: a nonlinear power iteration, not a forecast<a class="headerlink" href="#interpretation-a-nonlinear-power-iteration-not-a-forecast" title="Link to this heading">#</a></h2>
+<p>The defining feature of the recurrence above — and the point on which its
+interpretation hinges — is that the background is re-anchored to <span class="math notranslate nohighlight">\(u_0\)</span> at
+<em>every</em> step. The background state therefore never leaves <span class="math notranslate nohighlight">\(t=0\)</span>: however
+large the perturbation grows, it is never permitted to modify the flow upon
+which it grows. By construction there is <em>no wave–mean-flow interaction</em> in
+this system.</p>
+<p>This has a precise mathematical consequence. If <span class="math notranslate nohighlight">\(M\)</span> were linear, the
+iteration <span class="math notranslate nohighlight">\(u'_n = \mathbf{J}(u'_{n-1} + f_n)\)</span> would be a forced power
+iteration, whose homogeneous part converges (up to normalization) to the
+eigenvector of <span class="math notranslate nohighlight">\(\mathbf{J}\)</span> with the largest modulus eigenvalue — the
+fastest-growing mode of the one-step operator about <span class="math notranslate nohighlight">\(u_0\)</span>. Our iteration is
+the fully nonlinear analogue: repeated application of <span class="math notranslate nohighlight">\(M\)</span>, always re-centered
+on the same <span class="math notranslate nohighlight">\(u_0\)</span>, <em>selects and amplifies the fastest-growing finite-time
+structure of <span class="math notranslate nohighlight">\(M\)</span> about the point <span class="math notranslate nohighlight">\(u_0\)</span></em>, saturating at finite amplitude
+through the <span class="math notranslate nohighlight">\(O(\lVert\delta\rVert^2)\)</span> terms. In this sense the converged
+pattern is a <strong>nonlinear singular vector</strong> of the single-step operator at the
+basic state, extracted by power iteration.</p>
+<p>It follows that the iteration index <span class="math notranslate nohighlight">\(n\)</span> must not be read as physical
+atmospheric time. Although each application of <span class="math notranslate nohighlight">\(M\)</span> is nominally a 24-h
+integration — and we will write “nominal day <span class="math notranslate nohighlight">\(n\)</span>” for readability — the
+sequence <span class="math notranslate nohighlight">\(n = 1, 2, \dots, N\)</span> is the <em>convergence history of a
+mode-extraction algorithm</em>: early iterations are dominated by the projection
+of the forcing onto the growing structure, intermediate iterations by
+quasi-exponential amplification, and late iterations by nonlinear saturation.
+A real atmosphere evolving over fifteen days would meanwhile change its own
+background state profoundly; ours is locked to the JAS climatology
+throughout. This is exactly the sense in which the method deserves the name
+<em>semi-linear</em>: as in classical linear instability analysis, we study the
+growth of perturbations about a prescribed, fixed basic state — except that
+the operator applied to the perturbation is the full nonlinear <span class="math notranslate nohighlight">\(M\)</span> rather
+than its linearization.</p>
+<p>This interpretation imposes a discipline on how the results may be compared
+with observations, and we state it here as one of the declared aims of the
+paper: to establish the conditions under which the <em>spatial convergence
+sequence</em> of such a mode extraction can be meaningfully placed beside an
+<em>observed temporal evolution</em>. The comparison is defensible only to the
+extent that (i) the observed background (here, the monsoon trough) is
+quasi-stationary over the observed interval, so that nature is approximately
+running a fixed-background instability problem too, and (ii) the comparison
+is made at the level of the <em>converged mode structure</em> — the wavenumber,
+spacing, latitude, and morphology of the vortex chain — rather than as a
+step-by-date alignment. Section 3.7 applies this standard.</p>
+</section>
+<section id="diabatic-forcing">
+<h2>2.4 Diabatic forcing<a class="headerlink" href="#diabatic-forcing" title="Link to this heading">#</a></h2>
+<p>The forcing <span class="math notranslate nohighlight">\(f_n\)</span> is an idealized ITCZ-scale heating added to the temperature
+field at every step during the forcing period. It is separable in the
+horizontal and vertical.</p>
+<p><em>Horizontal structure.</em> The heating is centered at 10°N, 195°E, in the
+western–central Pacific, with a separable Gaussian envelope</p>
+<div class="math notranslate nohighlight">
+\[ h(\phi,\lambda) \;=\;
+\exp\!\left[-\tfrac{1}{2}\left(\frac{\phi-10^\circ}{\sigma_\phi}\right)^{2}
+            -\tfrac{1}{2}\left(\frac{\lambda-195^\circ}{\sigma_\lambda}\right)^{2}\right],
+\qquad \sigma_\phi \approx 6.4^\circ,\; \sigma_\lambda \approx 65^\circ, \]</div>
+<p>i.e., an ITCZ-scale zonally elongated ellipse spanning roughly 5–25°N and a
+wide Pacific sector (Fig. 2b; its meridional cross-section in Fig. 2d). An
+alternative cosine-lobe envelope, adapted from the forcing construction of
+Hakim and Masanam (2024), was also tested; the character of the breakdown is
+the same under both (the amplitude scales with the net delivered heating),
+and the comparison is given in Appendix B.</p>
+<p><img alt="Fig. 2" src="_images/heating_dist_check.png" /></p>
+<p><em>Fig. 2: The forcing and its background. (a) JAS climatological TCWV with
+the heating footprint contoured in black (0.25 and 0.6 of the peak rate);
+(b) horizontal structure of the applied Gaussian heating (<span class="math notranslate nohighlight">\(2.5 \mathrm{K} \cdot \mathrm{day^{-1}}\)</span>
+peak, centered at 10°N, 195°E); (c) the Deep vertical profile <span class="math notranslate nohighlight">\(Q(p)\)</span>;
+(d) meridional cross-section of the envelope at 195°E.</em></p>
+<p><em>Vertical structure.</em> The vertical profile is the deep-convective mode</p>
+<div class="math notranslate nohighlight">
+\[ Q(p) \;=\; \sin\!\left(\pi\,\frac{p - 200\ \mathrm{hPa}}{800\ \mathrm{hPa}}\right),
+\qquad 200 \le p \le 1000\ \mathrm{hPa}, \]</div>
+<p>which peaks at 600 hPa and vanishes at 200 and 1000 hPa (Fig. 2c). This
+profile is adopted as the leading EOF of observed diabatic heating over
+tropical oceans:
+Chen and Masunaga (2025, their Fig. 2b) show that the first EOF of the
+<span class="math notranslate nohighlight">\(Q_1\)</span> vertical structure in the convectively active tropics is a deep,
+single-signed mode of essentially this shape. Alternative profiles
+(stratiform, shallow, and vertically uniform) are used in the sensitivity
+experiments of Section 3.3.</p>
+<p><em>Amplitude and duration.</em> The heating rate is <span class="math notranslate nohighlight">\(2.5 \mathrm{K} \cdot \mathrm{day^{-1}}\)</span> at the
+horizontal and vertical maximum, applied as a discrete increment at each step
+(+2.5 K per 24-h step; +0.625 K per 6-h step). We treat this discrete pulse
+as an approximation to a continuous diabatic heating rate acting over the
+step — the same convention used for the moisture source in Step 4. The
+heating is sustained at every iteration for the full length of each
+experiment (<span class="math notranslate nohighlight">\(N = 20\)</span> for the headline run and the profile and amplitude
+sensitivity runs; <span class="math notranslate nohighlight">\(N = 16\)</span> for the mechanism-denial suite and the seasonal
+control), maintaining the strip against dissipation while the instability
+develops upon it. Amplitude is a genuinely calibrated quantity: the sweep of
+Appendix B.2 places the headline <span class="math notranslate nohighlight">\(2.5\ \mathrm{K} \cdot \mathrm{day^{-1}}\)</span>
+near the amplitude that maximizes the organized vortex response —
+<span class="math notranslate nohighlight">\(0.5 - 1\ \mathrm{K} \cdot \mathrm{day^{-1}}\)</span> under-force the strip (weaker,
+later peaks), while by <span class="math notranslate nohighlight">\(5 - 10\ \mathrm{K} \cdot \mathrm{day^{-1}}\)</span> the system
+is overdriven and the clean roll-up degrades.</p>
+</section>
+<section id="the-experiment-suite">
+<h2>2.5 The experiment suite<a class="headerlink" href="#the-experiment-suite" title="Link to this heading">#</a></h2>
+<p>The headline experiment and its mechanism-denial variants form a four-step
+suite, distinguished by the initial perturbation, the forcing, and the
+locking operator <span class="math notranslate nohighlight">\(\mathcal{L}\)</span>:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Step</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(u'_0\)</span></p></th>
+<th class="head"><p>Forcing</p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(\mathcal{L}\)</span> (per step)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>Standard breakdown</p></td>
+<td><p>0</p></td>
+<td><p>sustained heating</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>Moisture locking</p></td>
+<td><p>0</p></td>
+<td><p>sustained heating</p></td>
+<td><p>moisture channels of <span class="math notranslate nohighlight">\(u' \to 0\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>Moisture-only initialization</p></td>
+<td><p>day-7 moisture anomaly from Step 1</p></td>
+<td><p>none</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>Wind locking</p></td>
+<td><p>day-7 moisture anomaly</p></td>
+<td><p>persistent moisture source</p></td>
+<td><p>wind channels of <span class="math notranslate nohighlight">\(u' \to 0\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The locking operator acts on the <em>perturbation</em>, zeroing the designated
+channels after every step, so that (for example) in Step 2 the model always
+sees the background moisture field: any moisture–dynamics feedback is denied
+while the thermal forcing proceeds untouched. Steps 3 and 4 probe the
+converse: whether a moisture anomaly alone (with and without the winds it
+would otherwise induce) can excite the instability. Together the four steps
+factor the coupled growth into its wind and moisture pathways.</p>
+<p>Beyond the suite, four families of controls are run: (i) a <em>seasonal
+control</em> — the identical experiment on the DJF climatology, which tests
+whether the response is set by the background ITCZ rather than by the
+forcing; (ii) an <em>external-mode versus boundary-layer heating</em> pair,
+which places the heating either in the barotropic (external) vertical mode or
+in the boundary layer alone (Section 3.4; Appendix B.5); (iii) an <em>amplitude
+sweep</em> (<span class="math notranslate nohighlight">\(0.5 - 10 \mathrm{K} \cdot \mathrm{day^{-1}}\)</span>; Appendix B.2); and (iv) a <em>time-step control</em> repeating
+Step 1 with the 6-h Pangu operator (Section 3.6). The full suite is run on
+both Pangu and FCNv2.</p>
+</section>
+<section id="diagnostics">
+<h2>2.6 Diagnostics<a class="headerlink" href="#diagnostics" title="Link to this heading">#</a></h2>
+<p>The primary diagnostics are the 850-hPa perturbation relative vorticity
+<span class="math notranslate nohighlight">\(\zeta'_{850}\)</span> and the perturbation column water vapor <span class="math notranslate nohighlight">\(\mathrm{TCWV}'\)</span>. Because the
+curl is a linear operator, computing <span class="math notranslate nohighlight">\(\zeta'\)</span> directly from the perturbation
+winds is exact — <span class="math notranslate nohighlight">\(\zeta(u') = \zeta(u' + B) - \zeta(B)\)</span> — which we verified
+numerically to machine precision (<span class="math notranslate nohighlight">\(\sim10^{-7}\)</span> relative). Time series of the
+domain peak values (within the forced sector) track the growth and
+saturation; snapshot panels at selected iterations show the spatial
+morphology.</p>
+<p>One caveat governs all point-wise comparisons. The breakdown is a chaotic
+instability: a 0.2 K change in the initial perturbation lowers the day-12
+spatial correlation of the vorticity field to 0.42, even though the
+statistics (peak amplitude, number and spacing of vortices, latitude of the
+chain) are robust. All comparisons in this paper — against the reference
+experiment and against observations — are therefore made at the level of
+structure and statistics, never of exact vortex positions.</p>
+</section>
+<section id="observational-data">
+<h2>2.7 Observational data<a class="headerlink" href="#observational-data" title="Link to this heading">#</a></h2>
+<p>The observational counterpart uses full-disk imagery from the Himawari
+geostationary satellite, retrieved from the PCCU/ASRAD archive at daily 00Z:
+the water-vapor channel and the infrared window channel. Two western North
+Pacific events are documented: the primary case of 5–14 November 2024, in
+which the monsoon trough discretized into four coexisting tropical cyclones
+(Yinxing, Toraji, Usagi, Man-yi), and a secondary case of 30 August – 6
+September 2023 (Saola, Haikui, Kirogi, with Yun-yeung forming to the east).
+For each event we archive the daily full-disk frames, tropical western
+Pacific crops, and multi-day roll-up montages (Section 3.7; Appendix C).</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="introduction.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">1. Introduction</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="results.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">3. Results</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#models-and-background-states">2.1 Models and background states</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-perturbation-framework-perpetual-background-re-centering">2.2 The perturbation framework: perpetual background re-centering</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation-a-nonlinear-power-iteration-not-a-forecast">2.3 Interpretation: a nonlinear power iteration, not a forecast</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#diabatic-forcing">2.4 Diabatic forcing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-experiment-suite">2.5 The experiment suite</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#diagnostics">2.6 Diagnostics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#observational-data">2.7 Observational data</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By PC YE
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

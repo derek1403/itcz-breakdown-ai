@@ -1,0 +1,618 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>4. Discussion and Conclusions &#8212; ITCZ Breakdown AI Models</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'discussion';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="References" href="references.html" />
+    <link rel="prev" title="3. Results" href="results.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="00_abstract.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">ITCZ Breakdown AI Models</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="00_abstract.html">
+                    Barotropic Breakdown of the ITCZ in a Global AI Weather Model: A Finite-Time Nonlinear Perturbation Framework
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="methodology.html">2. Methodology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="results.html">3. Results</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">4. Discussion and Conclusions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix.html">Appendices</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/discussion.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>4. Discussion and Conclusions</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-the-model-has-learned">4.1 What the model has learned</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mode-extraction-versus-observed-evolution">4.2 Mode extraction versus observed evolution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#off-manifold-artifacts-the-day-1-manifold-shock">4.3 Off-manifold artifacts: the day-1 “manifold shock”</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-limitations">4.4 Further limitations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusions">4.5 Conclusions</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="discussion-and-conclusions">
+<h1>4. Discussion and Conclusions<a class="headerlink" href="#discussion-and-conclusions" title="Link to this heading">#</a></h1>
+<div class="highlight-說明 notranslate"><div class="highlight"><pre><span></span>討論章。內容：
+(1) 這些結果對「AI 模式學到了什麼」的意涵 —— 不是背答案：對稱加熱 → 北偏 PV 帶（守恆律的要求）、
+    正壓捲渦、風–水氣耦合，都是設計上沒有餵給它的。
+(2) 兩模式對比 —— FCNv2 水氣路徑弱很多 → 學到的動力不是架構的必然。
+(3) 「模態萃取 vs 觀測演化」問題收尾（§2.3 / §3.7 的呼應）。
+(4) 限制之一：day-1 殘響 = manifold shock（流形衝擊）—— 不歸因於物理重力波調整（提出後排除）。
+    歸因已依你的提問改寫（詳見 logic/discussion4.3.md）：殘響幾何不是強迫形狀給的，
+    是 J（在 off-manifold 點 u0 取的線性化）的結構給的 —— 近緯向對稱背景 → 全球準緯向模態
+    （條紋，含遠離強迫處）；陸地/地形等尖銳靜態梯度破壞對稱 → 非條狀錨定異常；
+    架構格 → 棋盤格。並先點明背景自身的 shock 被 B 精確吸收（f=0 ⇒ u&#39;≡0）。
+    可檢驗區辨：單步出現/不傳播、幾何不隨強迫形狀改變、day-1 振幅標度、白噪聲探針。
+(5) 其他限制：渦旋位置混沌、陸地過早長渦度、中緯度過度活躍。
+(6) 展望：manifold 探索（你的 Part 2 議程）。
+</pre></div>
+</div>
+<section id="what-the-model-has-learned">
+<h2>4.1 What the model has learned<a class="headerlink" href="#what-the-model-has-learned" title="Link to this heading">#</a></h2>
+<p>The experiments were designed so that success could not be scripted. The
+forcing supplied to Pangu-Weather is a smooth, meridionally symmetric,
+time-invariant temperature increment; everything that follows — and each step
+of it is a nontrivial dynamical inference — was produced by the learned
+operator. The first response is a PV band displaced to the poleward flank of
+a symmetric heating, which is what the diabatic PV equation demands of a
+fluid on a rotating sphere (Section 3.1); the model was never shown that
+equation. The band then destabilizes at the wavenumber and spacing that
+barotropic-instability theory selects for such a strip (Section 3.2). The
+growth requires, and gets, a two-way wind–moisture coupling, as the
+mechanism-denial suite shows by taking it away (Section 3.5). And the
+response amplitude is governed by the background state, not the forcing
+(Section 3.3) — the signature of a genuine instability of the basic state
+rather than a memorized response to heating. Taken together with the steady
+linear responses documented by Hakim and Masanam (2024), these results
+support the stronger claim: at least for tropical dynamics on synoptic and
+planetary scales, the model has internalized dynamical relationships, not
+merely climatological correlations.</p>
+<p>The cross-model contrast sharpens the point. FCNv2, trained on the same
+reanalysis with a different architecture, reproduces the barotropic roll-up
+only weakly and requires an order-of-magnitude larger forcing for a
+comparable response, with a much weaker moisture pathway. Whatever is
+responsible — architecture, training protocol, or the spectral smoothing
+tendencies documented for this model class (Bonavita 2024) — the dynamics
+recovered by our framework is a property of the individual trained model,
+not an inevitability of data-driven forecasting. Dynamical testing of the
+kind performed here therefore has discriminating power between models that
+headline scores do not.</p>
+</section>
+<section id="mode-extraction-versus-observed-evolution">
+<h2>4.2 Mode extraction versus observed evolution<a class="headerlink" href="#mode-extraction-versus-observed-evolution" title="Link to this heading">#</a></h2>
+<p>We return to the interpretive question raised in Section 2.3, because it is
+the hinge on which the observational comparison turns. Our recurrence holds
+the background at <span class="math notranslate nohighlight">\(t=0\)</span> forever: there is no wave–mean-flow interaction, and
+the iteration is a forced power iteration converging toward the
+fastest-growing finite-time structure of the one-step operator about the
+basic state — a nonlinear singular vector. The index <span class="math notranslate nohighlight">\(n\)</span> counts algorithmic
+convergence, not days of weather. The observed November 2024 sequence, by
+contrast, is a genuine temporal evolution. We have argued (Section 3.7) that
+the comparison between the two is nevertheless meaningful under two explicit
+conditions: the comparison is made at the level of converged mode structure,
+and the observed background is quasi-stationary over the interval — as the
+monsoon trough was during the event week. Under those conditions, nature is
+approximately running the fixed-background instability problem that our
+algorithm solves, and the agreement in structure (a chain of four vortices
+along the trough at several-thousand-kilometer spacing) is evidence about
+dynamics, not a coincidence of imagery. Where either condition fails — a
+rapidly evolving background, or comparison of intermediate iterates to
+intermediate dates — the correspondence should not be pressed, and we have
+not pressed it.</p>
+</section>
+<section id="off-manifold-artifacts-the-day-1-manifold-shock">
+<h2>4.3 Off-manifold artifacts: the day-1 “manifold shock”<a class="headerlink" href="#off-manifold-artifacts-the-day-1-manifold-shock" title="Link to this heading">#</a></h2>
+<p>The first iteration of every forced experiment exhibits a characteristic
+transient: globe-spanning, zonally banded striations — present far outside
+the forced sector — together with non-banded anomalies anchored to land,
+orography, and coastlines, and grid-scale checkerboard noise. It is tempting
+to read the striations as inertia–gravity-wave adjustment to an unbalanced
+heating — the physical response a primitive-equation model would produce —
+and we considered that reading; but we set it aside, because the
+phenomenology does not support it. Physical adjustment is dispersive: it
+propagates away from the forcing at identifiable group speeds over a finite
+adjustment time. The transient instead appears fully formed within a single
+operator application and does not propagate.</p>
+<p>The explanation we advance is statistical rather than physical. The trained
+operator is reliable only on (a neighborhood of) the manifold
+<span class="math notranslate nohighlight">\(\mathcal{M}\)</span> of atmospheric states it was fitted to; the forced input
+<span class="math notranslate nohighlight">\(u_0 + \delta + f\)</span> — a climatological mean plus an idealized heating that no
+reanalysis state resembles — lies off that manifold. Note first that the
+exact drift removal of Section 2.2 guarantees the background’s own
+off-manifold correction cannot appear in <span class="math notranslate nohighlight">\(u'\)</span> (it is absorbed into <span class="math notranslate nohighlight">\(B\)</span>
+identically); the entire transient lives in the differential response
+<span class="math notranslate nohighlight">\(M(u_0+\delta)-M(u_0) = \mathbf{J}\delta + \tfrac12\,\delta^\top\mathbf{H}\,
+\delta + \cdots\)</span>. Off-manifold, <em>neither term of this expansion is
+disciplined by training</em>: the Jacobian <span class="math notranslate nohighlight">\(\mathbf{J}\)</span> is a derivative taken at
+a point the network never saw, and the remainder reflects unconstrained
+network curvature. The geometry of the transient is therefore set by the
+structure of this untrained linearization, not by the shape of the forcing.
+Its three components read off directly: the background <span class="math notranslate nohighlight">\(u_0\)</span> is nearly
+zonally symmetric, so the modes of <span class="math notranslate nohighlight">\(\mathbf{J}\)</span> are approximately zonal
+harmonics — globally extended bands onto which the global attention
+projects even a localized forcing, explaining striations far from the
+heated sector; where sharp static features (coastlines, orography) break
+that symmetry, the same response anchors locally, explaining the non-banded
+land-locked anomalies; and the discrete patch/window architecture
+contributes its own fixed-pixel-scale checkerboard. We term this transient
+the <em>manifold shock</em>. The two readings are distinguishable in principle,
+and the distinguishing signatures favor the latter: single-step appearance
+versus dispersive timescale; geometry set by the basic state’s symmetry and
+the model’s static sensitivities versus propagation away from the source.
+Direct tests — invariance of the striations under changes of forcing shape
+and hemisphere, amplitude scaling of the day-1 residue (linear would
+implicate <span class="math notranslate nohighlight">\(\mathbf{J}\)</span>, superlinear the curvature), and a white-noise probe
+of <span class="math notranslate nohighlight">\(\mathbf{J}\)</span>’s preferred modes — are the subject of companion work on
+the geometry of DWP state manifolds, and are where we continue the program
+sketched in the Introduction.</p>
+<p>Practically, the manifold shock is a nuisance signal, and it is one reason
+(alongside the mechanisms of Section 3.6) that idealized perturbation
+experiments in neural operators must be designed and read with care: some of
+what the model returns is dynamics, and some is the geometry of its training
+distribution pushing back.</p>
+</section>
+<section id="further-limitations">
+<h2>4.4 Further limitations<a class="headerlink" href="#further-limitations" title="Link to this heading">#</a></h2>
+<p>Three further limitations bound our claims. First, the breakdown is
+chaotic: exact vortex positions are irreproducible under <span class="math notranslate nohighlight">\(0.2 \mathrm{K}\)</span> initial
+differences (Section 2.6), so all validation is statistical/structural; this
+is a property of the physical problem as much as of the model. Second, the
+model grows spurious early vorticity over land within the forced sector,
+earlier and stronger than the oceanic character of the process warrants — we
+suspect the same land-anchored learned tendencies implicated in the 6-h
+noise (Section 3.6) and note it as an open item. Third, the midlatitudes
+become more active after nominal day 9 than the tropical confinement of the
+forcing would lead one to expect; whether this is a physical teleconnection
+(cf. the planetary-wave radiation in Hakim and Masanam 2024) or accumulated
+artifact has not been established.</p>
+</section>
+<section id="conclusions">
+<h2>4.5 Conclusions<a class="headerlink" href="#conclusions" title="Link to this heading">#</a></h2>
+<p>A frozen-background, finite-time nonlinear perturbation framework —
+perpetual background re-centering — turns a deep-learning weather model into
+an instrument for classical instability analysis. Applied to Pangu-Weather
+with an idealized deep-convective ITCZ heating on a JAS climatological basic
+state, the framework recovers the complete barotropic ITCZ-breakdown
+sequence: diabatically generated PV banding on the poleward flank of the
+heating, roll-up into approximately four discrete vortices with realistic
+spacing, co-amplifying column moisture, background-controlled growth, and
+suppression under moisture denial — and with a structural counterpart in
+the November 2024 quadruple-typhoon event. Equally important are the interpretive boundaries
+we have drawn: the iteration extracts a nonlinear singular vector rather
+than simulating weather; its comparison with observed evolution is licensed
+only by background quasi-stationarity and made at the level of converged
+structure; and part of the model’s response to out-of-distribution forcing
+is the geometry of its training manifold rather than atmospheric dynamics.
+Within those boundaries, the verdict of the experiment is clear: the
+dynamics of ITCZ breakdown is in the machine.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="results.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">3. Results</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="references.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">References</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-the-model-has-learned">4.1 What the model has learned</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mode-extraction-versus-observed-evolution">4.2 Mode extraction versus observed evolution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#off-manifold-artifacts-the-day-1-manifold-shock">4.3 Off-manifold artifacts: the day-1 “manifold shock”</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-limitations">4.4 Further limitations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusions">4.5 Conclusions</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By PC YE
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

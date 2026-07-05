@@ -1,0 +1,31 @@
+# Book settings
+title: ITCZ Breakdown AI Models
+author: PC YE
+copyright: "2026"
+
+# 論文不需要強制 re-execute notebook，可以設為 cache 或 off
+execute:
+  execute_notebooks: off
+
+# 只 build TOC 裡列到的檔案，跳過 FIGURES_TODO.md / logic/ / FTR/ 等筆記
+only_build_toc_files: true
+
+# MyST 擴充：數學（dollarmath/amsmath）與 ::: 圍欄
+parse:
+  myst_enable_extensions:
+    - dollarmath
+    - amsmath
+    - colon_fence
+
+# LaTeX PDF 輸出的檔案名稱設定
+latex:
+  latex_documents:
+    targetname: itcz_paper.tex
+
+# 如果你有參考文獻，指定你的 .bib 檔案
+# bibtex_bibfiles:
+#   - references.bib
+
+html:
+  use_issues_button: false
+  use_repository_button: false
