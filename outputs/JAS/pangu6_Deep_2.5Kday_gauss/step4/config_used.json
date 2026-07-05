@@ -15,7 +15,7 @@
   "background": "JAS",
   "driver": {
     "n_days": 16,
-    "forcing_days": 16,
+    "forcing_days": 20,
     "save_every": 1,
     "clip_moisture": false
   },
@@ -27,7 +27,8 @@
     "edge_sigmas": 2.0,
     "heat_type": "Deep",
     "amp_K_per_day": 2.5,
-    "moist_amp_qday": 0.002
+    "moist_amp_qday": 0.002,
+    "method": "gauss"
   },
   "plot": {
     "domain": [
@@ -58,10 +59,11 @@
     ]
   },
   "experiment": {
-    "name": "step3_pangu_JAS_moistinit_d7",
-    "forcing_type": "none",
-    "persistent": false,
-    "lock": "none",
-    "seed_npz": "/wk2/pc/AI_models/itcz-breakdown-ai/outputs/JAS/seed_moisture_pangu_day7.npz"
+    "name": "pangu6_Deep_2.5Kday_gauss/step4",
+    "forcing_type": "moisture",
+    "persistent": true,
+    "lock": "wind",
+    "seed_npz": "/wk2/pc/AI_models/itcz-breakdown-ai/outputs/JAS/pangu6_Deep_2.5Kday_gauss/seed_moisture_pangu_day7.npz",
+    "out_dir": "/wk2/pc/AI_models/itcz-breakdown-ai/outputs/JAS/pangu6_Deep_2.5Kday_gauss/step4"
   }
 }

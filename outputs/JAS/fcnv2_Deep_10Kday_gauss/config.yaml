@@ -1,0 +1,15 @@
+# Per-experiment manifest (authoritative variable setup for this spec).
+# Shared defaults (paths, plot, forcing geometry, device) come from the root config.yaml;
+# this file overrides only what varies. Run:  scripts/run_stepN.py --exp <this dir>
+model: fcnv2
+step_hours: 6
+background: JAS
+driver:
+  n_days: 16
+  forcing_days: 20
+  save_every: 1
+  clip_moisture: false
+forcing:
+  heat_type: Deep
+  amp_K_per_day: 10.0
+  method: gauss          # horizontal forcing: gauss (cos not yet ported to main forcing.py)

@@ -16,6 +16,9 @@ The four stages are expressed as an ``experiment`` config block:
     seed_npz     : path to a moisture-only initial perturbation (Steps 3/4) or None
     resume_from  : (optional) path to a FULL perturbation npz to warm-start u'_{start}
     start_step   : (optional) step index of ``resume_from``; the loop resumes at start_step+1
+    out_dir      : (optional) explicit output directory; defaults to ``outputs/<bg>/<name>``.
+                   Set by the per-experiment layout (``outputs/<bg>/<spec>/stepN``) and by
+                   ``resume_run`` (so a resumed run writes back to the dir it was read from).
 """
 from __future__ import annotations
 
@@ -77,7 +80,7 @@ def run(cfg: dict, operator: Operator | None = None) -> str:
     lock = exp.get("lock", "none")
     save_every = cfg["driver"].get("save_every", 1)
 
-    run_dir = os.path.join(cfgmod.bg_output_dir(cfg), exp["name"])
+    run_dir = exp.get("out_dir") or os.path.join(cfgmod.bg_output_dir(cfg), exp["name"])
     os.makedirs(run_dir, exist_ok=True)
     _stamp(run_dir, cfg)
 

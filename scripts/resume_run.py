@@ -51,6 +51,8 @@ def main():
 
     cfg["experiment"]["resume_from"] = os.path.join(run_dir, f"pert_{start_step:03d}.npz")
     cfg["experiment"]["start_step"] = start_step
+    cfg["experiment"]["out_dir"] = run_dir      # write back exactly where we read from
+                                                # (robust to the outputs/<bg>/<spec>/stepN layout)
 
     print(f"[resume] {os.path.basename(run_dir)}: warm-start from step {start_step} "
           f"-> N={N} ({args.n_days}d), forcing_days={cfg['driver']['forcing_days']}")

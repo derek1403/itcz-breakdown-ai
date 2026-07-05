@@ -2,8 +2,13 @@
 
 Builds the main-pipeline heating distribution + JAS IC panel montage straight
 from the ACTUAL src/itcz forcing.py + config.yaml + ic/u0_JAS_pangu.npz that the
-run used. Saves to outputs/JAS/heating_dist_check.png (Fig. 1) and
-outputs/JAS/ic_JAS_check.png (Fig. 2 in methodology.md).
+run used. Saves the paper's bold-styled Fig. 2 into the HEADLINE spec folder
+outputs/JAS/pangu24_Deep_2.5Kday_gauss/heating_dist_check.png (referenced by
+methodology.md), plus outputs/JAS/ic_JAS_check.png (Appendix A IC figure).
+
+This is the AUTHORITATIVE (paper-styled) generator for the headline spec's figure.
+The OTHER spec folders get an equivalent figure from the reusable, cfg-driven
+tracker.plot_heating_dist via `scripts/plot_heating.py --all JAS`.
 
 Run with pangu_env python; paths are anchored to the repo root so cwd does not
 matter:
@@ -128,8 +133,10 @@ ax4.set_title(f"(d) Meridional cut @ {xlon:.0f}E (sig_lat={slat:.1f} deg, center
 ax4.set_xlabel("lat (deg)"); ax4.set_ylabel("unit heating"); ax4.grid(True, alpha=0.3)
 
 fig.tight_layout()
-fig.savefig(os.path.join(ROOT, "outputs/JAS/heating_dist_check.png"), dpi=120)
-print("saved outputs/JAS/heating_dist_check.png")
+_fig2 = "outputs/JAS/pangu24_Deep_2.5Kday_gauss/heating_dist_check.png"   # headline spec folder
+os.makedirs(os.path.dirname(os.path.join(ROOT, _fig2)), exist_ok=True)
+fig.savefig(os.path.join(ROOT, _fig2), dpi=120)
+print(f"saved {_fig2}")
 
 # =============== Fig 2: JAS IC (TCWV + 850 wind) — unchanged ===============
 fig2 = plt.figure(figsize=(11, 6))

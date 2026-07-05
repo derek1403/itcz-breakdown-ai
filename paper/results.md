@@ -7,11 +7,18 @@
     Schubert et al. 1991 撐腰。
 3.2 正壓崩解主結果 —— 全面改用高斯加熱的主管線 run（outputs/JAS，24h、持續加熱 16 天）：
     panels_vort + panels_tcwv + timeseries；不再對照/標註 AI-Forum。
-3.3 什麼控制反應強弱 —— 已改成一般論文的段落寫法（開頭一段總起三個控制因子，
-    每段第一句即主張，不再用 *(a)(b)(c)* 標籤）：背景季節對照（JAS vs DJF，高斯同強迫，
-    inverse 已移除）→ 振幅 → 垂直分布（結尾拋出「渦度為何不在乎垂直分布」的問題，
-    交棒給 3.4）。
-3.4 外部模態 vs 邊界層加熱等價 —— 你的積分論證 ∫−(∂Q/∂z)Ψ₀ dz ≈ Q_B。
+3.3 什麼控制反應強弱 —— 背景季節對照 → 振幅 → 垂直分布。垂直分布已依你的 Q3 筆記
+    （FTR/Q3_vertical_profile_F0.md）用正式 JAS+gauss 四組 run 定稿：
+    ζ' Deep 89 > Shallow 76 > uniform 54 ≫ Strat 8；TCWV' uniform 69 > Shallow 52 >
+    Deep 48 ≫ Strat 16。舊的「渦度不敏感」前提已刪；改為「兩個場服從 Q(p) 的
+    不同泛函」，交棒給 3.4。
+3.4 已全面改寫（回應你的 Q3 擔憂）—— 舊的全柱外部模態/邊界值論證撐不起新數字
+    （Deep 最強是硬反例），已由「低層非絕熱 PV 源」理論取代：
+    S = [Q(700)−Q(1000)]（內部項 ∝ ∂θ̇/∂z，蓋 3.1 同一條方程）+ β·Q_B（地面 PV sheet，
+    β≈0.6 為 O(1) 稀釋因子，用 uniform/Deep 一個數字校準）。S 重現 ζ' 全部穩健排序
+    （Strat 為負 → 崩潰；uniform 只剩邊界通道 → 居中；Deep/Shallow 內部梯度大 → 最強）。
+    TCWV' 則服從邊界層平均加熱 ⟨Q⟩₁₀₀₀₋₈₅₀（排序完全命中）。EX/BL 等價實驗重新詮釋為
+    「純邊界通道、等 Q_B → 等 S」的驗證。詳細推演見 logic/results3.4.md。
 3.5 機制剝奪（Step 2–4）—— 定量已定稿（24h 高斯套組）：鎖水氣 ζ' 5.5（抑制 94%）；
     只給水氣 ζ' 79 @ d9（水氣單獨也能起渦）；鎖風 ζ'≡0、TCWV 續增至 53（水氣無風則惰性）。
 3.6 24h vs 6h —— 先聲明 Pangu 無時間輸入（naive「日夜混疊」不成立），再給兩個真正的機制：
@@ -69,8 +76,8 @@ wind–moisture coupling analyzed in Section 3.5.
 
 Quantitatively, the peak 850-hPa perturbation vorticity reaches
 $\zeta' \approx 89 \times 10^{-5}\ \mathrm{s^{-1}}$ at nominal day 12, when
-four discrete vortices stand along $\sim$15°N between roughly 145°E and
-170°W, and the peak perturbation column water vapor reaches $\approx 48$ mm
+four discrete vortices stand along $\sim$ 15°N between roughly 145°E and
+170°W, and the peak perturbation column water vapor reaches $\approx 48\ \mathrm{mm}$
 at nominal day 14; thereafter the vortices drift poleward and the chain
 loses its zonal alignment. The co-amplification of the moisture field with
 the vorticity field, and the emergence of a discrete vortex chain from a
@@ -125,57 +132,127 @@ headline value lying in the regime where the roll-up is vigorous but not yet
 overdriven; by $10 \mathrm{K} \cdot \mathrm{day^{-1}}$ the response is strongly nonlinear from the
 outset and contaminates the midlatitudes.
 
-The vertical structure of the heating discriminates between the two response
-fields in an instructive way. With equal amplitude and horizontal envelope,
-the deep-convective profile yields peak
-$\zeta' \approx 43.8\times10^{-5}\ \mathrm{s^{-1}}$ but
-$\mathrm{TCWV}' \approx 31$ mm only, whereas a vertically uniform profile extending
-into the boundary layer yields $\zeta' \approx 48\times10^{-5}\
-\mathrm{s^{-1}}$ and $\mathrm{TCWV}' \approx 43$ mm (calibration runs): the vorticity
-response barely notices the change, while the moisture response is lifted by
-a third. The moisture side is readily understood — the sinusoidal profiles
-vanish at 1000 hPa and so drive no boundary-layer buoyancy and little
-low-level convergence in the moisture-rich lower troposphere, which is
-exactly what heating the boundary layer supplies. But the insensitivity of
-the *vorticity* response poses a sharper question — why should the
-instability care so little about where in the column the heating resides? —
-and answering it is the subject of the next subsection.
+The vertical structure of the heating is the most discriminating control of
+the three, and — tellingly — the two response fields order the four profiles
+*differently*. With equal amplitude and horizontal envelope:
 
-## 3.4 External-mode and boundary-layer heating produce similar responses
+| profile | peak $\zeta'$ ($10^{-5}\ \mathrm{s^{-1}}$) | peak $\mathrm{TCWV}'$ (mm) |
+|---|---|---|
+| Deep (peak 600 hPa) | 89.4 | 48.4 |
+| Shallow (peak $\sim$800 hPa) | 76.1 | 51.7 |
+| uniform (1000–200 hPa) | 54.0 | 69.2 |
+| Stratiform (low-level cooling) | 8.3 | 16.3 |
 
-A vertical-mode argument answers the question posed above. Project the
-heating onto the barotropic (external) mode, whose vertical structure
-function $\Psi_0(z)$ is nearly constant with height. The projection integral
-is, after integrating by parts,
+Three features stand out. First, the profiles that heat the lower free
+troposphere (Deep, Shallow) build the strongest vortex chains even though
+both deliver *zero* heating at 1000 hPa. Second, the vertically uniform
+profile — the one with the largest boundary-layer heating — is markedly
+weaker in vorticity yet strongest in moisture. Third, stratiform heating,
+which cools the lower troposphere, kills the instability almost completely
+while still moistening weakly. (Consistent with Section 2.6, we read the
+Deep-versus-Shallow difference as within the chaos-dominated uncertainty of
+peak amplitudes; the Stratiform collapse and the uniform/Deep separation are
+large and robust.) The full time series are shown in Appendix B.4. The
+vorticity and moisture responses are evidently controlled by *different
+functionals of the same profile* $Q(p)$ — identifying those functionals is
+the subject of the next subsection.
+
+## 3.4 What the vertical profile controls: the low-level diabatic PV source
+
+The theory that fits both orderings is already on the table: it is the
+diabatic PV source of Section 3.1, now read in the vertical. The interior
+source $DP/Dt \approx P\,\partial\dot\theta/\partial\theta$ generates
+cyclonic PV wherever the heating *increases with height*, i.e., below the
+heating maximum; and heating delivered at the lower boundary itself
+contributes a separate boundary source — a Bretherton-type PV sheet at the
+surface (Haynes and McIntyre 1987). Because the strip whose breakdown we
+measure lives at 850 hPa, the relevant quantity is the source integrated
+over the layer in which that strip is built, roughly 1000–700 hPa:
 
 $$
-\int_{B}^{T} -\frac{\partial Q}{\partial z}\,\Psi_0 \, dz
-\;\approx\; \Psi_0 \int_{B}^{T} -\frac{\partial Q}{\partial z}\, dz
-\;=\; \Psi_0\left(Q_B - Q_T\right) \;\approx\; Q_B,
+S \;=\; \underbrace{\Big[\,Q(700\ \mathrm{hPa}) - Q(1000\ \mathrm{hPa})\,\Big]}_{\text{interior: } \int \partial\dot\theta/\partial z\, dz}
+\;+\; \underbrace{\beta\, Q_B}_{\text{surface sheet}},
 $$
 
-for heating that vanishes at the column top: with $\Psi_0$ approximately
-constant, *the external-mode projection of any heating profile is controlled
-by its boundary value* $Q_B$. Two heatings with the same effective
-boundary-layer amplitude should therefore force the same external-mode —
-i.e., barotropic — response, regardless of how the remainder of the profile
-is distributed in the vertical. The model concurs: placing the heating in
-the external mode and placing it in the boundary layer alone yield closely
-similar perturbation evolutions, illustrated at nominal day 12 in Fig. 6.
-Since the instability that breaks the strip is barotropic, this equivalence
-also explains why the roll-up is robust across vertical profiles
-(Section 3.3) even as the moisture amplitude varies.
+with $\beta$ an $O(1)$ dilution factor for the surface-concentrated sheet
+(it must be redistributed over the depth of the strip, so $\beta < 1$).
+Evaluating $S$ on the model levels for the four profiles and normalizing to
+the uniform case (with $\beta = 0.55$ fixed by the single calibration
+condition that $S$ reproduce the uniform-to-Deep ratio):
 
-![Fig. 6](../aux/investigation/figs/hakim/exbl_evolution/day12.png)
+| profile | interior $Q_{700}{-}Q_{1000}$ | $Q_B$ | $S$ (rel. uniform) | observed $\zeta'$ (rel. uniform) |
+|---|---|---|---|---|
+| Deep | 0.92 | 0 | 1.66 | 1.66 |
+| Shallow | 1.15 | 0 | 2.08 | 1.41 |
+| uniform | 0.00 | 1 | 1.00 | 1.00 |
+| Stratiform | $-0.71$ | 0 | $< 0$ | 0.15 |
 
-*Fig. 6: Perturbation 500-hPa geopotential height at nominal day 12 for
-external-mode heating (EX, 1000–50 hPa; top row) versus boundary-layer
-heating (BL, 1000–700 hPa; bottom row), at forcing amplitudes $0.1 \mathrm{K} \cdot \mathrm{day^{-1}}$
-(left) and $0.5 \mathrm{K} \cdot \mathrm{day^{-1}}$ (right). Height perturbations are contoured every
-10 m (red solid = positive, blue dashed = negative); thin grey contours are the
-base-state 500-hPa height and the red dashed ellipse marks the heating
-footprint. At equal amplitude the EX and BL rows produce closely similar
-height responses, as the external-mode argument predicts.*
+The functional reproduces every robust feature of the ordering: Deep and
+Shallow are strongest because their low-level heating *gradient* is large —
+the surface value is irrelevant; uniform is intermediate because its
+interior gradient vanishes and it forces the strip through the (diluted)
+boundary pathway alone; and Stratiform's low-level *cooling* makes the
+source negative precisely in the layer where the strip and its moisture
+supply must be built — the instability is not weakened but switched off.
+The one free number, $\beta \approx 0.55$, is of the expected order
+($O(1)$, $<1$). The vertical-profile fingerprint is shown directly in
+Fig. 6.
+
+The moisture response obeys a different and simpler functional: the mean
+heating over the moisture-rich boundary layer,
+$\langle Q\rangle_{1000-850}$, which sets the low-level convergence. Its
+values (uniform 1.00, Shallow 0.55, Deep 0.28, Stratiform $-0.49$) predict
+exactly the observed $\mathrm{TCWV}'$ ordering — uniform strongest, Stratiform
+collapsed — with Deep and Shallow lifted above the passive prediction by
+the vortex-driven convergence of their strong circulations, the same
+two-way coupling isolated in Section 3.5.
+
+Figure 6 shows the fingerprint directly, in the field the functional orders.
+At nominal day 12 the Deep and Shallow profiles have organized discrete
+vortex chains along the strip; the vertically uniform profile — the
+external-mode/boundary-only case, with zero interior gradient in the
+strip-building layer — produces a weaker, less discretized band forced
+through the surface sheet alone; and the Stratiform profile has essentially
+no coherent low-level vorticity. The ordering of the panels is the ordering
+of $S$. We stress that the discriminating field is the low-level vorticity,
+*not* the 500-hPa geopotential height: at 500 hPa the deep-column uniform
+profile projects most strongly of the four onto the external geopotential
+mode, exactly the reading this section rejects, and only $\zeta'_{850}$
+exposes the low-level strip that $S$ governs.
+
+An independent pair of experiments corroborates the boundary pathway in
+isolation. External-mode heating (EX, 1000–50 hPa) and boundary-layer
+heating (BL, 1000–700 hPa) both have zero interior gradient in the
+strip-building layer, so both force the strip through the surface sheet
+alone; with equal boundary amplitude the source $S$ is identical, and the
+model produces closely similar 500-hPa height responses (the day-by-day
+fields are archived in `aux/investigation/figs/hakim/exbl_evolution_EX_BL/`).
+We note for completeness that a full-column
+external-mode projection of the heating — integrating
+$-\partial Q/\partial z$ from surface to top — is *not* the controlling
+functional: that integral collapses to the boundary values and cancels
+exactly the interior low-level gradient that the experiments show dominates.
+The strip is built locally, not by column projection. With this reading,
+one equation — the diabatic PV source — accounts for both the meridional
+asymmetry of Section 3.1 (through $P \propto f$) and the vertical-profile
+fingerprint of Section 3.3 (through $\partial\dot\theta/\partial z$ plus
+its boundary term): the learned operator behaves, in both respects, as if
+it carries that equation.
+
+![Fig. 6](../aux/investigation/figs/hakim/exbl_evolution_Deep_Sha_Uni_Str/profiles4_vort850_day12.png)
+
+*Fig. 6: Perturbation 850-hPa relative vorticity $\zeta'_{850}$ at nominal
+day 12 for the four heating profiles under identical Gaussian
+Deep-amplitude $2.5 \mathrm{K} \cdot \mathrm{day^{-1}}$ forcing (JAS background, 24-h operator):
+Deep and Shallow (top) build discrete vortex chains; the vertically uniform
+/ external-mode case (bottom-left) forms a weaker, less discretized band
+through the boundary pathway alone; Stratiform (bottom-right) is switched
+off. Panel titles give the instantaneous peak $|\zeta'|$ (in
+$10^{-5}\ \mathrm{s^{-1}}$); the black dashed ellipse marks the heating footprint.
+The panel ordering — Deep > Shallow > uniform $\gg$ Stratiform — is the
+ordering of the low-level PV source $S$. The earlier EX/BL 500-hPa
+comparison is retained in
+`aux/investigation/figs/hakim/exbl_evolution_EX_BL/`.*
 
 ## 3.5 Mechanism denial: the wind–moisture coupling is necessary
 
@@ -199,7 +276,7 @@ operates in both directions: winds build moisture (Step 1 vs. 2), and
 moisture builds winds (Step 3). Finally, locking the winds while sustaining
 the moisture source (Step 4) isolates the moisture evolution with the
 dynamical feedback denied: the column moisture then accumulates steadily
-(to $\approx 53$ mm by day 16) without ever organizing into vortices —
+(to $\approx 53\ \mathrm{mm}$ by day 16) without ever organizing into vortices —
 moisture alone, denied its winds, is inert.
 Taken together, the suite shows that the
 full breakdown requires the two-way coupling — winds converging moisture,
@@ -225,8 +302,8 @@ as in the 24-h run) yields a visibly noisier evolution: the vorticity band
 and a subsequent roll-up are present, but embedded in filamentary,
 land-anchored, high-frequency clutter absent from the 24-h run, and the
 discrete four-vortex chain never emerges as cleanly (Fig. 8). The peak
-amplitudes are also inflated ($\zeta' \approx 101$ vs. $89 \times 10^{-5}\
-\mathrm{s^{-1}}$; $\mathrm{TCWV}' \approx 77$ vs. $48$ mm), the moisture field
+amplitudes are also inflated ( $\zeta' \approx 101$ vs. $89 \times 10^{-5}\
+\mathrm{s^{-1}}$ ; $\mathrm{TCWV}' \approx 77$ vs. $48\ \mathrm{mm}$ ), the moisture field
 especially.
 
 We emphasize at the outset what this difference is *not*. Pangu's inputs

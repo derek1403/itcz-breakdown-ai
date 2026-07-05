@@ -16,9 +16,9 @@
 | 路徑 | 用途 | 詳細 |
 |------|------|------|
 | `src/itcz/` | 主套件：資料處理 `data/`、模型 `models/`、實驗 `experiment/`、診斷 `plotting/` | 見 [README §4](README.md#4-code-map--完整結構見-treemd) |
-| `scripts/` | thin CLI 入口：`prep_*`（建背景 IC）、`run_step{1..4}`（四步實驗）、`plot_*`（出圖） | 見 [README §3](README.md) |
+| `scripts/` | thin CLI 入口：`prep_*`（建背景 IC）、`run_step{1..4}`（四步實驗，支援 `--exp <spec>`）、`resume_run`（延長/暖啟動任一 run）、`plot_*`（出圖） | 見 [README §3](README.md) |
 | `ic/` | 產出的背景場 `u0_<bg>_<model>.npz`（大檔，不入 git） | — |
-| `outputs/` | 每個 run 的擾動場 `pert_NNN.npz` + 圖 + `config_used.json`，依背景分組 `outputs/<bg>/` | — |
+| `outputs/` | 依背景分組 `outputs/<bg>/`。**新 per-experiment layout**：`outputs/<bg>/<spec>/{config.yaml, step1..4}`（spec 名＝`<model><sh>_<heat>_<amp>Kday_<method>`）；JAS 已遷移，其餘背景仍為舊扁平 `step<N>_<model>_<bg>_...`。每個 stepN 內含 `pert_NNN.npz` + 圖 + `config_used.json` | 見 [README §8.1](README.md) |
 | `obs/` | 觀測對照資料與說明 | [obs/README.md](obs/README.md) |
 | `aux/` | 非主要部分歸檔（見下） | — |
 | `aux/investigation/` | 排查與試錯的完整歷史（為何早期對不上 AI-Forum、逐項排除、最終在 `aiforum_repro/` 重現成功） | [aux/investigation/README.md](aux/investigation/README.md) |
@@ -103,7 +103,8 @@
 │   ├── run_step1.py
 │   ├── run_step2.py
 │   ├── run_step3.py
-│   └── run_step4.py
+│   ├── run_step4.py
+│   └── resume_run.py                    # 延長/暖啟動任一 run（讀其 config_used.json，續跑到 --n_days）
 ├── src
 │   └── itcz
 │       ├── data

@@ -27,9 +27,9 @@ import numpy as np
 from itcz.models.layout import get_layout
 from itcz.plotting import tracker
 
-RUN_24H = os.path.join(ROOT, "outputs/JAS/step1_pangu_JAS_Deep_2.5Kday")
-RUN_6H = os.path.join(ROOT, "outputs/JAS/step1_pangu_JAS_Deep_2.5Kday_6h_sustained")
-RUN_6H_FALLBACK = os.path.join(ROOT, "outputs/JAS/step1_pangu_JAS_Deep_2.5Kday_6h_pulse7d")
+RUN_24H = os.path.join(ROOT, "outputs/JAS/pangu24_Deep_2.5Kday_gauss/step1")
+RUN_6H = os.path.join(ROOT, "outputs/JAS/pangu6_Deep_2.5Kday_gauss/step1")
+RUN_6H_FALLBACK = os.path.join(ROOT, "outputs/JAS/pangu6_Deep_2.5Kday_gauss_pulse7d/step1")
 RUN_DJF = os.path.join(ROOT, "outputs/DJF/step1_pangu_DJF_Deep_2.5Kday")
 OBS_DIR = os.path.join(ROOT, "obs/2024-11_WPac_quad-typhoon/fulldisk")
 CROP = (120, 280, 820, 575)  # tropical-WPac crop on the 1024^2 full disk (obs/README)
@@ -126,9 +126,9 @@ def fig7():
     """Self-contained like fig5: bold, big titles aligned with fig4b, legend on
     the left panel only, both panels titled by the peak field, day 0-16."""
     runs = [RUN_24H,
-            os.path.join(ROOT, "outputs/JAS/step2_pangu_JAS_Deep_2.5Kday_moistlock"),
-            os.path.join(ROOT, "outputs/JAS/step3_pangu_JAS_moistinit_d7"),
-            os.path.join(ROOT, "outputs/JAS/step4_pangu_JAS_windlock")]
+            os.path.join(ROOT, "outputs/JAS/pangu24_Deep_2.5Kday_gauss/step2"),
+            os.path.join(ROOT, "outputs/JAS/pangu24_Deep_2.5Kday_gauss/step3"),
+            os.path.join(ROOT, "outputs/JAS/pangu24_Deep_2.5Kday_gauss/step4")]
     labels = ["standard", "moisture-locked",
               "moisture-only init", "wind-locked"]
     out = os.path.join(OUT, "fig7_steps_overlay.png")
@@ -154,6 +154,40 @@ def fig7():
                 lbl.set_fontweight("bold")
         axv.legend(fontsize=10, framealpha=0.9)  # legend on the left panel only
         fig.suptitle("Mechanism denial: the four-step suite (Pangu, JAS, 24-h)",
+                     fontsize=14, fontweight="bold")
+        fig.tight_layout(rect=[0, 0, 1, 0.94])
+        fig.savefig(out, dpi=150); plt.close(fig)
+    print(f"[fig] {out}")
+
+
+def figprofiles():
+    """Appendix B.4: four vertical heating profiles, peak zeta'/TCWV' overlay."""
+    runs, labels = [], []
+    for ht in ["Deep", "Shallow", "uniform", "Stratiform"]:
+        runs.append(os.path.join(ROOT, f"outputs/JAS/pangu24_{ht}_2.5Kday_gauss/step1"))
+        labels.append(ht)
+    out = os.path.join(OUT, "figB4_profiles_overlay.png")
+    with plt.rc_context(_BOLD_RC):
+        fig, (axv, axt) = plt.subplots(1, 2, figsize=(11, 4.4))
+        for rd, lab in zip(runs, labels):
+            if not os.path.isdir(rd):
+                print(f"[skip] {rd} missing"); continue
+            d, vm, tm = run_series(rd)
+            axv.plot(d, vm * 1e5, "-o", ms=3, lw=2.0, label=lab)
+            axt.plot(d, tm, "-o", ms=3, lw=2.0, label=lab)
+        axv.set(title=r"Peak $\zeta'_{850}$",
+                xlabel="iteration n (nominal day)",
+                ylabel=r"peak $\zeta'_{850}$ ($10^{-5}$ s$^{-1}$)")
+        axt.set(title=r"Peak TCWV$'$",
+                xlabel="iteration n (nominal day)",
+                ylabel=r"peak TCWV$'$ (kg m$^{-2}$)")
+        for ax in (axv, axt):
+            ax.grid(alpha=0.3)
+            ax.set_xlim(0, 16)
+            for lbl in ax.get_xticklabels() + ax.get_yticklabels():
+                lbl.set_fontweight("bold")
+        axv.legend(fontsize=11, framealpha=0.9)
+        fig.suptitle("Vertical-profile sensitivity (Pangu, JAS, 24-h, 2.5 K/day)",
                      fontsize=14, fontweight="bold")
         fig.tight_layout(rect=[0, 0, 1, 0.94])
         fig.savefig(out, dpi=150); plt.close(fig)
@@ -294,9 +328,9 @@ def schematic():
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("which", choices=["fig5", "fig7", "fig8", "fig9", "schematic", "all"])
+    ap.add_argument("which", choices=["fig5", "fig7", "fig8", "fig9", "figprofiles", "schematic", "all"])
     args = ap.parse_args()
-    todo = ["fig5", "fig7", "fig8", "fig9", "schematic"] if args.which == "all" else [args.which]
+    todo = ["fig5", "fig7", "fig8", "fig9", "figprofiles", "schematic"] if args.which == "all" else [args.which]
     for name in todo:
         try:
             globals()[name]()

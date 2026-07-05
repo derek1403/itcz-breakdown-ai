@@ -6,10 +6,12 @@
     正壓捲渦、風–水氣耦合，都是設計上沒有餵給它的。
 (2) 兩模式對比 —— FCNv2 水氣路徑弱很多 → 學到的動力不是架構的必然。
 (3) 「模態萃取 vs 觀測演化」問題收尾（§2.3 / §3.7 的呼應）。
-(4) 限制之一：day-1 緯向條紋 = manifold shock（流形衝擊）—— 依你的指示，不歸因於物理重力波調整
-    （只提出來排除），主論述是 out-of-distribution 輸入離開訓練資料流形 𝓜，Taylor 餘項由網路
-    曲率主導而非流體動力，第一步把狀態「投影」回流形時甩出高頻雜訊；並給出可檢驗的區辨特徵
-    （單步出現、錨定於強迫幾何 vs 頻散、傳播）。
+(4) 限制之一：day-1 殘響 = manifold shock（流形衝擊）—— 不歸因於物理重力波調整（提出後排除）。
+    歸因已依你的提問改寫（詳見 logic/discussion4.3.md）：殘響幾何不是強迫形狀給的，
+    是 J（在 off-manifold 點 u0 取的線性化）的結構給的 —— 近緯向對稱背景 → 全球準緯向模態
+    （條紋，含遠離強迫處）；陸地/地形等尖銳靜態梯度破壞對稱 → 非條狀錨定異常；
+    架構格 → 棋盤格。並先點明背景自身的 shock 被 B 精確吸收（f=0 ⇒ u'≡0）。
+    可檢驗區辨：單步出現/不傳播、幾何不隨強迫形狀改變、day-1 振幅標度、白噪聲探針。
 (5) 其他限制：渦旋位置混沌、陸地過早長渦度、中緯度過度活躍。
 (6) 展望：manifold 探索（你的 Part 2 議程）。
 ```
@@ -28,7 +30,7 @@ barotropic-instability theory selects for such a strip (Section 3.2). The
 growth requires, and gets, a two-way wind–moisture coupling, as the
 mechanism-denial suite shows by taking it away (Section 3.5). And the
 response amplitude is governed by the background state, not the forcing
-(Section 3.3a) — the signature of a genuine instability of the basic state
+(Section 3.3) — the signature of a genuine instability of the basic state
 rather than a memorized response to heating. Taken together with the steady
 linear responses documented by Hakim and Masanam (2024), these results
 support the stronger claim: at least for tropical dynamics on synoptic and
@@ -70,37 +72,50 @@ not pressed it.
 
 ## 4.3 Off-manifold artifacts: the day-1 "manifold shock"
 
-The first iteration of every forced experiment exhibits globe-spanning,
-zonally banded striations in the perturbation fields. It is tempting to read these as
-inertia–gravity-wave adjustment to an unbalanced heating — the physical
-response a primitive-equation model would produce — and we considered that
-reading; but we set it aside, because the phenomenology does not support it.
-Physical adjustment is dispersive: it propagates away from the forcing at
-identifiable group speeds over a finite adjustment time. The striations
-instead appear fully formed within a single operator application, anchored to
-the geometry of the forcing, and do not propagate.
+The first iteration of every forced experiment exhibits a characteristic
+transient: globe-spanning, zonally banded striations — present far outside
+the forced sector — together with non-banded anomalies anchored to land,
+orography, and coastlines, and grid-scale checkerboard noise. It is tempting
+to read the striations as inertia–gravity-wave adjustment to an unbalanced
+heating — the physical response a primitive-equation model would produce —
+and we considered that reading; but we set it aside, because the
+phenomenology does not support it. Physical adjustment is dispersive: it
+propagates away from the forcing at identifiable group speeds over a finite
+adjustment time. The transient instead appears fully formed within a single
+operator application and does not propagate.
 
 The explanation we advance is statistical rather than physical. The trained
 operator is reliable only on (a neighborhood of) the manifold
 $\mathcal{M}$ of atmospheric states it was fitted to; the forced input
 $u_0 + \delta + f$ — a climatological mean plus an idealized heating that no
-reanalysis state resembles — lies off that manifold. Off-manifold, the
-Taylor expansion of Section 2.2 is dominated not by dynamics but by
-unconstrained network curvature: the remainder
-$\tfrac12\,\delta^\top\mathbf{H}\,\delta + \cdots$ reflects how the network
-happens to extrapolate, which no training signal disciplined. The first
-application of $M$ then acts, in effect, as a projection of the state back
-toward $\mathcal{M}$, shedding the off-manifold component of the input as
-structured, high-frequency residue — zonally banded because the forcing
-itself is zonally elongated. We term this transient the *manifold shock*.
-The two readings are distinguishable in principle, and the distinguishing
-signatures favor the latter: single-step appearance versus dispersive
-timescale; anchoring to the forcing geometry versus propagation away from
-it. A quantitative version of this test — sweeping the perturbation
-amplitude and measuring the departure from linear scaling as a direct probe
-of manifold curvature — is the subject of companion work on the geometry of
-DLWP state manifolds, and is where we continue the program sketched in the
-Introduction.
+reanalysis state resembles — lies off that manifold. Note first that the
+exact drift removal of Section 2.2 guarantees the background's own
+off-manifold correction cannot appear in $u'$ (it is absorbed into $B$
+identically); the entire transient lives in the differential response
+$M(u_0+\delta)-M(u_0) = \mathbf{J}\delta + \tfrac12\,\delta^\top\mathbf{H}\,
+\delta + \cdots$. Off-manifold, *neither term of this expansion is
+disciplined by training*: the Jacobian $\mathbf{J}$ is a derivative taken at
+a point the network never saw, and the remainder reflects unconstrained
+network curvature. The geometry of the transient is therefore set by the
+structure of this untrained linearization, not by the shape of the forcing.
+Its three components read off directly: the background $u_0$ is nearly
+zonally symmetric, so the modes of $\mathbf{J}$ are approximately zonal
+harmonics — globally extended bands onto which the global attention
+projects even a localized forcing, explaining striations far from the
+heated sector; where sharp static features (coastlines, orography) break
+that symmetry, the same response anchors locally, explaining the non-banded
+land-locked anomalies; and the discrete patch/window architecture
+contributes its own fixed-pixel-scale checkerboard. We term this transient
+the *manifold shock*. The two readings are distinguishable in principle,
+and the distinguishing signatures favor the latter: single-step appearance
+versus dispersive timescale; geometry set by the basic state's symmetry and
+the model's static sensitivities versus propagation away from the source.
+Direct tests — invariance of the striations under changes of forcing shape
+and hemisphere, amplitude scaling of the day-1 residue (linear would
+implicate $\mathbf{J}$, superlinear the curvature), and a white-noise probe
+of $\mathbf{J}$'s preferred modes — are the subject of companion work on
+the geometry of DWP state manifolds, and are where we continue the program
+sketched in the Introduction.
 
 Practically, the manifold shock is a nuisance signal, and it is one reason
 (alongside the mechanisms of Section 3.6) that idealized perturbation

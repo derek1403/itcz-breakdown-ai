@@ -6,6 +6,7 @@ humidity at the background.  Expected: vorticity growth suppressed (PDF p.5).
     python scripts/run_step2.py [--model pangu --background JJA --amp_K 10]
 """
 import argparse
+import os
 
 import _bootstrap  # noqa: F401
 from itcz import config as cfgmod
@@ -20,6 +21,8 @@ def main():
     ap.add_argument("--amp_K", type=float, default=None)
     ap.add_argument("--heat_type", default=None)
     ap.add_argument("--n_days", type=int, default=None)
+    ap.add_argument("--exp", default=None,
+                    help="spec dir for the outputs/<bg>/<spec>/stepN layout (reads <spec>/config.yaml)")
     ap.add_argument("--no_plot", action="store_true")
     args = ap.parse_args()
 
@@ -29,13 +32,16 @@ def main():
     if args.amp_K is not None: over.setdefault("forcing", {})["amp_K_per_day"] = args.amp_K
     if args.heat_type: over.setdefault("forcing", {})["heat_type"] = args.heat_type
     if args.n_days is not None: over.setdefault("driver", {})["n_days"] = args.n_days
-    cfg = cfgmod.load_config(over)
+    cfg = cfgmod.load_experiment(args.exp, over) if args.exp else cfgmod.load_config(over)
 
     amp, ht = cfg["forcing"]["amp_K_per_day"], cfg["forcing"]["heat_type"]
     cfg["experiment"] = {
         "name": f"step2_{cfg['model']}_{cfg['background']}_{ht}_{amp:g}Kday_moistlock",
         "forcing_type": "heating", "persistent": False, "lock": "moisture", "seed_npz": None,
     }
+    if args.exp:
+        cfg["experiment"]["name"] = f"{os.path.basename(os.path.normpath(args.exp))}/step2"
+        cfg["experiment"]["out_dir"] = cfgmod.step_out_dir(args.exp, 2)
     run_dir = driver.run(cfg)
     if not args.no_plot:
         tracker.plot_field_panels(run_dir, cfg, "vort")

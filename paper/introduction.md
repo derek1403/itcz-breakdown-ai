@@ -13,7 +13,7 @@
 你原本的筆記（HAKIM2024 啟發 + 之後要探討 manifold）已織入第 2 段與倒數第 2 段。
 ```
 
-Deep-learning weather prediction (DLWP) models trained end-to-end on
+Deep-learning weather prediction (DWP) models trained end-to-end on
 reanalysis data now match or exceed the deterministic skill of the world's
 best operational numerical weather prediction systems. Pangu-Weather, a
 three-dimensional Earth-specific transformer trained on 39 years of ERA5,
@@ -47,7 +47,7 @@ Schubert (1997) showed that the resulting vortices are natural tropical-cyclone
 precursors and that the process selects vortex spacings of a few thousand
 kilometers; Wang and Magnúsdóttir (2005, 2006) extended the analysis to
 three-dimensional flows and documented its synoptic-scale occurrence in the
-Pacific. ITCZ breakdown is therefore an attractive probe of a DLWP model: for
+Pacific. ITCZ breakdown is therefore an attractive probe of a DWP model: for
 the experiment to succeed, the model must supply (i) the diabatic generation
 of PV, (ii) the barotropic instability of a zonally elongated vorticity
 strip, and (iii) the coupling of the growing vortices to the moisture field —

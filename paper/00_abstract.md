@@ -35,7 +35,7 @@ Sustained deep-convective heating ($2.5 \mathrm{K} \cdot \mathrm{day^{-1}}$, cen
 generates a potential-vorticity band displaced to the poleward flank of the
 heating, which subsequently undulates and rolls up into approximately four
 discrete vortices (peak $\zeta' \approx 9\times10^{-4}\ \mathrm{s^{-1}}$,
-$\mathrm{TCWV}' \approx 48$ mm). Mechanism-denial experiments (moisture
+$\mathrm{TCWV}' \approx 48\ \mathrm{mm}$). Mechanism-denial experiments (moisture
 and wind locking) show the growth requires the wind–moisture coupling the
 model has learned. The converged mode structure — a chain of vortices along
 the monsoon trough — closely resembles the November 2024 western North

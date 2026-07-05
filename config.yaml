@@ -7,6 +7,14 @@
 #
 # Override any field on the command line, e.g.:
 #   python scripts/run_step1.py --model fcnv2 --background JJA --amp_K 5
+#
+# LAYERED / PER-EXPERIMENT LAYOUT (preferred, see README §3 & §8.1):
+#   This root file holds SHARED DEFAULTS (paths, plot, forcing geometry, device, and
+#   fallback model/driver values). A per-experiment manifest at
+#   outputs/<bg>/<spec>/config.yaml overrides only the VARIABLE setup (model, step_hours,
+#   background, driver, forcing.heat_type/amp). Run with:  run_stepN.py --exp <spec dir>
+#   (config.load_experiment merges manifest over this root). Without --exp, scripts fall
+#   back to the flat layout using the defaults below.
 # ============================================================================
 
 # --- external resources (read-only; never written) -------------------------

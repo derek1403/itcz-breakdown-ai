@@ -84,23 +84,37 @@ $PY scripts/prep_annual.py          # annual mean
 $PY scripts/prep_ragasa.py          # 2025-09-17 00Z typhoon day (single day)
 $PY scripts/prep_enso.py            # enso_pos / enso_neg / enso_neutral DJF composites
 
-# --- Steps 1-4 (validated recipe = config.yaml defaults: JAS / 2.5 K/day / Deep) ---
-$PY scripts/run_step1.py --model pangu --background JAS --amp_K 2.5 --heat_type Deep
-$PY scripts/run_step2.py --model pangu --background JAS --amp_K 2.5 --heat_type Deep
-$PY scripts/run_step3.py --model pangu --background JAS --step1_dir outputs/JAS/step1_pangu_JAS_Deep_2.5Kday
-$PY scripts/run_step4.py --model pangu --background JAS --step1_dir outputs/JAS/step1_pangu_JAS_Deep_2.5Kday
+# --- Steps 1-4, per-experiment layout (recommended): one manifest drives all 4 steps ---
+# The manifest outputs/<bg>/<spec>/config.yaml holds the VARIABLE setup (model, step_hours,
+# background, driver, heat_type, amp); the root config.yaml supplies shared defaults
+# (paths, plot, forcing geometry). --exp reads that manifest and writes to <spec>/stepN.
+EXP=outputs/JAS/pangu24_Deep_2.5Kday_gauss
+$PY scripts/run_step1.py --exp $EXP
+$PY scripts/run_step2.py --exp $EXP
+$PY scripts/run_step3.py --exp $EXP          # seeds from $EXP/step1 by default
+$PY scripts/run_step4.py --exp $EXP          # seeds from $EXP/step1 by default
 
-# Run the same on FCNv2 by adding --model fcnv2 (expects "no moisture evolution").
-# Re-plot any finished run:
-$PY scripts/plot_run.py outputs/<run_name> --model pangu
+# Extend/resume any finished run to more days (full-state warm-start from its last pert):
+$PY scripts/resume_run.py $EXP/step1 --n_days 20 --forcing_days 20
+
+# Legacy flat layout still works (no --exp): writes to outputs/<bg>/step1_<model>_<bg>_<heat>_<amp>Kday/
+$PY scripts/run_step1.py --model pangu --background JAS --amp_K 2.5 --heat_type Deep
+
+# Re-plot any finished run (path-based; works on either layout):
+$PY scripts/plot_run.py $EXP/step1 --model pangu
 ```
 
-Outputs are grouped by background: each run writes under
-`outputs/<background>/<run_name>/`: `pert_NNN.npz` (the perturbation `u'_n` per step),
-`config_used.json`, `panels_vort.png`, `panels_tcwv.png`. The background's initial-field
-figures (`ic_vort_<model>.png`, `ic_tcwv_<model>.png`, via `scripts/plot_background.py`)
-sit at the `outputs/<background>/` level, alongside the run dirs. Cost on CPU ≈ 45 s/step
-(Pangu), 14 s/step (FCNv2); a 16-day run is 64 steps.
+**Output layout (per-experiment).** Each spec folder groups one experiment's four steps:
+`outputs/<background>/<spec>/` holds `config.yaml` (the manifest) + `step1/ … step4/`, and each
+`stepN/` holds `pert_NNN.npz` (the perturbation `u'_n` per step), `config_used.json` (the
+fully-resolved cfg actually run), `panels_vort.png`, `panels_tcwv.png`. The spec folder also holds
+`heating_dist_check.png` — its own 4-panel heating figure (paper Fig. 2), generated per-spec by
+`scripts/plot_heating.py --all <bg>` (`tracker.plot_heating_dist`, cfg-driven). Spec-folder naming =
+`<model><step_hours-for-pangu>_<heat>_<amp>Kday_<method>` (e.g. `pangu24_Deep_2.5Kday_gauss`,
+`fcnv2_Deep_2.5Kday_gauss`). Background-level figures (`ic_*`) and the shared moisture seeds sit at
+`outputs/<background>/`. Cost on CPU ≈ 45 s/step (Pangu),
+14 s/step (FCNv2). (Backgrounds other than JAS are still in the legacy flat layout pending
+the same migration.)
 
 ---
 
@@ -242,3 +256,22 @@ $PY 2_plot_results.py     # vort/tcwv/timeseries panels
 * stepping 維持 6 h（每日加熱等比縮放；AI-Forum 原以 24 h 驗證，若差距大可切 `pangu_weather_24.onnx`）
 
 Step 1–4 於 Pangu 與 FCNv2 上重跑，輸出見 `outputs/JAS/`。investigation 目錄整體歸檔於 `aux/`。
+
+### 8.1 📁 outputs/JAS/ 已改為 per-experiment layout（2026-07）
+
+`outputs/JAS/` 已從舊的扁平 `step<N>_<model>_JAS_...` 命名，改成**每個實驗一個 spec 資料夾、其下放 step1–4**：
+
+```
+outputs/JAS/pangu24_Deep_2.5Kday_gauss/     # ← 主線（24h、Deep、2.5K/day、gauss；step1 已延長到 20 天）
+    config.yaml                             # manifest：只放變異參數，跑法 run_stepN.py --exp <此資料夾>
+    step1/ step2/ step3/ step4/             # 各步的 pert_NNN.npz + config_used.json + 圖
+outputs/JAS/fcnv2_Deep_2.5Kday_gauss/       # 對應 FCNv2 主線
+outputs/JAS/{pangu6,fcnv2}_Deep_{5,10}Kday_gauss/          # 其他 amp（多為 step1–2）
+outputs/JAS/pangu6_Deep_2.5Kday_gauss/          # 6h 主線（sustained/fd20），step1–4 一套
+outputs/JAS/pangu6_Deep_2.5Kday_gauss_pulse7d/  # 6h 加熱 7 天後關（fd7）的替代版，step1–4 一套
+```
+
+**一個 `config.yaml` 只服務一組 step1–4**：若某步的來源不確定，就依該 spec 的 manifest 重跑一組覆蓋（例如原
+`moistinit6h`/`windlock6h` 來源不明，改由主線 manifest 重跑 step3/4）。命名 =
+`<model><step_hours(僅pangu)>_<heat>_<amp>Kday_<method>[_變體]`。**其他背景（DJF/JJA/paper*/ragasa）仍為舊扁平命名，
+待以同一方式遷移**（遷移為同磁碟 rename，`config_used.json` 原樣保留，另生成 spec 層 `config.yaml` manifest）。

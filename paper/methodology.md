@@ -26,7 +26,7 @@
 
 ## 2.1 Models and background states
 
-We use two independently trained global DLWP models as our "laboratory
+We use two independently trained global DWP models as our "laboratory
 atmospheres." The primary model is Pangu-Weather (Bi et al. 2023), a 3D
 Earth-specific transformer operating on 13 pressure levels
 (1000–50 hPa; five upper-air variables $z,q,T,u,v$) plus four surface fields
@@ -217,7 +217,7 @@ Hakim and Masanam (2024), was also tested; the character of the breakdown is
 the same under both (the amplitude scales with the net delivered heating),
 and the comparison is given in Appendix B.
 
-![Fig. 2](../outputs/JAS/heating_dist_check.png)
+![Fig. 2](../outputs/JAS/pangu24_Deep_2.5Kday_gauss/heating_dist_check.png)
 
 *Fig. 2: The forcing and its background. (a) JAS climatological TCWV with
 the heating footprint contoured in black (0.25 and 0.6 of the peak rate);
@@ -248,7 +248,7 @@ heating is sustained at every iteration throughout the $N = 16$ experiment,
 maintaining the strip against dissipation while the instability develops
 upon it. Amplitude is a genuinely calibrated quantity: rates of order
 $10 \mathrm{K} \cdot \mathrm{day^{-1}}$ drive the system into a strongly overdriven regime
-(Appendix B), while $1.5$–$3 \mathrm{K} \cdot \mathrm{day^{-1}}$ brackets the regime in which
+(Appendix B), while $1.5 - 3 \mathrm{K} \cdot \mathrm{day^{-1}}$ brackets the regime in which
 the roll-up is vigorous but not overdriven.
 
 ## 2.5 The experiment suite
@@ -278,7 +278,7 @@ whether the response is set by the background ITCZ rather than by the
 forcing; (ii) an *external-mode versus boundary-layer heating* pair,
 which places the heating either in the barotropic (external) vertical mode or
 in the boundary layer alone (Section 3.4); (iii) an *amplitude sweep*
-($0.1$–$20 \mathrm{K} \cdot \mathrm{day^{-1}}$; Appendix B); and (iv) a *time-step control* repeating
+($0.1 - 20 \mathrm{K} \cdot \mathrm{day^{-1}}$; Appendix B); and (iv) a *time-step control* repeating
 Step 1 with the 6-h Pangu operator (Section 3.6). The full suite is run on
 both Pangu and FCNv2.
 

@@ -38,6 +38,27 @@ def load_config(overrides: dict | None = None, path: str | None = None) -> dict:
     return cfg
 
 
+def load_experiment(spec_dir: str, overrides: dict | None = None) -> dict:
+    """Load a per-experiment manifest for the ``outputs/<bg>/<spec>/`` layout.
+
+    Layered config: the root ``config.yaml`` supplies shared defaults (paths, plot,
+    forcing geometry, device); ``<spec_dir>/config.yaml`` supplies the variable setup
+    (model, step_hours, background, driver, heat_type, amp). CLI ``overrides`` win over
+    both. Returns a resolved cfg ready for ``driver.run`` (paths resolved to absolute).
+    """
+    manifest_path = os.path.join(spec_dir, "config.yaml")
+    with open(manifest_path) as fh:
+        manifest = yaml.safe_load(fh) or {}
+    if overrides:
+        _deep_update(manifest, copy.deepcopy(overrides))
+    return load_config(manifest)
+
+
+def step_out_dir(spec_dir: str, step: int) -> str:
+    """Per-step output directory inside a spec folder: ``<spec_dir>/step<N>`` (absolute)."""
+    return os.path.join(os.path.abspath(spec_dir), f"step{step}")
+
+
 def ic_path(cfg: dict, background: str, model: str) -> str:
     """Absolute path of the prepared background-state npz for (background, model)."""
     return os.path.join(cfg["paths"]["ic_dir"], f"u0_{background}_{model}.npz")

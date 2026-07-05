@@ -22,7 +22,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.colors import BoundaryNorm
 
-from ..experiment.forcing import LAT, LON, ellipse_boundary, horizontal_ellipse, sigmas
+from ..experiment.forcing import (
+    LAT, LON, ellipse_boundary, horizontal_ellipse, sigmas, vertical_profile,
+)
 from ..models.layout import State, get_layout
 
 A_EARTH = 6.371e6  # m
@@ -352,5 +354,81 @@ def plot_forcing_ellipse(cfg, out=None):
     os.makedirs(os.path.dirname(out), exist_ok=True)
     fig.savefig(out, dpi=130)
     plt.close(fig)
+    print(f"[plot] {out}")
+    return out
+
+
+def plot_heating_dist(cfg, out=None):
+    """Four-panel heating-distribution figure for one experiment (paper Fig. 2).
+
+    Driven entirely by ``cfg`` (model, background, forcing geometry/heat_type/amp), so
+    each spec folder can carry its own ``heating_dist_check.png`` matching its manifest:
+      (a) background TCWV with the heating footprint (0.25/0.6 of peak) contoured;
+      (b) horizontal Gaussian heating scaled to the amplitude (K/day);
+      (c) the vertical profile Q(p) for this heat_type;
+      (d) meridional cross-section of the envelope through the center longitude.
+    """
+    import cartopy.crs as ccrs
+    import cartopy.feature as cfeature
+    from matplotlib.colors import ListedColormap
+    from .. import config as cfgmod
+
+    model, bg = cfg["model"], cfg["background"]
+    layout = get_layout(model)
+    fcfg = cfg["forcing"]
+    amp, heat_type = fcfg["amp_K_per_day"], fcfg["heat_type"]
+    slat, slon = sigmas(fcfg)
+    clat, clon = fcfg["center_lat"], fcfg["center_lon"]
+
+    H = horizontal_ellipse(clat, clon, slat, slon)                 # (721,1440), peak 1
+    vprof = vertical_profile(heat_type, layout.levels)
+    u0 = State.from_npz(cfgmod.ic_path(cfg, bg, model), model)
+    tcwv_ic = layout.tcwv(u0)
+    ilon = int(np.argmin(np.abs(LON - clon)))
+
+    proj, data = ccrs.PlateCarree(central_longitude=180), ccrs.PlateCarree()
+    tlev = np.arange(0, 75, 5)
+    _tc = plt.get_cmap("turbo")(np.linspace(0, 1, len(tlev) - 1)); _tc[0] = (1, 1, 1, 1)
+    cmap_t = ListedColormap(_tc); cmap_t.set_over(plt.get_cmap("turbo")(1.0))
+    norm_t = BoundaryNorm(tlev, cmap_t.N)
+    hlev = np.arange(0, amp + 0.25, 0.25)
+    norm_h = BoundaryNorm(hlev, plt.get_cmap("Reds").N, clip=False, extend="max")
+
+    def _addmap(ax):
+        ax.add_feature(cfeature.COASTLINE, linewidth=0.6); ax.set_global()
+        gl = ax.gridlines(draw_labels=True, linewidth=0.3, color="0.5", alpha=0.5)
+        gl.top_labels = gl.right_labels = False
+
+    fig = plt.figure(figsize=(16, 9))
+    ax1 = fig.add_subplot(2, 2, 1, projection=proj)
+    im1 = ax1.pcolormesh(LON, LAT, tcwv_ic, cmap=cmap_t, norm=norm_t, shading="auto", transform=data)
+    ax1.contour(LON, LAT, H, levels=[0.25, 0.6], colors="k", linewidths=0.8, transform=data)
+    _addmap(ax1); ax1.set_title(f"(a) {bg} TCWV ({model}); black = heating 0.25/0.6 contour")
+    fig.colorbar(im1, ax=ax1, orientation="horizontal", pad=0.08, aspect=40, ticks=tlev,
+                 extend="max", label="TCWV (kg m$^{-2}$)")
+
+    ax2 = fig.add_subplot(2, 2, 2, projection=proj)
+    im2 = ax2.pcolormesh(LON, LAT, amp * H, cmap="Reds", norm=norm_h, shading="auto", transform=data)
+    _addmap(ax2); ax2.set_title(f"(b) {fcfg.get('method', 'gauss')} heating ({amp:g} K/day, "
+                                f"center {clat:.0f}N/{clon:.0f}E, sig {slat:.1f}/{slon:.1f} deg)")
+    fig.colorbar(im2, ax=ax2, orientation="horizontal", pad=0.08, aspect=40, ticks=hlev,
+                 label="heating (K/day)")
+
+    ax3 = fig.add_subplot(2, 2, 3)
+    ax3.plot(vprof, layout.levels, "o-"); ax3.invert_yaxis()
+    ax3.set_title(f"(c) {heat_type} vertical profile")
+    ax3.set_xlabel("unit heating"); ax3.set_ylabel("pressure (hPa)"); ax3.grid(True, alpha=0.3)
+
+    ax4 = fig.add_subplot(2, 2, 4)
+    ax4.plot(LAT, H[:, ilon], "-")
+    ax4.axvline(clat, color="g", ls=":", lw=1); ax4.axvline(0, color="0.6", lw=0.6)
+    ax4.set_xlim(-20, 40)
+    ax4.set_title(f"(d) Meridional cut @ {clon:.0f}E (sig_lat={slat:.1f} deg, center {clat:.0f}N)")
+    ax4.set_xlabel("lat (deg)"); ax4.set_ylabel("unit heating"); ax4.grid(True, alpha=0.3)
+
+    fig.tight_layout()
+    out = out or os.path.join(cfgmod.bg_output_dir(cfg, bg), "heating_dist_check.png")
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    fig.savefig(out, dpi=120); plt.close(fig)
     print(f"[plot] {out}")
     return out
