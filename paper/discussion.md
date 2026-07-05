@@ -148,9 +148,8 @@ state, the framework recovers the complete barotropic ITCZ-breakdown
 sequence: diabatically generated PV banding on the poleward flank of the
 heating, roll-up into approximately four discrete vortices with realistic
 spacing, co-amplifying column moisture, background-controlled growth, and
-suppression under moisture denial — at amplitudes matching the reference
-experiment, and with a structural counterpart in the November 2024
-quadruple-typhoon event. Equally important are the interpretive boundaries
+suppression under moisture denial — and with a structural counterpart in
+the November 2024 quadruple-typhoon event. Equally important are the interpretive boundaries
 we have drawn: the iteration extracts a nonlinear singular vector rather
 than simulating weather; its comparison with observed evolution is licensed
 only by background quasi-stationarity and made at the level of converged

@@ -194,6 +194,38 @@ def figprofiles():
     print(f"[fig] {out}")
 
 
+def figamps():
+    """Appendix B.2: amplitude sweep in the headline configuration."""
+    amps = ["0.5", "1", "2.5", "5", "10"]
+    out = os.path.join(OUT, "figB2_amp_sweep.png")
+    with plt.rc_context(_BOLD_RC):
+        fig, (axv, axt) = plt.subplots(1, 2, figsize=(11, 4.4))
+        for a in amps:
+            rd = os.path.join(ROOT, f"outputs/JAS/pangu24_Deep_{a}Kday_gauss/step1")
+            if not os.path.isdir(rd):
+                print(f"[skip] {rd} missing"); continue
+            d, vm, tm = run_series(rd)
+            axv.plot(d, vm * 1e5, "-o", ms=3, lw=2.0, label=f"{a} K/day")
+            axt.plot(d, tm, "-o", ms=3, lw=2.0, label=f"{a} K/day")
+        axv.set(title=r"Peak $\zeta'_{850}$",
+                xlabel="iteration n (nominal day)",
+                ylabel=r"peak $\zeta'_{850}$ ($10^{-5}$ s$^{-1}$)")
+        axt.set(title=r"Peak TCWV$'$",
+                xlabel="iteration n (nominal day)",
+                ylabel=r"peak TCWV$'$ (kg m$^{-2}$)")
+        for ax in (axv, axt):
+            ax.grid(alpha=0.3)
+            ax.set_xlim(0, 20)
+            for lbl in ax.get_xticklabels() + ax.get_yticklabels():
+                lbl.set_fontweight("bold")
+        axv.legend(fontsize=11, framealpha=0.9)
+        fig.suptitle("Amplitude sweep (Pangu, JAS, 24-h, Gaussian Deep, sustained)",
+                     fontsize=14, fontweight="bold")
+        fig.tight_layout(rect=[0, 0, 1, 0.94])
+        fig.savefig(out, dpi=150); plt.close(fig)
+    print(f"[fig] {out}")
+
+
 # ---------------------------------------------------------------------- fig8
 def fig8(day=12):
     import cartopy.crs as ccrs
@@ -328,9 +360,9 @@ def schematic():
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("which", choices=["fig5", "fig7", "fig8", "fig9", "figprofiles", "schematic", "all"])
+    ap.add_argument("which", choices=["fig5", "fig7", "fig8", "fig9", "figprofiles", "figamps", "schematic", "all"])
     args = ap.parse_args()
-    todo = ["fig5", "fig7", "fig8", "fig9", "figprofiles", "schematic"] if args.which == "all" else [args.which]
+    todo = ["fig5", "fig7", "fig8", "fig9", "figprofiles", "figamps", "schematic"] if args.which == "all" else [args.which]
     for name in todo:
         try:
             globals()[name]()

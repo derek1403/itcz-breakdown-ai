@@ -5,7 +5,8 @@
 3.1 加熱初期的「北偏渦度帶」—— 你的 PV 論證（加熱對稱於 10°N，但 f 越北越大 → PV 生成
     D(PV)/Dt = PV ∂θ̇/∂θ 越北越強 → 正渦度帶長在加熱北緣），引 Haynes & McIntyre 1987、
     Schubert et al. 1991 撐腰。
-3.2 正壓崩解主結果 —— 全面改用高斯加熱的主管線 run（outputs/JAS，24h、持續加熱 16 天）：
+3.2 正壓崩解主結果 —— 全面改用高斯加熱的主管線 run（outputs/JAS，24h、全程持續加熱
+    20 天；denial 套組與 DJF 為 16 天）：
     panels_vort + panels_tcwv + timeseries；不再對照/標註 AI-Forum。
 3.3 什麼控制反應強弱 —— 背景季節對照 → 振幅 → 垂直分布。垂直分布已依你的 Q3 筆記
     （FTR/Q3_vertical_profile_F0.md）用正式 JAS+gauss 四組 run 定稿：
@@ -15,8 +16,14 @@
 3.4 已全面改寫（回應你的 Q3 擔憂）—— 舊的全柱外部模態/邊界值論證撐不起新數字
     （Deep 最強是硬反例），已由「低層非絕熱 PV 源」理論取代：
     S = [Q(700)−Q(1000)]（內部項 ∝ ∂θ̇/∂z，蓋 3.1 同一條方程）+ β·Q_B（地面 PV sheet，
-    β≈0.6 為 O(1) 稀釋因子，用 uniform/Deep 一個數字校準）。S 重現 ζ' 全部穩健排序
+    β=0.55 為 O(1) 稀釋因子，用 uniform/Deep 一個數字校準——表中 Deep 列已標明
+    "calibration"，避免被誤讀成獨立預測）。S 重現 ζ' 全部穩健排序
     （Strat 為負 → 崩潰；uniform 只剩邊界通道 → 居中；Deep/Shallow 內部梯度大 → 最強）。
+    透明度聲明（新增）：Deep/Shallow 兩者 Q_B 皆為 0，S 比值 = 內部梯度比 1.15/0.92，
+    與 β 無關——任何 β 下 S 都把 Shallow 排在 Deep 之上，與單一實現的觀測順序相反；
+    正文已明寫這一對屬於 §2.6 的混沌不確定度（可用小 ensemble 檢驗，FIGURES_TODO Q4）。
+    Fig 6 已由合作者換成四 profile 的 ζ'₈₅₀ day-12 四拼圖（比舊 EX/BL 圖更切題：
+    它顯示的正是 S 所支配的判別場）；EX/BL 圖移到附錄 B.5。
     TCWV' 則服從邊界層平均加熱 ⟨Q⟩₁₀₀₀₋₈₅₀（排序完全命中）。EX/BL 等價實驗重新詮釋為
     「純邊界通道、等 Q_B → 等 S」的驗證。詳細推演見 logic/results3.4.md。
 3.5 機制剝奪（Step 2–4）—— 定量已定稿（24h 高斯套組）：鎖水氣 ζ' 5.5（抑制 94%）；
@@ -126,11 +133,20 @@ organization on the winter background. (b) Peak $\mathrm{TCWV}'$ versus iteratio
 nearly identical in the two seasons.*
 
 The forcing amplitude, by contrast, sets only where on a familiar curve the
-experiment sits. An amplitude sweep (Appendix B) shows quasi-linear scaling
-of the early response up to a few $\mathrm{K} \cdot \mathrm{day^{-1}}$, with the $2.5 \mathrm{K} \cdot \mathrm{day^{-1}}$
-headline value lying in the regime where the roll-up is vigorous but not yet
-overdriven; by $10 \mathrm{K} \cdot \mathrm{day^{-1}}$ the response is strongly nonlinear from the
-outset and contaminates the midlatitudes.
+experiment sits — and the two response fields part company along it. An
+amplitude sweep at $0.5$, $1$, $2.5$, $5$, and $10\ \mathrm{K} \cdot \mathrm{day^{-1}}$ (Appendix B.2)
+shows the column moistening rising monotonically with amplitude (peak
+$\mathrm{TCWV}'$ climbs from $35$ to $61\ \mathrm{mm}$), consistent with a quasi-passive
+thermodynamic response. The vortex response, however, is *non-monotonic*: peak
+$\zeta'$ rises from $\sim 64$ at $0.5$–$1\ \mathrm{K} \cdot \mathrm{day^{-1}}$ to its maximum of
+$89 \times 10^{-5}\ \mathrm{s^{-1}}$ at the $2.5 \mathrm{K} \cdot \mathrm{day^{-1}}$ headline value, then *falls
+back* to $68$ at $5$ and $42$ at $10\ \mathrm{K} \cdot \mathrm{day^{-1}}$, with the peak arriving ever
+earlier (day 19 → 9). Beyond a few $\mathrm{K} \cdot \mathrm{day^{-1}}$ the forcing is overdriven: the
+response goes strongly nonlinear from the outset, spreads well beyond the
+forced strip into the midlatitudes, and the clean four-vortex roll-up never
+consolidates. The headline $2.5 \mathrm{K} \cdot \mathrm{day^{-1}}$ is thus close to the amplitude that
+maximizes the organized vortex response, not merely a point on a rising
+quasi-linear stretch.
 
 The vertical structure of the heating is the most discriminating control of
 the three, and — tellingly — the two response fields order the four profiles
@@ -182,7 +198,7 @@ condition that $S$ reproduce the uniform-to-Deep ratio):
 
 | profile | interior $Q_{700}{-}Q_{1000}$ | $Q_B$ | $S$ (rel. uniform) | observed $\zeta'$ (rel. uniform) |
 |---|---|---|---|---|
-| Deep | 0.92 | 0 | 1.66 | 1.66 |
+| Deep | 0.92 | 0 | 1.66 (calibration) | 1.66 |
 | Shallow | 1.15 | 0 | 2.08 | 1.41 |
 | uniform | 0.00 | 1 | 1.00 | 1.00 |
 | Stratiform | $-0.71$ | 0 | $< 0$ | 0.15 |
@@ -195,8 +211,19 @@ boundary pathway alone; and Stratiform's low-level *cooling* makes the
 source negative precisely in the layer where the strip and its moisture
 supply must be built — the instability is not weakened but switched off.
 The one free number, $\beta \approx 0.55$, is of the expected order
-($O(1)$, $<1$). The vertical-profile fingerprint is shown directly in
-Fig. 6.
+($O(1)$, $<1$); since it is fixed on the Deep row, that row matches by
+construction and the Shallow and Stratiform rows are the independent
+tests. One transparency point deserves emphasis. Within the sine pair the
+value of $\beta$ is immaterial — Deep and Shallow both have $Q_B = 0$, so
+their $S$ ratio is pinned at the interior-gradient ratio $1.15/0.92$
+regardless of calibration — and $S$ therefore ranks Shallow *above* Deep
+for any $\beta$, whereas the single realizations rank Deep first. This
+inversion involves exactly the pair that Section 2.6 assigns to
+chaos-dominated peak-amplitude uncertainty (the two runs also peak on
+different nominal days), and we read it as such rather than tune it away;
+the $\beta$-independent content of the theory — the sign of $S$ and the
+separation of the sine profiles from uniform — is what the data test, and
+what they confirm.
 
 The moisture response obeys a different and simpler functional: the mean
 heating over the moisture-rich boundary layer,
@@ -213,20 +240,24 @@ vortex chains along the strip; the vertically uniform profile — the
 external-mode/boundary-only case, with zero interior gradient in the
 strip-building layer — produces a weaker, less discretized band forced
 through the surface sheet alone; and the Stratiform profile has essentially
-no coherent low-level vorticity. The ordering of the panels is the ordering
+no coherent low-level vorticity. The separations between the panels — the
+sine profiles above uniform, Stratiform extinguished — are the separations
 of $S$. We stress that the discriminating field is the low-level vorticity,
 *not* the 500-hPa geopotential height: at 500 hPa the deep-column uniform
 profile projects most strongly of the four onto the external geopotential
 mode, exactly the reading this section rejects, and only $\zeta'_{850}$
-exposes the low-level strip that $S$ governs.
+exposes the low-level strip that $S$ governs (the 500-hPa view of the same
+four runs, which follows yet a third functional — the column integral — is
+shown in Appendix B.4, Fig. B5).
 
 An independent pair of experiments corroborates the boundary pathway in
 isolation. External-mode heating (EX, 1000–50 hPa) and boundary-layer
 heating (BL, 1000–700 hPa) both have zero interior gradient in the
 strip-building layer, so both force the strip through the surface sheet
 alone; with equal boundary amplitude the source $S$ is identical, and the
-model produces closely similar 500-hPa height responses (the day-by-day
-fields are archived in `aux/investigation/figs/hakim/exbl_evolution_EX_BL/`).
+model produces closely similar 500-hPa height responses (Appendix B.5,
+Fig. B6), consistent with the classical external-mode projection argument
+discussed there.
 We note for completeness that a full-column
 external-mode projection of the heating — integrating
 $-\partial Q/\partial z$ from surface to top — is *not* the controlling
@@ -248,11 +279,12 @@ Deep and Shallow (top) build discrete vortex chains; the vertically uniform
 / external-mode case (bottom-left) forms a weaker, less discretized band
 through the boundary pathway alone; Stratiform (bottom-right) is switched
 off. Panel titles give the instantaneous peak $|\zeta'|$ (in
-$10^{-5}\ \mathrm{s^{-1}}$); the black dashed ellipse marks the heating footprint.
-The panel ordering — Deep > Shallow > uniform $\gg$ Stratiform — is the
-ordering of the low-level PV source $S$. The earlier EX/BL 500-hPa
-comparison is retained in
-`aux/investigation/figs/hakim/exbl_evolution_EX_BL/`.*
+$10^{-5}\ \mathrm{s^{-1}}$); the green dashed ellipse marks the heating footprint.
+The robust separations in the panels — the sine profiles above uniform,
+Stratiform switched off — are the separations of the low-level PV source
+$S$; the Deep–Shallow pair order lies within single-run variability
+(Section 2.6). The companion 500-hPa comparison of the same four runs, and
+the EX/BL boundary-pathway pair, are in Appendix B.4–B.5.*
 
 ## 3.5 Mechanism denial: the wind–moisture coupling is necessary
 

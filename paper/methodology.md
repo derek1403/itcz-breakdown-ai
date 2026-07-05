@@ -17,7 +17,9 @@
 2.4 非絕熱加熱 —— 水平：高斯橢圓（σφ≈6.4°、σλ≈65°，中心 10°N/195°E；cos 波瓣替代版
     移到 Appendix B，註明源自 Hakim & Masanam 的做法、結果無明顯差異）；垂直：
     Deep = sin(π(p−200)/800)，出自 Chen & Masunaga 2025 Fig. 2b 的 EOF1；2.5 K/day、
-    全程持續加熱（依 config_used：forcing_days=16，非 7 天脈衝）；離散脈衝 ≈ 連續加熱率。
+    全程持續加熱（非 7 天脈衝；依 config_used：主線/profile/振幅 step1 全 20 天，
+    denial 套組與 DJF 為 16 天）；離散脈衝 ≈ 連續加熱率。振幅段落已同步新 B.2 掃描
+    （2.5 近最優；0.5–1 under-forced；5–10 overdriven）。
 2.5 實驗組 —— Step 1–4（標準 / 鎖水氣 / 只給水氣 / 鎖風）+ 外部模態 vs 邊界層加熱對 +
     DJF 季節對照 + 振幅掃描 + 24h vs 6h。
 2.6 診斷 —— 直接對 u' 取渦度的合法性（curl 線性）、TCWV、混沌敏感性警語。
@@ -172,7 +174,7 @@ basic state, extracted by power iteration.
 It follows that the iteration index $n$ must not be read as physical
 atmospheric time. Although each application of $M$ is nominally a 24-h
 integration — and we will write "nominal day $n$" for readability — the
-sequence $n = 1, 2, \dots, 15$ is the *convergence history of a
+sequence $n = 1, 2, \dots, N$ is the *convergence history of a
 mode-extraction algorithm*: early iterations are dominated by the projection
 of the forcing onto the growing structure, intermediate iterations by
 quasi-exponential amplification, and late iterations by nonlinear saturation.
@@ -244,12 +246,16 @@ horizontal and vertical maximum, applied as a discrete increment at each step
 (+2.5 K per 24-h step; +0.625 K per 6-h step). We treat this discrete pulse
 as an approximation to a continuous diabatic heating rate acting over the
 step — the same convention used for the moisture source in Step 4. The
-heating is sustained at every iteration throughout the $N = 16$ experiment,
-maintaining the strip against dissipation while the instability develops
-upon it. Amplitude is a genuinely calibrated quantity: rates of order
-$10 \mathrm{K} \cdot \mathrm{day^{-1}}$ drive the system into a strongly overdriven regime
-(Appendix B), while $1.5 - 3 \mathrm{K} \cdot \mathrm{day^{-1}}$ brackets the regime in which
-the roll-up is vigorous but not overdriven.
+heating is sustained at every iteration for the full length of each
+experiment ($N = 20$ for the headline run and the profile and amplitude
+sensitivity runs; $N = 16$ for the mechanism-denial suite and the seasonal
+control), maintaining the strip against dissipation while the instability
+develops upon it. Amplitude is a genuinely calibrated quantity: the sweep of
+Appendix B.2 places the headline $2.5\ \mathrm{K} \cdot \mathrm{day^{-1}}$
+near the amplitude that maximizes the organized vortex response —
+$0.5 - 1\ \mathrm{K} \cdot \mathrm{day^{-1}}$ under-force the strip (weaker,
+later peaks), while by $5 - 10\ \mathrm{K} \cdot \mathrm{day^{-1}}$ the system
+is overdriven and the clean roll-up degrades.
 
 ## 2.5 The experiment suite
 
@@ -277,8 +283,8 @@ control* — the identical experiment on the DJF climatology, which tests
 whether the response is set by the background ITCZ rather than by the
 forcing; (ii) an *external-mode versus boundary-layer heating* pair,
 which places the heating either in the barotropic (external) vertical mode or
-in the boundary layer alone (Section 3.4); (iii) an *amplitude sweep*
-($0.1 - 20 \mathrm{K} \cdot \mathrm{day^{-1}}$; Appendix B); and (iv) a *time-step control* repeating
+in the boundary layer alone (Section 3.4; Appendix B.5); (iii) an *amplitude
+sweep* ($0.5 - 10 \mathrm{K} \cdot \mathrm{day^{-1}}$; Appendix B.2); and (iv) a *time-step control* repeating
 Step 1 with the 6-h Pangu operator (Section 3.6). The full suite is run on
 both Pangu and FCNv2.
 
