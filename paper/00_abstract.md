@@ -18,7 +18,7 @@
 
 ## Abstract
 
-Deep-learning weather prediction (DLWP) models now rival operational numerical
+Data-driven weather prediction (DWP) models now rival operational numerical
 weather prediction in forecast skill, yet whether they encode atmospheric
 *dynamics* — rather than sophisticated pattern matching — remains an open
 question. Following the dynamical-testing paradigm of Hakim and Masanam (2024),

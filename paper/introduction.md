@@ -14,7 +14,7 @@
 你原本的筆記（HAKIM2024 啟發 + 之後要探討 manifold）已織入第 2 段與倒數第 2 段。
 ```
 
-Deep-learning weather prediction (DWP) models trained end-to-end on
+Data-driven weather prediction (DWP) models trained end-to-end on
 reanalysis data now match or exceed the deterministic skill of the world's
 best operational numerical weather prediction systems. Pangu-Weather, a
 three-dimensional Earth-specific transformer trained on 39 years of ERA5,

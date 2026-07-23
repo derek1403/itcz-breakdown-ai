@@ -32,7 +32,7 @@
 !.nojekyll
 
 # 7) 保留 paper/_build/html 的所有內容
-!paper/_build/html/*
+!paper/_build/html/**
 
 
 # ------------------------------------------------------------

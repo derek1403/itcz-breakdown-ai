@@ -141,7 +141,7 @@ artifact has not been established.
 ## 4.5 Conclusions
 
 A frozen-background, finite-time nonlinear perturbation framework —
-perpetual background re-centering — turns a deep-learning weather model into
+perpetual background re-centering — turns a data-driven weather model into
 an instrument for classical instability analysis. Applied to Pangu-Weather
 with an idealized deep-convective ITCZ heating on a JAS climatological basic
 state, the framework recovers the complete barotropic ITCZ-breakdown
